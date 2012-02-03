@@ -117,12 +117,17 @@ if not exist "$(ProjectDir)\bin\data" mkdir  "$(ProjectDir)\bin\data"
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\ofxGrabCam\src\ofxGrabCam.cpp" />
     <ClCompile Include="..\src\ofxGraycode.cpp" />
+    <ClCompile Include="..\src\Payload.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ofxGrabCam\src\ofxGrabCam.h" />
     <ClInclude Include="..\src\ofxGraycode.h" />
+    <ClInclude Include="..\src\Payload.h" />
+    <ClInclude Include="..\src\Types.h" />
     <ClInclude Include="src\testApp.h" />
   </ItemGroup>
   <ItemGroup>
