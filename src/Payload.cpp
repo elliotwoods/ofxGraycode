@@ -15,7 +15,7 @@ namespace ofxGraycode {
 		this->allocated = false;
 	}
 
-	void Payload::init(unsigned long width, unsigned long height) {
+	void Payload::init(uint width, uint height) {
 		this->width = width;
 		this->height = height;
 		this->size = width*height;
@@ -27,15 +27,19 @@ namespace ofxGraycode {
 		return this->allocated;
 	}
 
-	ulong Payload::getWidth() const {
+	uint Payload::getWidth() const {
 		return this->width;
 	}
 
-	ulong Payload::getHeight() const {
+	uint Payload::getHeight() const {
 		return this->height;
 	}
+	
+	uint Payload::getSize() const {
+		return this->size;
+	}
 
-	ulong Payload::getFrameCount() const {
+	uint Payload::getFrameCount() const {
 		return this->frameCount;
 	}
 
@@ -58,15 +62,61 @@ namespace ofxGraycode {
 
 	void PayloadGraycode::fillPixels(const unsigned int frame, ofPixels& pixels) const {
 		if (!isAllocated()) {
-			ofLogError() << "ofxGraycode::PayloadGraycode::encode : cannot encode, we are not allocated";
+			ofLogError() << "ofxGraycode::PayloadGraycode::fillPixels : cannot encode, we are not allocated";
 			return;
 		}
 
 		uchar* pixel = pixels.getPixels();
-		const ulong* data = this->data.getPixels();
+		const uint* data = this->data.getPixels();
 		for (int i=0; i<size; i++)
-			*pixel++ = (*data++ & (ulong)1 << frame) == (ulong)1 << frame ? (uchar)255 : (uchar)0;
-	} 
+			*pixel++ = (*data++ & (uint)1 << frame) == (uint)1 << frame ? (uchar)255 : (uchar)0;
+	}
+
+	void PayloadGraycode::calc(const vector<ofPixels> &captures, ofPixels_<uint> &output) {
+		if (captures.size() != frameCount)
+		{
+			ofLogError() << "ofxGraycode::PayloadGraycode::calc : cannot calc as number of captured frames does not match target framecount";
+			return;
+		}
+
+		//calculate the mean of all captures
+		ofPixels mean = ofPixels(captures[0]);
+		mean.set(0, 0);
+		const uchar* pixelIn;
+		uchar* pixelOut;
+		for (uint frame=0; frame<frameCount; frame++) {
+			pixelIn = captures[frame].getPixels();
+			pixelOut = mean.getPixels();
+			for (int i=0; i<mean.size(); i++) {
+				*pixelOut++ += *pixelIn++ / frameCount;
+			}
+		}
+		
+		//prepare output
+		output.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_IMAGE_GRAYSCALE);
+		output.set(0, 0);
+
+		//decode
+		const uchar* meanIn;
+		uint* dataOut;
+		for (uint frame=0; frame<frameCount; frame++) {
+			pixelIn = captures[frame].getPixels();
+			meanIn = mean.getPixels();
+			dataOut = output.getPixels();
+			for (int i=0; i<mean.size(); i++, dataOut++) {
+				if (*pixelIn++ > *meanIn++)
+					*dataOut |= (uint)1 << frame;
+				else
+					*dataOut;
+			}
+		}
+
+		//invert data
+		dataOut = output.getPixels();
+		for (int i=0; i<data.size(); i++, dataOut++) {
+			*dataOut = dataInverse[*dataOut];
+		}
+	}
 
 	void PayloadGraycode::render() {
 		this->frameCountX = ceil(log((float)width) / log((float)2)); 
@@ -76,18 +126,18 @@ namespace ofxGraycode {
 		data.allocate(width, height, OF_IMAGE_GRAYSCALE);
 		dataInverse.resize(getMaxIndex());
 		
-		ulong* pix = data.getPixels();
-		ulong idx = 0;
+		uint* pix = data.getPixels();
+		uint idx = 0;
 
-		for (ulong y=0; y<height; y++)
-			for (ulong x=0; x<width; x++, pix++, idx++) {
+		for (uint y=0; y<height; y++)
+			for (uint x=0; x<width; x++, pix++, idx++) {
 				*pix = x ^ (x >> 1) +
 					((y ^ (y >> 1)) << (int) frameCountX);
 				dataInverse[*pix] = idx;
 			}
 	}
 
-	ulong PayloadGraycode::getMaxIndex() {
+	uint PayloadGraycode::getMaxIndex() {
 		return 1 << (frameCountX + frameCountY);
 	}
 }

@@ -13,17 +13,52 @@
 namespace ofxGraycode {
 	using namespace std;
 
-	class Encoder {
+	class BaseCodec {
 	public:
-		Encoder();
+		BaseCodec();
 		void init(Payload& payload);
+		virtual void reset() = 0;
+	protected:
+		Payload* payload;
+		int	frame;
+	};
+
+
+	class Encoder : public BaseCodec {
+	public:
 		void reset();
 
 		bool operator>>(ofPixels& pixels);
 		bool operator>>(ofImage& image);
+	};
 
-	private:
-		Payload* payload;
-		int	frame;
+
+	class Decoder : public BaseCodec, ofBaseDraws {
+	public:
+		void reset();
+		void operator<<(ofPixels& pixels);
+		void operator<<(ofBaseHasPixels& image);
+		bool isReady();
+
+		////
+		//ofBaseDraws
+		////
+		//
+		void draw(float x,float y);
+		void draw(float x,float y,float w, float h);
+		float getHeight();
+		float getWidth();
+		//
+		////
+	protected:
+		void calc(); ///< this is called automatically when all frames are received
+		void updatePreview();
+		///Captures is only used if this payload specifies
+		///	that it is offline using isOffline()
+		///Offline denotes it performs image analysis at the
+		///	end of all captures rather than during captures
+		vector<ofPixels> captures;
+		ofPixels_<uint> data;
+		ofImage preview;
 	};
 }
