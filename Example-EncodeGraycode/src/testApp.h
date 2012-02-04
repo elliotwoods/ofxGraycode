@@ -2,6 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxGrabCam.h"
+#include "ofxGraycode.h"
+
+using namespace ofxGraycode;
 
 class testApp : public ofBaseApp{
 
@@ -19,18 +22,8 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-	
-	void generate();
-	void adjust(int dx, int dy);
-	void save();
-	
-	ofVec3f volume;
-	ofVec3f mean;
-	int count;
-	
-	ofxGrabCam camera;
 
-	ofImage img;
-	
-	ofMesh mesh;
+	ofImage output;
+	PayloadGraycode payload;
+	Encoder encoder;
 };

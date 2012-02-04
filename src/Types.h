@@ -10,4 +10,5 @@
 
 namespace ofxGraycode {
 	typedef unsigned long ulong;
+	typedef unsigned char uchar;
 }

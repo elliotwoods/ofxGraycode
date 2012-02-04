@@ -18,19 +18,29 @@ namespace ofxGraycode {
 		this->frame = 0;
 	}
 
-	bool Encoder::operator>>(ofBaseHasPixels& image) {
+	void Encoder::reset() {
+		frame = 0;
+	}
 
-		if (frame == payload->getFrameCount())
+	bool Encoder::operator>>(ofPixels& pixels) {
+
+		if (frame >= payload->getFrameCount())
 			return false;
 
-		ofPixels& output = image.getPixelsRef();
+		if (!payload->matchingPixels(pixels))
+			payload->allocatePixels(pixels);
 
-		if (!payload->matchingPixels(output))
-			payload->allocatePixels(output);
-
-		payload->fillPixels(frame, output);
+		payload->fillPixels(frame++, pixels);
 
 		return true;
+	}
+
+	bool Encoder::operator>>(ofImage& image) {
+		if (operator>>(image.getPixelsRef())) {
+			image.update();
+			return true;
+		} else
+			return false;
 	}
 
 }

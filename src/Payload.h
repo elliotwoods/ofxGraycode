@@ -43,7 +43,7 @@ namespace ofxGraycode {
 	class PayloadGraycode : public Payload {
 	public:
 		ofImageType getImageType() const;
-		void encode(const unsigned int frame, ofPixels& pixels) const;
+		void fillPixels(const unsigned int frame, ofPixels& pixels) const;
 		
 	protected:
 		void render();
@@ -53,6 +53,6 @@ namespace ofxGraycode {
 		ulong frameCountX, frameCountY;
 
 		ofPixels_<ulong> data;
-		ofPixels_<ulong> dataInverse;
+		vector<ulong> dataInverse;
 	};
 }

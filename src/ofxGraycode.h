@@ -17,7 +17,11 @@ namespace ofxGraycode {
 	public:
 		Encoder();
 		void init(Payload& payload);
-		bool operator>>(ofBaseHasPixels& image);
+		void reset();
+
+		bool operator>>(ofPixels& pixels);
+		bool operator>>(ofImage& image);
+
 	private:
 		Payload* payload;
 		int	frame;

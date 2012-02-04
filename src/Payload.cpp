@@ -9,6 +9,8 @@
 
 namespace ofxGraycode {
 	
+//----------------------------------------------------------
+// Payload
 	Payload::Payload() {
 		this->allocated = false;
 	}
@@ -47,15 +49,23 @@ namespace ofxGraycode {
 		pixels.allocate(this->getWidth(), this->getHeight(), this->getImageType());
 	}
 
+//----------------------------------------------------------
+// PayloadGraycode
+
 	ofImageType PayloadGraycode::getImageType() const {
 		return OF_IMAGE_GRAYSCALE;
 	}
 
-	void PayloadGraycode::encode(const unsigned int frame, ofPixels& pixels) const {
+	void PayloadGraycode::fillPixels(const unsigned int frame, ofPixels& pixels) const {
 		if (!isAllocated()) {
 			ofLogError() << "ofxGraycode::PayloadGraycode::encode : cannot encode, we are not allocated";
 			return;
 		}
+
+		uchar* pixel = pixels.getPixels();
+		const ulong* data = this->data.getPixels();
+		for (int i=0; i<size; i++)
+			*pixel++ = (*data++ & (ulong)1 << frame) == (ulong)1 << frame ? (uchar)255 : (uchar)0;
 	} 
 
 	void PayloadGraycode::render() {
@@ -64,10 +74,10 @@ namespace ofxGraycode {
 		this->frameCount = frameCountX + frameCountY;
 		
 		data.allocate(width, height, OF_IMAGE_GRAYSCALE);
-		dataInverse.allocate(width, height, OF_IMAGE_GRAYSCALE);
+		dataInverse.resize(getMaxIndex());
 		
 		ulong* pix = data.getPixels();
-		ulong idx;
+		ulong idx = 0;
 
 		for (ulong y=0; y<height; y++)
 			for (ulong x=0; x<width; x++, pix++, idx++) {
