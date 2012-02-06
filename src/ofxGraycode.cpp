@@ -21,6 +21,10 @@ namespace ofxGraycode {
 		reset();
 	}
 
+	int BaseCodec::getFrame() {
+		return this->frame;
+	}
+
 //----------------------------------------
 // Encoder
 	void Encoder::reset() {
@@ -52,21 +56,41 @@ namespace ofxGraycode {
 // Decoder
 	void Decoder::reset() {
 		frame = 0;
+		hasData = false;
+		if (this->payload->isOffline())
+			captures.clear();
 	}
 
-	void Decoder::operator<<(ofPixels& pixels) {
+	void Decoder::operator<<(const ofPixels& pixels) {
 		if (frame==0)
 			data.allocate(pixels.getWidth(), pixels.getHeight(), OF_IMAGE_GRAYSCALE);
 
+		const ofPixels* greyPixels;
+		if (pixels.getNumChannels() > 1) {
+			ofPixels* downsample = new ofPixels();
+			downsample->allocate(pixels.getWidth(), pixels.getHeight(), OF_PIXELS_MONO);
+			downsample->set(0, 0);
+			const uchar* in = pixels.getPixels();
+			uchar* out = downsample->getPixels();
+			for (int i=0; i<pixels.size(); i++, out += (i % pixels.getNumChannels() == 0)) {
+				*out += *in++ / pixels.getNumChannels();
+			}
+			greyPixels = downsample;
+		} else
+			greyPixels = &pixels;
+
 		if (this->payload->isOffline())
-			captures.push_back(ofPixels(pixels));
+			captures.push_back(*greyPixels);
 		else
-			payload->readPixels(frame, pixels);
+			payload->readPixels(frame, *greyPixels);
 
  		if (++frame >= payload->getFrameCount()) {
 			calc();
-			frame = 0;
+			frame--;
 		}
+
+		if (greyPixels != &pixels)
+			delete greyPixels;
 	}
 
 	void Decoder::operator<<(ofBaseHasPixels& image) {
@@ -74,9 +98,16 @@ namespace ofxGraycode {
 	}
 
 	bool Decoder::isReady() {
-		return data.isAllocated();
+		return hasData;
 	}
 
+	const vector<ofPixels>& Decoder::getCaptures() const {
+		return this->captures;
+	}
+
+	const ofPixels& Decoder::getMean() const {
+		return this->mean;
+	}
 	////
 	//ofBaseDraws
 	////
@@ -100,27 +131,54 @@ namespace ofxGraycode {
 	////
 
 	void Decoder::calc() {
+		ofLogNotice() << "ofxGraycode::Decoder::calc()";
 		if (payload->isOffline()) {
 			PayloadOffline& payload(*(PayloadOffline*)this->payload);
-			payload.calc(this->captures, this->data);
+
+			////
+			//mean
+			////
+			//
+			this->mean = ofPixels(captures[0]);
+			this->mean.set(0, 0);
+			const uchar* pixelIn;
+			uchar* pixelOut;
+			for (uint frame=0; frame<this->payload->getFrameCount(); frame++) {
+				pixelIn = this->captures[frame].getPixels();
+				pixelOut = this->mean.getPixels();
+				for (int i=0; i<mean.size(); i++) {
+					*pixelOut++ += *pixelIn++ / this->payload->getFrameCount();
+				}
+			}
+			//
+			////
+
+			payload.calc(this->captures, this->mean, this->data);
 		} else {
 			PayloadOnline& payload(*(PayloadOnline*)this->payload);
 			payload.calc(this->data);
 		}
+		hasData = true;
 		updatePreview();
 	}
 
 	void Decoder::updatePreview() {
 		preview.allocate(data.getWidth(), data.getHeight(), OF_IMAGE_COLOR);
+		preview.getPixelsRef().set(0,0);
+		preview.getPixelsRef().set(1,0);
+		preview.getPixelsRef().set(2,0);
+		
 		uchar* pix = preview.getPixels();
 		const uint* idx = data.getPixels();
 		for (int i=0; i<data.size(); i++, idx++) {
 			if (*idx < payload->getSize()) {
 				*pix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
 				*pix++ = 255.0f * float(*idx / payload->getHeight()) / float(payload->getHeight());
-				*pix++;
-			} else
-				pix+=3;
+				*pix++ = 0.0f;
+			} else {
+				memset(pix, 0, 3);
+				pix += 3;
+			}
 		}
 		preview.update();
 	}

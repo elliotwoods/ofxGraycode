@@ -59,7 +59,7 @@ namespace ofxGraycode {
 	class PayloadOffline : public Payload {
 	public:
 		bool isOffline() const { return true; }
-		virtual void calc(const vector<ofPixels> &captures, ofPixels_<uint> &output) = 0;
+		virtual void calc(const vector<ofPixels> &captures, const ofPixels& threshold, ofPixels_<uint> &output) const = 0;
 	};
 
 	class PayloadOnline : public Payload {
@@ -74,7 +74,7 @@ namespace ofxGraycode {
 	public:
 		ofImageType getImageType() const;
 		void fillPixels(const unsigned int frame, ofPixels& pixels) const;
-		void calc(const vector<ofPixels> &captures, ofPixels_<uint> &output);
+		void calc(const vector<ofPixels> &captures, const ofPixels& threshold, ofPixels_<uint> &output) const;
 
 	protected:
 		void render();

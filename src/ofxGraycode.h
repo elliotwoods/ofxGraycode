@@ -18,6 +18,7 @@ namespace ofxGraycode {
 		BaseCodec();
 		void init(Payload& payload);
 		virtual void reset() = 0;
+		int getFrame();
 	protected:
 		Payload* payload;
 		int	frame;
@@ -36,10 +37,12 @@ namespace ofxGraycode {
 	class Decoder : public BaseCodec, ofBaseDraws {
 	public:
 		void reset();
-		void operator<<(ofPixels& pixels);
+		void operator<<(const ofPixels& pixels);
 		void operator<<(ofBaseHasPixels& image);
 		bool isReady();
 
+		const vector<ofPixels>& getCaptures() const;
+		const ofPixels& getMean() const;
 		////
 		//ofBaseDraws
 		////
@@ -58,7 +61,10 @@ namespace ofxGraycode {
 		///Offline denotes it performs image analysis at the
 		///	end of all captures rather than during captures
 		vector<ofPixels> captures;
+		ofPixels mean;
+
 		ofPixels_<uint> data;
 		ofImage preview;
+		bool hasData;
 	};
 }

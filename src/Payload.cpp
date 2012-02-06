@@ -72,24 +72,11 @@ namespace ofxGraycode {
 			*pixel++ = (*data++ & (uint)1 << frame) == (uint)1 << frame ? (uchar)255 : (uchar)0;
 	}
 
-	void PayloadGraycode::calc(const vector<ofPixels> &captures, ofPixels_<uint> &output) {
+	void PayloadGraycode::calc(const vector<ofPixels> &captures, const ofPixels& threshold, ofPixels_<uint> &output) const {
 		if (captures.size() != frameCount)
 		{
 			ofLogError() << "ofxGraycode::PayloadGraycode::calc : cannot calc as number of captured frames does not match target framecount";
 			return;
-		}
-
-		//calculate the mean of all captures
-		ofPixels mean = ofPixels(captures[0]);
-		mean.set(0, 0);
-		const uchar* pixelIn;
-		uchar* pixelOut;
-		for (uint frame=0; frame<frameCount; frame++) {
-			pixelIn = captures[frame].getPixels();
-			pixelOut = mean.getPixels();
-			for (int i=0; i<mean.size(); i++) {
-				*pixelOut++ += *pixelIn++ / frameCount;
-			}
 		}
 		
 		//prepare output
@@ -97,14 +84,15 @@ namespace ofxGraycode {
 		output.set(0, 0);
 
 		//decode
-		const uchar* meanIn;
+		const uchar* thresholdIn;
+		const uchar* pixelIn;
 		uint* dataOut;
 		for (uint frame=0; frame<frameCount; frame++) {
 			pixelIn = captures[frame].getPixels();
-			meanIn = mean.getPixels();
+			thresholdIn = threshold.getPixels();
 			dataOut = output.getPixels();
-			for (int i=0; i<mean.size(); i++, dataOut++) {
-				if (*pixelIn++ > *meanIn++)
+			for (int i=0; i<threshold.size(); i++, dataOut++) {
+				if (*pixelIn++ > *thresholdIn++)
 					*dataOut |= (uint)1 << frame;
 				else
 					*dataOut;
@@ -113,7 +101,8 @@ namespace ofxGraycode {
 
 		//invert data
 		dataOut = output.getPixels();
-		for (int i=0; i<data.size(); i++, dataOut++) {
+		
+		for (int i=0; i<output.size(); i++, dataOut++) {
 			*dataOut = dataInverse[*dataOut];
 		}
 	}
