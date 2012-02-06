@@ -1,0 +1,217 @@
+<!DOCTYPE PATCH  SYSTEM "http://vvvv.org/versions/vvvv45beta26.dtd" >
+   <PATCH nodename="C:\openFrameworks\openFrameworks\addons\ofxGraycode\Example-DecodeGraycodeOSC\sendGraycodeFromVVVV.v4p" systemname="sendGraycodeFromVVVV" filename="C:\openFrameworks\openFrameworks\addons\ofxGraycode\Example-DecodeGraycodeOSC\sendGraycodeFromVVVV.v4p">
+   <BOUNDS type="Window" left="13260" top="17805" width="3795" height="6870">
+   </BOUNDS>
+   <NODE componentmode="Hidden" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\plugins\VVVV.Nodes.EmguCV.dll" id="0" nodename="Encode (EmguCV.StructuredLight)" systemname="Encode (EmguCV.StructuredLight)">
+   <BOUNDS height="100" left="1230" top="2970" type="Node" width="100">
+   </BOUNDS>
+   <PIN pinname="Properties" visible="1">
+   </PIN>
+   <PIN pinname="Output" visible="1">
+   </PIN>
+   <PIN pinname="Frame" visible="1">
+   </PIN>
+   </NODE>
+   <NODE componentmode="Hidden" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\plugins\VVVV.Nodes.EmguCV.dll" id="1" nodename="Payload (EmguCV.StructuredLight)" systemname="Payload (EmguCV.StructuredLight)">
+   <BOUNDS height="100" left="1860" top="2280" type="Node" width="100">
+   </BOUNDS>
+   <PIN pinname="Payload" visible="1">
+   </PIN>
+   <PIN pinname="Width" slicecount="1" values="512">
+   </PIN>
+   <PIN pinname="Height" slicecount="1" values="512">
+   </PIN>
+   <PIN pinname="Balanced" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK dstnodeid="0" dstpinname="Properties" srcnodeid="1" srcpinname="Payload">
+   </LINK>
+   <NODE componentmode="Hidden" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\modules\ImageQuad (EmguCV DX9).v4p" id="2" nodename="ImageQuad (EmguCV DX9)" systemname="ImageQuad (EmguCV DX9)">
+   <BOUNDS height="100" left="1230" top="3495" type="Node" width="100">
+   </BOUNDS>
+   <PIN pinname="Image" visible="1">
+   </PIN>
+   <PIN pinname="Layer" visible="1">
+   </PIN>
+   <PIN pinname="Nearest Neighbour" slicecount="1" values="1">
+   </PIN>
+   </NODE>
+   <LINK dstnodeid="2" dstpinname="Image" srcnodeid="0" srcpinname="Output">
+   </LINK>
+   <NODE componentmode="InAWindow" id="3" nodename="Renderer (EX9)" systemname="Renderer (EX9)">
+   <BOUNDS height="100" left="1230" top="4020" type="Node" width="100">
+   </BOUNDS>
+   <BOUNDS height="1800" left="1230" top="4020" type="Box" width="2400">
+   </BOUNDS>
+   <BOUNDS height="12300" left="240" top="15465" type="Window" width="12525">
+   </BOUNDS>
+   <PIN pinname="Layers" visible="1">
+   </PIN>
+   </NODE>
+   <LINK dstnodeid="3" dstpinname="Layers" srcnodeid="2" srcpinname="Layer">
+   </LINK>
+   <NODE componentmode="Hidden" id="4" nodename="OSCEncoder (Network)" systemname="OSCEncoder (Network)">
+   <BOUNDS height="100" left="555" top="5100" type="Node" width="100">
+   </BOUNDS>
+   <PIN pinname="Address" slicecount="1" values="/capture" encoded="0">
+   </PIN>
+   <PIN pinname="OSCMessage" visible="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="UDP (Network Client)" nodename="UDP (Network Client)" componentmode="Hidden" id="5">
+   <BOUNDS type="Node" left="555" top="5745" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input" visible="1">
+   </PIN>
+   <PIN pinname="Remote Host" slicecount="1" values="localhost" encoded="0">
+   </PIN>
+   <PIN pinname="Remote Port" slicecount="1" values="5588">
+   </PIN>
+   <PIN pinname="Do Send" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="4" srcpinname="OSCMessage" dstnodeid="5" dstpinname="Input">
+   </LINK>
+   <NODE systemname="Counter (Animation)" nodename="Counter (Animation)" componentmode="Hidden" id="6">
+   <BOUNDS type="Node" left="1230" top="1185" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Output" visible="1">
+   </PIN>
+   <PIN pinname="Up">
+   </PIN>
+   <PIN pinname="Reset">
+   </PIN>
+   <PIN pinname="Mode" slicecount="1" values="Unlimited">
+   </PIN>
+   </NODE>
+   <NODE systemname="FrameDelay (Animation)" nodename="FrameDelay (Animation)" componentmode="Hidden" id="7">
+   <BOUNDS type="Node" left="1230" top="1920" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input 1" visible="1">
+   </PIN>
+   <PIN pinname="Output 1" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="6" srcpinname="Output" dstnodeid="7" dstpinname="Input 1">
+   </LINK>
+   <LINK srcnodeid="7" srcpinname="Output 1" dstnodeid="0" dstpinname="Frame">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="8" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Node" left="2505" top="2895" width="0" height="0">
+   </BOUNDS>
+   <BOUNDS type="Box" left="2505" top="2895" width="345" height="240">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||" encoded="0">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="1" srcpinname="Frame Count" dstnodeid="8" dstpinname="Y Input Value">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="9" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Node" left="2910" top="2385" width="0" height="0">
+   </BOUNDS>
+   <BOUNDS type="Box" left="2910" top="2385" width="345" height="240">
+   </BOUNDS>
+   <PIN pinname="Units" slicecount="1" values="||" encoded="0">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Integer">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="6" srcpinname="Output" dstnodeid="9" dstpinname="Y Input Value" linkstyle="VHV">
+   <LINKPOINT x="1265" y="1640">
+   </LINKPOINT>
+   <LINKPOINT x="2935" y="1690">
+   </LINKPOINT>
+   </LINK>
+   <NODE systemname="Change (Animation)" nodename="Change (Animation)" componentmode="Hidden" id="10">
+   <BOUNDS type="Node" left="720" top="4635" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="OnChange" visible="1">
+   </PIN>
+   <PIN pinname="Input" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="10" srcpinname="OnChange" dstnodeid="5" dstpinname="Do Send">
+   </LINK>
+   <LINK srcnodeid="6" srcpinname="Output" dstnodeid="10" dstpinname="Input" linkstyle="Bezier">
+   <LINKPOINT x="1245" y="3020">
+   </LINKPOINT>
+   <LINKPOINT x="750" y="3070">
+   </LINKPOINT>
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="11" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Node" left="1230" top="120" width="0" height="0">
+   </BOUNDS>
+   <BOUNDS type="Box" left="1230" top="120" width="480" height="480">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||" encoded="0">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Bang">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Up" encoded="0">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="11" srcpinname="Y Output Value" dstnodeid="6" dstpinname="Up">
+   </LINK>
+   <NODE nodename="IOBox (Value Advanced)" componentmode="InABox" id="12" systemname="IOBox (Value Advanced)">
+   <BOUNDS type="Node" left="2190" top="120" width="0" height="0">
+   </BOUNDS>
+   <BOUNDS type="Box" left="2190" top="120" width="480" height="480">
+   </BOUNDS>
+   <PIN pinname="Y Input Value" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Units" slicecount="1" values="||" encoded="0">
+   </PIN>
+   <PIN pinname="Precision" slicecount="1" values="4">
+   </PIN>
+   <PIN pinname="Value Type" slicecount="1" values="Boolean">
+   </PIN>
+   <PIN pinname="Behavior" slicecount="1" values="Bang">
+   </PIN>
+   <PIN pinname="Descriptive Name" slicecount="1" values="Reset" encoded="0">
+   </PIN>
+   <PIN pinname="Y Output Value" visible="1">
+   </PIN>
+   <PIN pinname="X Input Value" slicecount="1" values="0">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="12" srcpinname="Y Output Value" dstnodeid="6" dstpinname="Reset">
+   </LINK>
+   <NODE componentmode="Hidden" id="14" nodename="OSCEncoder (Network)" systemname="OSCEncoder (Network)">
+   <BOUNDS height="100" left="2025" top="5100" type="Node" width="100">
+   </BOUNDS>
+   <PIN pinname="Address" slicecount="1" encoded="0" values="/clear">
+   </PIN>
+   <PIN pinname="OSCMessage" visible="1">
+   </PIN>
+   </NODE>
+   <NODE systemname="UDP (Network Client)" nodename="UDP (Network Client)" componentmode="Hidden" id="13">
+   <BOUNDS type="Node" left="2025" top="5745" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input" visible="1">
+   </PIN>
+   <PIN pinname="Remote Host" slicecount="1" encoded="0" values="localhost">
+   </PIN>
+   <PIN pinname="Remote Port" slicecount="1" values="5588">
+   </PIN>
+   <PIN pinname="Do Send" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="14" srcpinname="OSCMessage" dstnodeid="13" dstpinname="Input">
+   </LINK>
+   <LINK srcnodeid="12" srcpinname="Y Output Value" dstnodeid="13" dstpinname="Do Send" hiddenwhenlocked="1">
+   </LINK>
+   </PATCH>
