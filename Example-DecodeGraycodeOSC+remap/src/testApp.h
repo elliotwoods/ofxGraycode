@@ -4,10 +4,13 @@
 #include "ofxGrabCam.h"
 #include "ofxGraycode.h"
 #include "ofxOsc.h"
+#include "ofxCv.h"
 
 #define SERVER_PORT 5588
 
 using namespace ofxGraycode;
+using namespace ofxCv;
+using namespace cv;
 
 class testApp : public ofBaseApp{
 
@@ -29,6 +32,8 @@ public:
 	void processInput();
 	void moveFrame(int distance);
 	void moveThreshold(int distance);
+
+	Mat buildRemap();
 
 	PayloadGraycode payload;
 	ofVideoGrabber video;

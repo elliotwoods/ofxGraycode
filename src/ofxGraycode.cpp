@@ -55,15 +55,14 @@ namespace ofxGraycode {
 //----------------------------------------
 // Decoder
 	void Decoder::reset() {
-		frame = 0;
-		hasData = false;
-		if (this->payload->isOffline())
-			captures.clear();
+		this->frame = 0;
+		this->data.clear();
+		this->captures.clear();
 	}
 
 	void Decoder::operator<<(const ofPixels& pixels) {
 		if (frame==0)
-			data.allocate(pixels.getWidth(), pixels.getHeight(), OF_IMAGE_GRAYSCALE);
+			data.allocate(pixels.getWidth(), pixels.getHeight());
 
 		const ofPixels* greyPixels;
 		if (pixels.getNumChannels() > 1) {
@@ -97,16 +96,34 @@ namespace ofxGraycode {
 		this->operator<<(image.getPixelsRef());
 	}
 
-	bool Decoder::isReady() {
-		return hasData;
+	bool Decoder::hasData() {
+		return this->data.getHasData();
+	}
+
+	uint Decoder::size() const {
+		return this->data.size();
 	}
 
 	const vector<ofPixels>& Decoder::getCaptures() const {
 		return this->captures;
 	}
 
+	const ofPixels_<uint>& Decoder::getData() const {
+		return this->data.getData();
+	}
+
 	const ofPixels& Decoder::getMean() const {
-		return this->mean;
+		return this->data.getMean();
+	}
+
+	void Decoder::setThreshold(uchar distanceThreshold) {
+		this->data.setDistanceThreshold(distanceThreshold);
+		if (this->data.getHasData())
+			this->updatePreview();
+	}
+
+	uchar Decoder::getThreshold() const {
+		return this->data.getDistanceThreshold();
 	}
 	////
 	//ofBaseDraws
@@ -135,30 +152,12 @@ namespace ofxGraycode {
 		if (payload->isOffline()) {
 			PayloadOffline& payload(*(PayloadOffline*)this->payload);
 
-			////
-			//mean
-			////
-			//
-			this->mean = ofPixels(captures[0]);
-			this->mean.set(0, 0);
-			const uchar* pixelIn;
-			uchar* pixelOut;
-			for (uint frame=0; frame<this->payload->getFrameCount(); frame++) {
-				pixelIn = this->captures[frame].getPixels();
-				pixelOut = this->mean.getPixels();
-				for (int i=0; i<mean.size(); i++) {
-					*pixelOut++ += *pixelIn++ / this->payload->getFrameCount();
-				}
-			}
-			//
-			////
-
-			payload.calc(this->captures, this->mean, this->data);
+			data.calcMean(this->captures);
+			payload.calc(this->captures, this->data);
 		} else {
 			PayloadOnline& payload(*(PayloadOnline*)this->payload);
 			payload.calc(this->data);
 		}
-		hasData = true;
 		updatePreview();
 	}
 
@@ -169,9 +168,11 @@ namespace ofxGraycode {
 		preview.getPixelsRef().set(2,0);
 		
 		uchar* pix = preview.getPixels();
-		const uint* idx = data.getPixels();
+		uint* distance = data.getDistance().getPixels();
+		uint threshold = data.getDistanceThreshold();
+		const uint* idx = data.getData().getPixels();
 		for (int i=0; i<data.size(); i++, idx++) {
-			if (*idx < payload->getSize()) {
+			if (*idx < payload->getSize() && *distance++ > threshold) {
 				*pix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
 				*pix++ = 255.0f * float(*idx / payload->getHeight()) / float(payload->getHeight());
 				*pix++ = 0.0f;

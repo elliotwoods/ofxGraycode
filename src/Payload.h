@@ -8,6 +8,7 @@
 #pragma once
 #include "ofMain.h"
 
+#include "DataSet.h"
 #include "Types.h"
 
 // Payloads are what defines an encoding
@@ -59,13 +60,13 @@ namespace ofxGraycode {
 	class PayloadOffline : public Payload {
 	public:
 		bool isOffline() const { return true; }
-		virtual void calc(const vector<ofPixels> &captures, const ofPixels& threshold, ofPixels_<uint> &output) const = 0;
+		virtual void calc(const vector<ofPixels> &captures, DataSet &data) const = 0;
 	};
 
 	class PayloadOnline : public Payload {
 	public:
 		bool isOffline() const { return false; }
-		virtual void calc(ofPixels_<uint> &output) = 0;
+		virtual void calc(DataSet& data) = 0;
 	};
 
 	/** Basic Graycode encoding with threshold taken from
@@ -74,8 +75,8 @@ namespace ofxGraycode {
 	public:
 		ofImageType getImageType() const;
 		void fillPixels(const unsigned int frame, ofPixels& pixels) const;
-		void calc(const vector<ofPixels> &captures, const ofPixels& threshold, ofPixels_<uint> &output) const;
-
+		void calc(const vector<ofPixels> &captures, DataSet &data) const;
+		
 	protected:
 		void render();
 

@@ -55,7 +55,6 @@ namespace ofxGraycode {
 
 //----------------------------------------------------------
 // PayloadGraycode
-
 	ofImageType PayloadGraycode::getImageType() const {
 		return OF_IMAGE_GRAYSCALE;
 	}
@@ -72,39 +71,54 @@ namespace ofxGraycode {
 			*pixel++ = (*data++ & (uint)1 << frame) == (uint)1 << frame ? (uchar)255 : (uchar)0;
 	}
 
-	void PayloadGraycode::calc(const vector<ofPixels> &captures, const ofPixels& threshold, ofPixels_<uint> &output) const {
+	void PayloadGraycode::calc(const vector<ofPixels>& captures, DataSet& data) const {
 		if (captures.size() != frameCount)
 		{
 			ofLogError() << "ofxGraycode::PayloadGraycode::calc : cannot calc as number of captured frames does not match target framecount";
 			return;
 		}
-		
+
+		int captureWidth = captures[0].getWidth();
+		int captureHeight = captures[0].getHeight();
+
 		//prepare output
-		output.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_IMAGE_GRAYSCALE);
-		output.set(0, 0);
+		data.allocate(captureWidth, captureHeight);
+		data.calcMean(captures);
 
 		//decode
 		const uchar* thresholdIn;
 		const uchar* pixelIn;
+		uchar distanceThreshold = data.getDistanceThreshold();
 		uint* dataOut;
+		uint* distanceOut;
+		int distance;
 		for (uint frame=0; frame<frameCount; frame++) {
 			pixelIn = captures[frame].getPixels();
-			thresholdIn = threshold.getPixels();
-			dataOut = output.getPixels();
-			for (int i=0; i<threshold.size(); i++, dataOut++) {
-				if (*pixelIn++ > *thresholdIn++)
+			thresholdIn = data.getMean().getPixels();
+			dataOut = data.getData().getPixels();
+			distanceOut = data.getDistance().getPixels();
+			for (int i=0; i<data.size(); i++, dataOut++, pixelIn++, thresholdIn++) {
+				distance = (int)*pixelIn - (int)*thresholdIn;
+				if (distance > 0)
 					*dataOut |= (uint)1 << frame;
-				else
-					*dataOut;
+				*distanceOut++ += abs(distance);
 			}
 		}
 
+		//normalise distance
+		distanceOut = data.getDistance().getPixels();
+		for (int i=0; i<data.size(); i++)
+			*distanceOut++ /= frameCount;
+		data.applyDistanceThreshold();
+
 		//invert data
-		dataOut = output.getPixels();
+		dataOut = data.getData().getPixels();
 		
-		for (int i=0; i<output.size(); i++, dataOut++) {
+		for (int i=0; i<data.size(); i++, dataOut++) {
 			*dataOut = dataInverse[*dataOut];
 		}
+
+		data.setHasData(true);
 	}
 
 	void PayloadGraycode::render() {

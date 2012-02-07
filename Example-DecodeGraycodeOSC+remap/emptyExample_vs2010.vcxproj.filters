@@ -36,7 +36,30 @@
     <ClCompile Include="..\..\ofxOsc\src\ofxOscSender.cpp">
       <Filter>addons\ofxOSC</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Dataset.cpp" />
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\Calibration.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\ContourFinder.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\Distance.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\Helpers.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\Tracker.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\Utilities.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxCv\libs\ofxCv\src\Wrappers.cpp">
+      <Filter>addons\ofxCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dataset.cpp">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\testApp.h" />
@@ -88,7 +111,12 @@
     <ClInclude Include="..\..\ofxOsc\src\ofxOscSender.h">
       <Filter>addons\ofxOSC</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Dataset.h" />
+    <ClInclude Include="..\..\ofxCv\src\ofxCv.h">
+      <Filter>addons\ofxCv</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dataset.h">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="addons">
@@ -105,6 +133,9 @@
     </Filter>
     <Filter Include="addons\ofxOSC">
       <UniqueIdentifier>{98382bee-ddff-4598-8fd7-868b577773d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxCv">
+      <UniqueIdentifier>{a1f68417-5911-4902-8fd4-a64cea3cbc3b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@
 #include "ofMain.h"
 
 #include "Payload.h"
+#include "Dataset.h"
 
 namespace ofxGraycode {
 	using namespace std;
@@ -39,10 +40,15 @@ namespace ofxGraycode {
 		void reset();
 		void operator<<(const ofPixels& pixels);
 		void operator<<(ofBaseHasPixels& image);
-		bool isReady();
+		bool hasData();
 
+		uint size() const; ///< camera image size
 		const vector<ofPixels>& getCaptures() const;
+		const ofPixels_<uint>& getData() const;
 		const ofPixels& getMean() const;
+		void setThreshold(uchar distanceThreshold);
+		uchar getThreshold() const;
+
 		////
 		//ofBaseDraws
 		////
@@ -61,10 +67,8 @@ namespace ofxGraycode {
 		///Offline denotes it performs image analysis at the
 		///	end of all captures rather than during captures
 		vector<ofPixels> captures;
-		ofPixels mean;
 
-		ofPixels_<uint> data;
+		DataSet data;
 		ofImage preview;
-		bool hasData;
 	};
 }
