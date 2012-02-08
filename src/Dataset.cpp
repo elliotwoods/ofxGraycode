@@ -1,6 +1,11 @@
 #include "DataSet.h"
 
 namespace ofxGraycode {
+
+	////
+	// Initialisation
+	////
+	//
 	DataSet::DataSet() {
 		clear();
 	}
@@ -44,7 +49,11 @@ namespace ofxGraycode {
 		for (uint i = 0; i < tempMean.size(); i++)
 			*meanOut++ = *meanIn++ / captures.size();
 	}
-
+	
+	////
+	// Accessors
+	////
+	//
 	const ofPixels_<uint>& DataSet::getData() const {
 		return this->data;
 	}
@@ -95,5 +104,33 @@ namespace ofxGraycode {
 		uint* distance = this->distance.getPixels();
 		for (int i=0; i<this->size(); i++)
 			*active++ = *distance++ > distanceThreshold;
+	}
+
+	
+	////
+	// File access
+	////
+	//
+	void DataSet::save() const {
+		this->save(ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath());
+	}
+
+	void DataSet::save(string filename) const {
+		if (!hasData) {
+			ofLogError() << "ofxGraycode::DataSet::save : cannot save, this set doesn't have data yet";
+			return;
+		}
+
+		ofBuffer save;
+		ofSaveImage(mean, save);
+		ofSaveImage(data, save);
+		ofSaveImage(distance, save);
+		ofSaveImage(active, save);
+
+		save << distanceThreshold;
+		save << ofImage(mean);
+		save << data;
+		dave << distance;
+		save << active;
 	}
 }

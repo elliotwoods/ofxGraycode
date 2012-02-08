@@ -125,6 +125,10 @@ namespace ofxGraycode {
 	uchar Decoder::getThreshold() const {
 		return this->data.getDistanceThreshold();
 	}
+
+	const DataSet& Decoder::getDataSet() const {
+		return this->data;
+	}
 	////
 	//ofBaseDraws
 	////

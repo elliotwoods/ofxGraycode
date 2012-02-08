@@ -24,6 +24,8 @@ namespace ofxGraycode {
 		void setHasData(bool hasData);
 		void applyDistanceThreshold();
 
+		void save() const;
+		void save(string filename) const;
 	protected:
 		ofPixels mean; ///< used for offline DataSets
 		ofPixels_<uint> data; ///<encoded pixel index in camera space
