@@ -48,8 +48,8 @@ namespace ofxGraycode {
 		const ofPixels& getMean() const;
 		void setThreshold(uchar distanceThreshold);
 		uchar getThreshold() const;
-
 		const DataSet& getDataSet() const;
+
 		////
 		//ofBaseDraws
 		////
