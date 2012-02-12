@@ -121,18 +121,24 @@ namespace ofxGraycode {
 			return;
 		}
 
+		if (filename=="") {
+			ofLogWarning() << "ofxGraycode::DataSet::save failed as no file selected";
+			return;
+		}
+
 		unsigned short width = this->data.getWidth();
 		unsigned short height = this->data.getHeight();
-
-		ofFile save(filename, ofFile::WriteOnly, true);
+		
+		ofstream save(filename, ios::binary);
 		if (!save.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::save failed to open file " << filename;
 			return;
 		}
 
-		save << this->size();
-		save << width << height;
-		save << this->distanceThreshold;
+		save << this->size() << endl;
+		save << width << endl;
+		save << height << endl;
+		save << this->distanceThreshold << endl;
 		save.write((char*)data.getPixels(), this->size() * sizeof(uint));
 		save.write((char*)mean.getPixels(), this->size() * sizeof(uchar));
 		save.write((char*)distance.getPixels(), this->size() * sizeof(uint));
@@ -145,28 +151,38 @@ namespace ofxGraycode {
 	}
 
 	void DataSet::load(const string filename) {
+		if (filename=="") {
+			ofLogWarning() << "ofxGraycode::DataSet::load failed as no file selected";
+			return;
+		}
+
 		uint size;
 		unsigned short width, height;
 
-		ofFile load(filename, ofFile::ReadOnly, true);
+		ifstream load(filename, ios::binary);
 		if (!load.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::load failed to open file " << filename;
 			return;
 		}
+
 		load >> size;
 		load >> width;
 		load >> height;
+		load >> this->distanceThreshold;
+		load.ignore(1);
+
 		if (size != width * height) {
 			ofLogError() << "ofxGraycode::DataSet::load failed. size mismatch in file. is it corrupt / correct type?";
 			return;
 		}
-
 		this->allocate(width, height);
-		load >> this->distanceThreshold;
+
 		load.read((char*)data.getPixels(), this->size() * sizeof(uint));
 		load.read((char*)mean.getPixels(), this->size() * sizeof(uchar));
 		load.read((char*)distance.getPixels(), this->size() * sizeof(uint));
 		load.read((char*)active.getPixels(), this->size() * sizeof(uchar));
 		load.close();
+
+		this->hasData = true;
 	}
 }

@@ -132,12 +132,13 @@ namespace ofxGraycode {
 		uint* pix = data.getPixels();
 		uint idx = 0;
 
-		for (uint y=0; y<height; y++)
+		for (uint y=0; y<height; y++) {
 			for (uint x=0; x<width; x++, pix++, idx++) {
 				*pix = x ^ (x >> 1) +
 					((y ^ (y >> 1)) << (int) frameCountX);
 				dataInverse[*pix] = idx;
 			}
+		}
 	}
 
 	uint PayloadGraycode::getMaxIndex() {

@@ -41,6 +41,15 @@ void testApp::keyPressed(int key){
 		moveThreshold(+5);
 	if (key == OF_KEY_DOWN)
 		moveThreshold(-5);
+	
+	if (key=='l')
+		decoder.loadDataSet();
+	if (key=='s')
+		decoder.saveDataSet();
+
+	if (key=='v')
+		video.videoSettings();
+
 }
 
 //--------------------------------------------------------------

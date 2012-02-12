@@ -129,6 +129,7 @@ namespace ofxGraycode {
 	const DataSet& Decoder::getDataSet() const {
 		return this->data;
 	}
+
 	////
 	//ofBaseDraws
 	////
@@ -147,6 +148,30 @@ namespace ofxGraycode {
 
 	float Decoder::getWidth() {
 		return preview.getWidth();
+	}
+	//
+	////
+
+	////
+	//file actions
+	////
+	//
+	void Decoder::loadDataSet() {
+		data.load();
+		updatePreview();
+	}
+
+	void Decoder::loadDataSet(const string filename) {
+		data.load(filename);
+		updatePreview();
+	}
+
+	void Decoder::saveDataSet() {
+		data.save();
+	}
+
+	void Decoder::saveDataSet(const string filename) {
+		data.save(filename);
 	}
 	//
 	////

@@ -60,6 +60,17 @@ namespace ofxGraycode {
 		float getWidth();
 		//
 		////
+
+		////
+		//file actions
+		////
+		//
+		void loadDataSet();
+		void loadDataSet(const string filename);
+		void saveDataSet();
+		void saveDataSet(const string filename);
+		//
+		/////
 	protected:
 		void calc(); ///< this is called automatically when all frames are received
 		void updatePreview();
