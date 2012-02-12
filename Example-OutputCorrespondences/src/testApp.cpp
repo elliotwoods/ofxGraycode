@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	ofSetWindowShape(1024,30);
 }
 
 //--------------------------------------------------------------
@@ -18,10 +19,10 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 	data.load();
-	string filename = ofFilePath::removeExt(data.getFilename());
+	string filename = data.getFilename();
 
 	ofstream file((filename + "-correspondences.txt").c_str());
-	file << "Camera pixel (index, x, y)\tProjector pixel (index, x, y)\tDistance (score)";
+	file << "Camera pixel (index, x, y)\tProjector pixel (index, x, y)\tDistance (score)" << endl;
 	
 	const unsigned char* active = data.getActive().getPixels();
 	const uint* input = data.getData().getPixels();
@@ -40,7 +41,11 @@ void testApp::keyPressed(int key){
 			file << i << "\t" << camxy.x << "\t" << camxy.y << "\t" <<
 			*input << "\t" << projxy.x << "\t" << projxy.y << "\t" << *distance << endl;
 		}
+
+		if (i % 1000 == 0)
+			cout << ((float)i / (float)data.size() * 100.0f) << "% complete" << endl;
 	}
+	cout << "done." << endl;
 	file.close();
 }
 
