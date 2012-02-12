@@ -115,22 +115,58 @@ namespace ofxGraycode {
 		this->save(ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath());
 	}
 
-	void DataSet::save(string filename) const {
+	void DataSet::save(const string filename) const {
 		if (!hasData) {
 			ofLogError() << "ofxGraycode::DataSet::save : cannot save, this set doesn't have data yet";
 			return;
 		}
 
-		ofBuffer save;
-		ofSaveImage(mean, save);
-		ofSaveImage(data, save);
-		ofSaveImage(distance, save);
-		ofSaveImage(active, save);
+		unsigned short width = this->data.getWidth();
+		unsigned short height = this->data.getHeight();
 
-		save << distanceThreshold;
-		save << ofImage(mean);
-		save << data;
-		dave << distance;
-		save << active;
+		ofFile save(filename, ofFile::WriteOnly, true);
+		if (!save.is_open()) {
+			ofLogError() << "ofxGraycode::DataSet::save failed to open file " << filename;
+			return;
+		}
+
+		save << this->size();
+		save << width << height;
+		save << this->distanceThreshold;
+		save.write((char*)data.getPixels(), this->size() * sizeof(uint));
+		save.write((char*)mean.getPixels(), this->size() * sizeof(uchar));
+		save.write((char*)distance.getPixels(), this->size() * sizeof(uint));
+		save.write((char*)active.getPixels(), this->size() * sizeof(uchar));
+		save.close();
+	}
+
+	void DataSet::load() {
+		this->load(ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath());
+	}
+
+	void DataSet::load(const string filename) {
+		uint size;
+		unsigned short width, height;
+
+		ofFile load(filename, ofFile::ReadOnly, true);
+		if (!load.is_open()) {
+			ofLogError() << "ofxGraycode::DataSet::load failed to open file " << filename;
+			return;
+		}
+		load >> size;
+		load >> width;
+		load >> height;
+		if (size != width * height) {
+			ofLogError() << "ofxGraycode::DataSet::load failed. size mismatch in file. is it corrupt / correct type?";
+			return;
+		}
+
+		this->allocate(width, height);
+		load >> this->distanceThreshold;
+		load.read((char*)data.getPixels(), this->size() * sizeof(uint));
+		load.read((char*)mean.getPixels(), this->size() * sizeof(uchar));
+		load.read((char*)distance.getPixels(), this->size() * sizeof(uint));
+		load.read((char*)active.getPixels(), this->size() * sizeof(uchar));
+		load.close();
 	}
 }

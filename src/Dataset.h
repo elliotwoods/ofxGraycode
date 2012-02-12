@@ -25,10 +25,13 @@ namespace ofxGraycode {
 		void applyDistanceThreshold();
 
 		void save() const;
-		void save(string filename) const;
+		void save(const string filename) const;
+
+		void load();
+		void load(const string filename);
 	protected:
-		ofPixels mean; ///< used for offline DataSets
 		ofPixels_<uint> data; ///<encoded pixel index in camera space
+		ofPixels mean; ///< used for offline DataSets
 		ofPixels_<uint> distance; ///<distance from threshold
 		ofPixels active; ///< We treat this as if it stores bools, but no reason to make a bool type really
 
