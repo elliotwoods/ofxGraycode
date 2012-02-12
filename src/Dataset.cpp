@@ -129,7 +129,7 @@ namespace ofxGraycode {
 		unsigned short width = this->data.getWidth();
 		unsigned short height = this->data.getHeight();
 		
-		ofstream save(filename, ios::binary);
+		ofstream save(filename.c_str(), ios::binary);
 		if (!save.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::save failed to open file " << filename;
 			return;
@@ -159,7 +159,7 @@ namespace ofxGraycode {
 		uint size;
 		unsigned short width, height;
 
-		ifstream load(filename, ios::binary);
+		ifstream load(filename.c_str(), ios::binary);
 		if (!load.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::load failed to open file " << filename;
 			return;
