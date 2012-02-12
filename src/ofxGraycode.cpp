@@ -200,7 +200,6 @@ namespace ofxGraycode {
 		uint* distance = data.getDistance().getPixels();
 		uint threshold = data.getDistanceThreshold();
 		const uint* idx = data.getData().getPixels();
-		uint highest = 0;
 		for (int i=0; i<data.size(); i++, idx++) {
 			if (*idx < payload->getSize() && *distance++ > threshold) {
 				*pix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
