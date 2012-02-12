@@ -1,6 +1,6 @@
 <!DOCTYPE PATCH  SYSTEM "http://vvvv.org/versions/vvvv45beta26.dtd" >
-   <PATCH nodename="C:\openFrameworks\openFrameworks\addons\ofxGraycode\Example-DecodeGraycodeOSC\sendGraycodeFromVVVV.v4p" systemname="sendGraycodeFromVVVV" filename="C:\openFrameworks\openFrameworks\addons\ofxGraycode\Example-DecodeGraycodeOSC\sendGraycodeFromVVVV.v4p">
-   <BOUNDS type="Window" left="13260" top="17805" width="3795" height="6870">
+   <PATCH nodename="C:\openFrameworks\openFrameworks\addons\ofxGraycode\Example-DecodeGraycodeOSC\sendGraycodeFromVVVV.v4p" filename="C:\openFrameworks\openFrameworks\addons\ofxGraycode\Example-DecodeGraycodeOSC\sendGraycodeFromVVVV.v4p" systemname="sendGraycodeFromVVVV">
+   <BOUNDS height="12240" left="13260" top="12435" type="Window" width="3795">
    </BOUNDS>
    <NODE componentmode="Hidden" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\plugins\VVVV.Nodes.EmguCV.dll" id="0" nodename="Encode (EmguCV.StructuredLight)" systemname="Encode (EmguCV.StructuredLight)">
    <BOUNDS height="100" left="1230" top="2970" type="Node" width="100">
@@ -17,9 +17,9 @@
    </BOUNDS>
    <PIN pinname="Payload" visible="1">
    </PIN>
-   <PIN pinname="Width" slicecount="1" values="512">
+   <PIN pinname="Width" slicecount="1" values="1024">
    </PIN>
-   <PIN pinname="Height" slicecount="1" values="512">
+   <PIN pinname="Height" slicecount="1" values="768">
    </PIN>
    <PIN pinname="Balanced" slicecount="1" values="0">
    </PIN>
@@ -213,5 +213,99 @@
    <LINK dstnodeid="13" dstpinname="Input" srcnodeid="14" srcpinname="OSCMessage">
    </LINK>
    <LINK dstnodeid="13" dstpinname="Do Send" hiddenwhenlocked="1" srcnodeid="12" srcpinname="Y Output Value">
+   </LINK>
+   <NODE systemname="Decode (EmguCV.StructuredLight)" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\plugins\VVVV.Nodes.EmguCV.dll" nodename="Decode (EmguCV.StructuredLight)" componentmode="Hidden" id="15">
+   <BOUNDS type="Node" left="255" top="6945" width="1590" height="270">
+   </BOUNDS>
+   <PIN pinname="Input" visible="1">
+   </PIN>
+   <PIN pinname="Frame" visible="1">
+   </PIN>
+   <PIN pinname="Apply" visible="1">
+   </PIN>
+   <PIN pinname="Properties" visible="1">
+   </PIN>
+   <PIN pinname="Reset" visible="1">
+   </PIN>
+   <PIN pinname="Output" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="0" srcpinname="Output" dstnodeid="15" dstpinname="Input" linkstyle="Bezier" hiddenwhenlocked="1">
+   <LINKPOINT x="1035" y="5278">
+   </LINKPOINT>
+   <LINKPOINT x="495" y="4908">
+   </LINKPOINT>
+   </LINK>
+   <LINK srcnodeid="6" srcpinname="Output" dstnodeid="15" dstpinname="Frame" linkstyle="Bezier" hiddenwhenlocked="1">
+   <LINKPOINT x="1035" y="4385">
+   </LINKPOINT>
+   <LINKPOINT x="660" y="4015">
+   </LINKPOINT>
+   </LINK>
+   <LINK srcnodeid="10" srcpinname="OnChange" dstnodeid="15" dstpinname="Apply" linkstyle="Bezier" hiddenwhenlocked="1">
+   <LINKPOINT x="540" y="6110">
+   </LINKPOINT>
+   <LINKPOINT x="825" y="5740">
+   </LINKPOINT>
+   </LINK>
+   <LINK srcnodeid="1" srcpinname="Payload" dstnodeid="15" dstpinname="Properties" linkstyle="Bezier" hiddenwhenlocked="1">
+   <LINKPOINT x="1665" y="4933">
+   </LINKPOINT>
+   <LINKPOINT x="1185" y="4563">
+   </LINKPOINT>
+   </LINK>
+   <LINK srcnodeid="12" srcpinname="Y Output Value" dstnodeid="15" dstpinname="Reset" linkstyle="Bezier" hiddenwhenlocked="1">
+   <LINKPOINT x="1995" y="3958">
+   </LINKPOINT>
+   <LINKPOINT x="1020" y="3588">
+   </LINKPOINT>
+   </LINK>
+   <NODE systemname="CameraSpace (EmguCV.StructuredLight)" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\plugins\VVVV.Nodes.EmguCV.dll" nodename="CameraSpace (EmguCV.StructuredLight)" componentmode="Hidden" id="16">
+   <BOUNDS type="Node" left="255" top="7455" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Input" visible="1">
+   </PIN>
+   <PIN pinname="Threshold" slicecount="1" values="0">
+   </PIN>
+   <PIN pinname="Output" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="15" srcpinname="Output" dstnodeid="16" dstpinname="Input">
+   </LINK>
+   <NODE systemname="ImageQuad (EmguCV DX9)" filename="..\..\..\..\..\kimchiandchips\VVVV.Research\VVVV.Nodes.EmguCV\Package\modules\ImageQuad (EmguCV DX9).v4p" nodename="ImageQuad (EmguCV DX9)" componentmode="Hidden" id="17">
+   <BOUNDS type="Node" left="255" top="7965" width="100" height="100">
+   </BOUNDS>
+   <PIN pinname="Image" visible="1">
+   </PIN>
+   <PIN pinname="Layer" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="16" srcpinname="Output" dstnodeid="17" dstpinname="Image">
+   </LINK>
+   <NODE systemname="Renderer (EX9)" nodename="Renderer (EX9)" componentmode="InABox" id="18">
+   <BOUNDS type="Node" left="240" top="8445" width="100" height="100">
+   </BOUNDS>
+   <BOUNDS type="Box" left="240" top="8445" width="3240" height="3180">
+   </BOUNDS>
+   <BOUNDS type="Window" left="14145" top="21345" width="6240" height="5010">
+   </BOUNDS>
+   <PIN pinname="Layers" visible="1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="17" srcpinname="Layer" dstnodeid="18" dstpinname="Layers">
+   </LINK>
+   <NODE nodename="IOBox (String)" componentmode="InABox" id="19" systemname="IOBox (String)" hiddenwhenlocked="1">
+   <BOUNDS type="Node" left="1770" top="7425" width="0" height="0">
+   </BOUNDS>
+   <BOUNDS type="Box" left="1770" top="7425" width="795" height="240">
+   </BOUNDS>
+   <PIN pinname="Default" slicecount="1" values="||" encoded="0">
+   </PIN>
+   <PIN pinname="File Mask" slicecount="1" values="||" encoded="0">
+   </PIN>
+   <PIN pinname="Maximum Characters" slicecount="1" values="-1">
+   </PIN>
+   </NODE>
+   <LINK srcnodeid="15" srcpinname="Status" dstnodeid="19" dstpinname="Input String" hiddenwhenlocked="1">
    </LINK>
    </PATCH>
