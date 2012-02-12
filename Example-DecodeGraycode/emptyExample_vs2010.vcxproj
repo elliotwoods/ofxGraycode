@@ -118,6 +118,7 @@ if not exist "$(ProjectDir)\bin\data" mkdir  "$(ProjectDir)\bin\data"
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ofxGrabCam\src\ofxGrabCam.cpp" />
+    <ClCompile Include="..\src\Dataset.cpp" />
     <ClCompile Include="..\src\ofxGraycode.cpp" />
     <ClCompile Include="..\src\Payload.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -125,6 +126,7 @@ if not exist "$(ProjectDir)\bin\data" mkdir  "$(ProjectDir)\bin\data"
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ofxGrabCam\src\ofxGrabCam.h" />
+    <ClInclude Include="..\src\Dataset.h" />
     <ClInclude Include="..\src\ofxGraycode.h" />
     <ClInclude Include="..\src\Payload.h" />
     <ClInclude Include="..\src\Types.h" />

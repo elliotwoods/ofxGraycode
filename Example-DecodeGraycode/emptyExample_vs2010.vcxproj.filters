@@ -12,6 +12,9 @@
     <ClCompile Include="..\..\ofxGrabCam\src\ofxGrabCam.cpp">
       <Filter>addons\ofxGrabcam</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Dataset.cpp">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\testApp.h" />
@@ -26,6 +29,9 @@
     </ClInclude>
     <ClInclude Include="..\..\ofxGrabCam\src\ofxGrabCam.h">
       <Filter>addons\ofxGrabcam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dataset.h">
+      <Filter>addons\ofxGraycode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
