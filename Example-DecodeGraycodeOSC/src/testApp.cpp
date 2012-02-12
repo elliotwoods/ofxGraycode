@@ -2,10 +2,11 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofSetWindowShape(1024, 768/2);
 	ofSetLogLevel(OF_LOG_NOTICE);
 
 	payload.init(1024, 768);
+
+	ofSetWindowShape(payload.getWidth(), payload.getHeight() / 2);
 	video.initGrabber(640, 480, true);
 	decoder.init(payload);
 
@@ -24,11 +25,14 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	video.draw(0, 0, 512, 512);
+	int width = payload.getWidth() / 2;
+	int height = payload.getHeight() / 2;
+
+	video.draw(0, 0, width, height);
 	if (decoder.hasData() && previewFrame == -2)
-		decoder.draw(512, 0, 512, 768/2);
+		decoder.draw(width, 0, width, height);
 	else if (capturePreview.isAllocated())
-		capturePreview.draw(512, 0, 512, 768/2);
+		capturePreview.draw(width, 0, width, height);
 }
 
 //--------------------------------------------------------------

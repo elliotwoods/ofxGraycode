@@ -5,6 +5,9 @@ void testApp::setup(){
 	payload.init(1024, 768);
 	encoder.init(payload);
 
+	//set the oF window size to match the payload size
+	ofSetWindowShape(payload.getWidth(), payload.getHeight());
+
 	//connect to server
 	client.setup("localhost", SERVER_PORT);
 
