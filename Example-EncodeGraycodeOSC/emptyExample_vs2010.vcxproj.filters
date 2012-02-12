@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\testApp.cpp" />
+    <ClCompile Include="..\src\ofxGraycode.cpp">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Payload.cpp">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxGrabCam\src\ofxGrabCam.cpp">
+      <Filter>addons\ofxGrabcam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Dataset.cpp">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>addons\ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>addons\ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>addons\ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxOsc\src\ofxOscSender.cpp">
+      <Filter>addons\ofxOsc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxNetwork\src\ofxTCPClient.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxNetwork\src\ofxTCPManager.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxNetwork\src\ofxTCPServer.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ofxNetwork\src\ofxUDPManager.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\testApp.h" />
+    <ClInclude Include="..\src\ofxGraycode.h">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Payload.h">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Types.h">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxGrabCam\src\ofxGrabCam.h">
+      <Filter>addons\ofxGrabcam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Dataset.h">
+      <Filter>addons\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\ofxOsc.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\ofxOscArg.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\ofxOscBundle.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\ofxOscMessage.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\ofxOscReceiver.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\ofxOscSender.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxOsc\src\win32pstdint.h">
+      <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxNetwork\src\ofxNetwork.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxNetwork\src\ofxNetworkUtils.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxNetwork\src\ofxTCPClient.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxNetwork\src\ofxTCPManager.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxNetwork\src\ofxTCPServer.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ofxNetwork\src\ofxUDPManager.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="addons">
+      <UniqueIdentifier>{1c52f653-215c-4234-bad9-79227a6d7ec4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGraycode">
+      <UniqueIdentifier>{04b79d62-7784-4de1-a5af-dfc10ef07436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxGrabcam">
+      <UniqueIdentifier>{450a7b84-eb90-4855-97ea-5141c9cf5532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOsc">
+      <UniqueIdentifier>{dca22c84-4a14-4a0c-83fa-6d69b0696398}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetwork">
+      <UniqueIdentifier>{a9454d13-6584-420c-9e86-6afd94275735}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

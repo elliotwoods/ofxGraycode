@@ -2,10 +2,10 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofSetWindowShape(1024, 512);
+	ofSetWindowShape(1024, 768/2);
 	ofSetLogLevel(OF_LOG_NOTICE);
 
-	payload.init(512, 512);
+	payload.init(1024, 768);
 	video.initGrabber(640, 480, true);
 	decoder.init(payload);
 
@@ -26,9 +26,9 @@ void testApp::update(){
 void testApp::draw(){
 	video.draw(0, 0, 512, 512);
 	if (decoder.hasData() && previewFrame == -2)
-		decoder.draw(512, 0, 512, 512);
+		decoder.draw(512, 0, 512, 768/2);
 	else if (capturePreview.isAllocated())
-		capturePreview.draw(512, 0, 512, 512);
+		capturePreview.draw(512, 0, 512, 768/2);
 }
 
 //--------------------------------------------------------------
