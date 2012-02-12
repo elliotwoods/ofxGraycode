@@ -2,6 +2,10 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	//avoid output video tearing
+	ofSetVerticalSync(true);
+	
+	//initialise everything
 	payload.init(1024, 768);
 	encoder.init(payload);
 
