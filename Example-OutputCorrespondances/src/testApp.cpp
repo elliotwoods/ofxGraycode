@@ -2,11 +2,6 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	payload.init(1024, 768);
-	encoder.init(payload);
-
-	//load first frame
-	encoder >> output;
 }
 
 //--------------------------------------------------------------
@@ -16,19 +11,25 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	output.draw(0,0);
+	int y = 10;
+	ofDrawBitmapString("Press any key to load a file and output as correspondance table file + cam/proj properties at the same path", 10, y+=10);
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	if (key == 'r')
-		encoder.reset();
-	else {
-		//feed out a new frame
-		//returns false if no new frames
- 		if (!(encoder >> output))
-			ofLogNotice() << "End of frames";
+	data.load();
+	string filename = ofFilePath::removeExt(data.getFilename());
+
+	ofstream file((filename + "-correspondances.txt").c_str());
+	file << "Camera pixel\tProjector pixel\tDistance (score)";
+	const unsigned char* active = data.getActive().getPixels();
+	const uint* input = data.getData().getPixels();
+	const uint* distance = data.getDistance().getPixels();
+	for (uint i=0; i<data.size(); i++, active++, input++, distance++) {
+		if (*active)
+			file << i << "\t" << *input << "\t" << *distance << endl;
 	}
+	file.close();
 }
 
 //--------------------------------------------------------------

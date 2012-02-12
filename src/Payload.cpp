@@ -82,7 +82,6 @@ namespace ofxGraycode {
 		int captureHeight = captures[0].getHeight();
 
 		//prepare output
-		data.allocate(captureWidth, captureHeight);
 		data.calcMean(captures);
 
 		//decode

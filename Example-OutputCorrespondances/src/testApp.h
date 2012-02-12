@@ -23,7 +23,5 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	ofImage output;
-	PayloadGraycode payload;
-	Encoder encoder;
+	DataSet data;
 };

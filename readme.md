@@ -16,7 +16,7 @@ https://github.com/YCAMInterlab/ProCamToolkit.git
 
 * Again, press any key to progress through frames (output from encoder and input into decoder)
 * When you get to the end of the frames, the decoder will calculate the dataset, and visualise on the right
-* Payload resolution is 1024x768
+* Payload resolution is 512x512
 
 ## DecodeGraycodeOSC
 

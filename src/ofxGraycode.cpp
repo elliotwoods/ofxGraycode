@@ -62,7 +62,7 @@ namespace ofxGraycode {
 
 	void Decoder::operator<<(const ofPixels& pixels) {
 		if (frame==0)
-			data.allocate(pixels.getWidth(), pixels.getHeight());
+			data.allocate(pixels.getWidth(), pixels.getHeight(), payload->getWidth(), payload->getHeight());
 
 		const ofPixels* greyPixels;
 		if (pixels.getNumChannels() > 1) {
@@ -205,7 +205,6 @@ namespace ofxGraycode {
 				*pix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
 				*pix++ = 255.0f * float(*idx / payload->getWidth()) / float(payload->getHeight());
 				*pix++ = 0.0f;
-				highest = MAX(highest, *idx);
 			} else {
 				memset(pix, 0, 3);
 				pix += 3;

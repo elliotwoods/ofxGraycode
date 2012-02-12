@@ -10,7 +10,7 @@ namespace ofxGraycode {
 		clear();
 	}
 
-	void DataSet::allocate(int captureWidth, int captureHeight) {
+	void DataSet::allocate(int captureWidth, int captureHeight, int payloadWidth, int payloadHeight) {
 		data.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		distance.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		mean.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
@@ -19,6 +19,8 @@ namespace ofxGraycode {
 		distance.set(0,0);
 		mean.set(0,0);
 		active.set(0,0);
+		this->payloadWidth = payloadWidth;
+		this->payloadHeight = payloadHeight;
 	}
 
 	void DataSet::clear() {
@@ -28,6 +30,9 @@ namespace ofxGraycode {
 		active.clear();
 		distanceThreshold = 20;
 		hasData = false;
+		filename = "";
+		payloadWidth = 0;
+		payloadHeight = 0;
 	}
 
 	void DataSet::calcMean(const vector<ofPixels>& captures) {
@@ -70,6 +75,10 @@ namespace ofxGraycode {
 		return this->distance;
 	}
 
+	const ofPixels& DataSet::getActive() {
+		return this->active;
+	}
+
 	uchar DataSet::getDistanceThreshold() const {
 		return this->distanceThreshold;
 	}
@@ -85,6 +94,14 @@ namespace ofxGraycode {
 
 	uint DataSet::getHeight() const {
 		return data.getHeight();
+	}
+
+	uint DataSet::getPayloadWidth() const {
+		return this->payloadWidth;
+	}
+
+	uint DataSet::getPayloadHeight() const {
+		return this->payloadHeight;
 	}
 
 	uint DataSet::size() const {
@@ -126,18 +143,18 @@ namespace ofxGraycode {
 			return;
 		}
 
-		unsigned short width = this->data.getWidth();
-		unsigned short height = this->data.getHeight();
+		int width = this->data.getWidth();
+		int height = this->data.getHeight();
 		
-		ofstream save(filename.c_str(), ios::binary);
+		ofstream save(ofToDataPath(filename).c_str(), ios::binary);
 		if (!save.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::save failed to open file " << filename;
 			return;
 		}
 
 		save << this->size() << endl;
-		save << width << endl;
-		save << height << endl;
+		save << width << "\t" <<  height << endl;
+		save << payloadWidth << "\t" <<  payloadHeight << endl;
 		save << this->distanceThreshold << endl;
 		save.write((char*)data.getPixels(), this->size() * sizeof(uint));
 		save.write((char*)mean.getPixels(), this->size() * sizeof(uchar));
@@ -156,10 +173,12 @@ namespace ofxGraycode {
 			return;
 		}
 
+		this->filename = filename;
+
 		uint size;
 		unsigned short width, height;
 
-		ifstream load(filename.c_str(), ios::binary);
+		ifstream load(ofToDataPath(filename).c_str(), ios::binary);
 		if (!load.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::load failed to open file " << filename;
 			return;
@@ -168,6 +187,8 @@ namespace ofxGraycode {
 		load >> size;
 		load >> width;
 		load >> height;
+		load >> payloadWidth;
+		load >> payloadHeight;
 		load >> this->distanceThreshold;
 		load.ignore(1);
 
@@ -175,7 +196,7 @@ namespace ofxGraycode {
 			ofLogError() << "ofxGraycode::DataSet::load failed. size mismatch in file. is it corrupt / correct type?";
 			return;
 		}
-		this->allocate(width, height);
+		this->allocate(width, height, payloadWidth, payloadHeight);
 
 		load.read((char*)data.getPixels(), this->size() * sizeof(uint));
 		load.read((char*)mean.getPixels(), this->size() * sizeof(uchar));
@@ -184,5 +205,9 @@ namespace ofxGraycode {
 		load.close();
 
 		this->hasData = true;
+	}
+
+	const string& DataSet::getFilename() const {
+		return this->filename;
 	}
 }
