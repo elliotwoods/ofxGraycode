@@ -24,4 +24,5 @@ public:
 	void gotMessage(ofMessage msg);
 
 	DataSet data;
+	inline ofVec2f getNorm(const uint index, const uint width, const uint height);
 };

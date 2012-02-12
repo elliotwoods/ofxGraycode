@@ -168,10 +168,14 @@ namespace ofxGraycode {
 
 	void Decoder::saveDataSet() {
 		data.save();
+		if (preview.isAllocated())
+			preview.saveImage(data.getFilename() + ".png");
 	}
 
 	void Decoder::saveDataSet(const string filename) {
 		data.save(filename);
+		if (preview.isAllocated())
+			preview.saveImage(data.getFilename() + ".png");
 	}
 	//
 	////

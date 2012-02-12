@@ -128,11 +128,11 @@ namespace ofxGraycode {
 	// File access
 	////
 	//
-	void DataSet::save() const {
+	void DataSet::save() {
 		this->save(ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath());
 	}
 
-	void DataSet::save(const string filename) const {
+	void DataSet::save(const string filename) {
 		if (!hasData) {
 			ofLogError() << "ofxGraycode::DataSet::save : cannot save, this set doesn't have data yet";
 			return;
@@ -142,6 +142,8 @@ namespace ofxGraycode {
 			ofLogWarning() << "ofxGraycode::DataSet::save failed as no file selected";
 			return;
 		}
+
+		this->filename = filename;
 
 		int width = this->data.getWidth();
 		int height = this->data.getHeight();

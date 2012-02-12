@@ -1,0 +1,1 @@
+Camera pixel (index, x, y)	Projector pixel (index, x, y)	Distance (score)

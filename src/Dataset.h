@@ -27,8 +27,8 @@ namespace ofxGraycode {
 		void setHasData(bool hasData);
 		void applyDistanceThreshold();
 
-		void save() const;
-		void save(const string filename) const;
+		void save();
+		void save(const string filename);
 		void load();
 		void load(const string filename);
 		const string& getFilename() const;
