@@ -9,9 +9,6 @@
     <ClCompile Include="..\src\Payload.cpp">
       <Filter>addons\ofxGraycode</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\ofxGrabCam\src\ofxGrabCam.cpp">
-      <Filter>addons\ofxGrabcam</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Dataset.cpp">
       <Filter>addons\ofxGraycode</Filter>
     </ClCompile>
@@ -50,9 +47,6 @@
     </ClInclude>
     <ClInclude Include="..\src\Types.h">
       <Filter>addons\ofxGraycode</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ofxGrabCam\src\ofxGrabCam.h">
-      <Filter>addons\ofxGrabcam</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Dataset.h">
       <Filter>addons\ofxGraycode</Filter>
@@ -103,9 +97,6 @@
     </Filter>
     <Filter Include="addons\ofxGraycode">
       <UniqueIdentifier>{04b79d62-7784-4de1-a5af-dfc10ef07436}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxGrabcam">
-      <UniqueIdentifier>{450a7b84-eb90-4855-97ea-5141c9cf5532}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxOsc">
       <UniqueIdentifier>{dca22c84-4a14-4a0c-83fa-6d69b0696398}</UniqueIdentifier>
