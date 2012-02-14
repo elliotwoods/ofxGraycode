@@ -2,7 +2,8 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofSetWindowShape(1024,30);
+	ofSetWindowShape(1024,45);
+	hasData = false;
 }
 
 //--------------------------------------------------------------
@@ -12,12 +13,35 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	int y = 10;
-	ofDrawBitmapString("Press any key to load a file and output as correspondence table file + cam/proj properties at the same path", 10, y+=10);
+	if (!hasData) {
+		int y = 10;
+		ofDrawBitmapString("Press any key to load a file and output as correspondence table file + cam/proj properties at the same path", 10, y+=10);
+		ofDrawBitmapString("[l] will load without outputting any data to files]", 10, y+=10);
+		ofDrawBitmapString("[f] will toggle fullscreen (good for checking your datasets once preview is rendered)", 10, y+=10);
+	} else {
+		ofPushStyle();
+		ofSetColor(255,100,200);
+		ofPushView();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		projNorm.drawVertices();
+		ofPopView();
+		ofPopStyle();
+	}
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+	if (key==OF_KEY_ESC)
+		return;
+
+	if (key=='f') {
+		ofToggleFullscreen();
+		return;
+	}
+		
 	data.load();
 	string filename = data.getFilename();
 
@@ -33,13 +57,17 @@ void testApp::keyPressed(int key){
 	int camHeight = data.getHeight();
 	int projWidth = data.getPayloadWidth();
 	int projHeight = data.getPayloadHeight();
+	projNorm.clear();
 
 	for (uint i=0; i<data.size(); i++, active++, input++, distance++) {
 		if (*active) {
 			camxy = getNorm(i, camWidth, camHeight);
-			projxy = getNorm(i, projWidth, projHeight);
-			file << i << "\t" << camxy.x << "\t" << camxy.y << "\t" <<
-			*input << "\t" << projxy.x << "\t" << projxy.y << "\t" << *distance << endl;
+			projxy = getNorm(*input, projWidth, projHeight);
+			projNorm.addVertex(projxy);
+			if (key != 'l') {
+				file << i << "\t" << camxy.x << "\t" << camxy.y << "\t" <<
+				*input << "\t" << projxy.x << "\t" << projxy.y << "\t" << *distance << endl;
+			}
 		}
 
 		if (i % 1000 == 0)
@@ -47,6 +75,9 @@ void testApp::keyPressed(int key){
 	}
 	cout << "done." << endl;
 	file.close();
+
+	ofSetWindowShape(projWidth, projHeight);
+	hasData = true;
 }
 
 //--------------------------------------------------------------

@@ -25,4 +25,7 @@ public:
 
 	DataSet data;
 	inline ofVec2f getNorm(const uint index, const uint width, const uint height);
+
+	ofMesh projNorm;
+	bool hasData;
 };
