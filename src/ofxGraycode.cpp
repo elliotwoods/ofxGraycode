@@ -83,7 +83,7 @@ namespace ofxGraycode {
 		else
 			payload->readPixels(frame, *greyPixels);
 
- 		if (++frame >= payload->getFrameCount()) {
+		if (++frame >= payload->getFrameCount()) {
 			calc();
 			frame--;
 		}
@@ -135,19 +135,33 @@ namespace ofxGraycode {
 	////
 	//
 	void Decoder::draw(float x,float y) {
-		preview.draw(x, y);
+		projectorInCamera.draw(x, y);
 	}
 
 	void Decoder::draw(float x,float y,float w, float h) {
-		preview.draw(x, y, w, h);
+		projectorInCamera.draw(x, y, w, h);
 	}
 	
 	float Decoder::getHeight() {
-		return preview.getHeight();
+		return projectorInCamera.getHeight();
 	}
 
 	float Decoder::getWidth() {
-		return preview.getWidth();
+		return projectorInCamera.getWidth();
+	}
+	//
+	////
+
+	////
+	//previews
+	////
+	//
+	const ofImage& Decoder::getCameraInProjector() {
+		return this->cameraInProjector;
+	}
+
+	const ofImage& Decoder::getProjectorInCamera() {
+		return this->projectorInCamera;
 	}
 	//
 	////
@@ -168,14 +182,24 @@ namespace ofxGraycode {
 
 	void Decoder::saveDataSet() {
 		data.save();
-		if (preview.isAllocated())
-			preview.saveImage(data.getFilename() + ".png");
+		savePreviews();
 	}
 
 	void Decoder::saveDataSet(const string filename) {
 		data.save(filename);
-		if (preview.isAllocated())
-			preview.saveImage(data.getFilename() + ".png");
+		savePreviews();
+	}
+
+	void Decoder::savePreviews() {
+		string filename = data.getFilename();
+		if (filename == "")
+			filename = ofSystemSaveDialog("DataSet", "Select output path for previews").getPath();
+
+		if (projectorInCamera.isAllocated())
+			projectorInCamera.saveImage(filename + "-projectorInCamera.png");
+
+		if (cameraInProjector.isAllocated())
+			cameraInProjector.saveImage(filename + "-cameraInProjector.png");
 	}
 	//
 	////
@@ -195,25 +219,35 @@ namespace ofxGraycode {
 	}
 
 	void Decoder::updatePreview() {
-		preview.allocate(data.getWidth(), data.getHeight(), OF_IMAGE_COLOR);
-		preview.getPixelsRef().set(0,0);
-		preview.getPixelsRef().set(1,0);
-		preview.getPixelsRef().set(2,0);
-		
-		uchar* pix = preview.getPixels();
+		projectorInCamera.allocate(data.getWidth(), data.getHeight(), OF_IMAGE_COLOR);
+		memset(projectorInCamera.getPixels(), 0, projectorInCamera.getPixelsRef().size());
+
+		cameraInProjector.allocate(data.getPayloadWidth(), data.getPayloadHeight(), OF_IMAGE_COLOR);
+		memset(cameraInProjector.getPixels(), 0, cameraInProjector.getPixelsRef().size());
+
+		uchar* camPix = projectorInCamera.getPixels();
+		uchar* projPixels = cameraInProjector.getPixels();
+		uchar* projPix;
 		uint* distance = data.getDistance().getPixels();
 		uint threshold = data.getDistanceThreshold();
 		const uint* idx = data.getData().getPixels();
 		for (int i=0; i<data.size(); i++, idx++) {
 			if (*idx < payload->getSize() && *distance++ > threshold) {
-				*pix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
-				*pix++ = 255.0f * float(*idx / payload->getWidth()) / float(payload->getHeight());
-				*pix++ = 0.0f;
+				*camPix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
+				*camPix++ = 255.0f * float(*idx / payload->getWidth()) / float(payload->getHeight());
+				*camPix++ = 0.0f;
+
+				projPix = projPixels + 3 * *idx;
+				projPix[0] = 255.0f * float(i % data.getWidth()) / float(data.getWidth());
+				projPix[1] = 255.0f * float(i / data.getWidth()) / float(data.getHeight());
+
 			} else {
-				memset(pix, 0, 3);
-				pix += 3;
+				memset(camPix, 0, 3);
+				camPix += 3;
 			}
 		}
-		preview.update();
+
+		projectorInCamera.update();
+		cameraInProjector.update();
 	}
 }

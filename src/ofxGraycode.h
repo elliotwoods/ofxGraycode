@@ -62,6 +62,15 @@ namespace ofxGraycode {
 		////
 
 		////
+		//previews
+		////
+		//
+		const ofImage& getCameraInProjector();
+		const ofImage& getProjectorInCamera();
+		//
+		////
+
+		////
 		//file actions
 		////
 		//
@@ -69,6 +78,7 @@ namespace ofxGraycode {
 		void loadDataSet(const string filename);
 		void saveDataSet();
 		void saveDataSet(const string filename);
+		void savePreviews();
 		//
 		/////
 	protected:
@@ -81,6 +91,6 @@ namespace ofxGraycode {
 		vector<ofPixels> captures;
 
 		DataSet data;
-		ofImage preview;
+		ofImage projectorInCamera, cameraInProjector;
 	};
 }
