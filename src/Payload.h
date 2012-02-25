@@ -46,7 +46,7 @@ namespace ofxGraycode {
 		bool matchingPixels(const ofPixels& pixels) const;
 		void allocatePixels(ofPixels& pixels) const;
 		virtual void fillPixels(const unsigned int frame, ofPixels& pixels) const = 0;
-		virtual void readPixels(const unsigned int frame, const ofPixels& pixels) { };
+		virtual void readPixels(const unsigned int frame, const ofPixels& pixels) const { };
 
 	protected:
 		virtual void render() = 0;
@@ -66,7 +66,7 @@ namespace ofxGraycode {
 	class PayloadOnline : public Payload {
 	public:
 		bool isOffline() const { return false; }
-		virtual void calc(DataSet& data) = 0;
+		virtual void calc(DataSet& data) const = 0;
 	};
 
 	/** Basic Graycode encoding with threshold taken from

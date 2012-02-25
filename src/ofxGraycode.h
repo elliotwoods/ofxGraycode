@@ -17,11 +17,11 @@ namespace ofxGraycode {
 	class BaseCodec {
 	public:
 		BaseCodec();
-		void init(Payload& payload);
+		void init(const Payload& payload);
 		virtual void reset() = 0;
 		int getFrame();
 	protected:
-		Payload* payload;
+		const Payload* payload;
 		int	frame;
 	};
 
@@ -35,7 +35,7 @@ namespace ofxGraycode {
 	};
 
 
-	class Decoder : public BaseCodec, ofBaseDraws {
+	class Decoder : public BaseCodec, public ofBaseDraws {
 	public:
 		void reset();
 		void operator<<(const ofPixels& pixels);
@@ -84,6 +84,7 @@ namespace ofxGraycode {
 	protected:
 		void calc(); ///< this is called automatically when all frames are received
 		void updatePreview();
+		void updatePreviewTextures();
 		///Captures is only used if this payload specifies
 		///	that it is offline using isOffline()
 		///Offline denotes it performs image analysis at the
@@ -92,5 +93,6 @@ namespace ofxGraycode {
 
 		DataSet data;
 		ofImage projectorInCamera, cameraInProjector;
+		bool needPreviewUpdate; ///<to be thread safe, we perform the updates later in the draw function
 	};
 }

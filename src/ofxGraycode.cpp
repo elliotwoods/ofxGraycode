@@ -16,7 +16,7 @@ namespace ofxGraycode {
 		this->payload = 0;
 	}
 
-	void BaseCodec::init(Payload& payload) {
+	void BaseCodec::init(const Payload& payload) {
 		this->payload = &payload;
 		reset();
 	}
@@ -58,11 +58,18 @@ namespace ofxGraycode {
 		this->frame = 0;
 		this->data.clear();
 		this->captures.clear();
+		this->needPreviewUpdate = false;
 	}
 
 	void Decoder::operator<<(const ofPixels& pixels) {
 		if (frame==0)
 			data.allocate(pixels.getWidth(), pixels.getHeight(), payload->getWidth(), payload->getHeight());
+
+		if (frame >= payload->getFrameCount() - 1) {
+#pragma omp critical(ofLog)
+			ofLogWarning("ofxGraycode") << "Can't add more frames, we've already captured a full set. please clear()";
+			return;
+		}
 
 		const ofPixels* greyPixels;
 		if (pixels.getNumChannels() > 1) {
@@ -83,9 +90,11 @@ namespace ofxGraycode {
 		else
 			payload->readPixels(frame, *greyPixels);
 
-		if (++frame >= payload->getFrameCount()) {
+		frame++;
+
+		if (frame >= payload->getFrameCount()) {
 			calc();
-			frame--;
+			frame = payload->getFrameCount();
 		}
 
 		if (greyPixels != &pixels)
@@ -135,11 +144,15 @@ namespace ofxGraycode {
 	////
 	//
 	void Decoder::draw(float x,float y) {
-		projectorInCamera.draw(x, y);
+		this->updatePreviewTextures();
+		if (projectorInCamera.isAllocated())
+			projectorInCamera.draw(x, y);
 	}
 
 	void Decoder::draw(float x,float y,float w, float h) {
-		projectorInCamera.draw(x, y, w, h);
+		this->updatePreviewTextures();
+		if (projectorInCamera.isAllocated())
+			projectorInCamera.draw(x, y, w, h);
 	}
 	
 	float Decoder::getHeight() {
@@ -157,10 +170,12 @@ namespace ofxGraycode {
 	////
 	//
 	const ofImage& Decoder::getCameraInProjector() {
+		this->updatePreviewTextures();
 		return this->cameraInProjector;
 	}
 
 	const ofImage& Decoder::getProjectorInCamera() {
+		this->updatePreviewTextures();
 		return this->projectorInCamera;
 	}
 	//
@@ -207,12 +222,11 @@ namespace ofxGraycode {
 	void Decoder::calc() {
 		ofLogNotice() << "ofxGraycode::Decoder::calc()";
 		if (payload->isOffline()) {
-			PayloadOffline& payload(*(PayloadOffline*)this->payload);
-
+			const PayloadOffline& payload(*(const PayloadOffline*)this->payload);
 			data.calcMean(this->captures);
 			payload.calc(this->captures, this->data);
 		} else {
-			PayloadOnline& payload(*(PayloadOnline*)this->payload);
+			const PayloadOnline& payload(*(const PayloadOnline*)this->payload);
 			payload.calc(this->data);
 		}
 		updatePreview();
@@ -247,7 +261,16 @@ namespace ofxGraycode {
 			}
 		}
 
+		//to be thread safe, we perform the opengl updates on next draw
+		this->needPreviewUpdate = true;
+	}
+
+	void Decoder::updatePreviewTextures() {
+		if (!this->needPreviewUpdate)
+			return;
+
 		projectorInCamera.update();
 		cameraInProjector.update();
+		this->needPreviewUpdate = false;
 	}
 }

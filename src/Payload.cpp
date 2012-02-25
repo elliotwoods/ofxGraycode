@@ -122,7 +122,7 @@ namespace ofxGraycode {
 
 	void PayloadGraycode::render() {
 		this->frameCountX = ceil(log((float)width) / log((float)2)); 
-		this->frameCountY = ceil(log((float)width) / log((float)2)); 
+		this->frameCountY = ceil(log((float)height) / log((float)2)); 
 		this->frameCount = frameCountX + frameCountY;
 		
 		data.allocate(width, height, OF_IMAGE_GRAYSCALE);
