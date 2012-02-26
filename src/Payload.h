@@ -9,7 +9,6 @@
 #include "ofMain.h"
 
 #include "DataSet.h"
-#include "Types.h"
 
 // Payloads are what defines an encoding
 // Changing the payload results in a different message being
@@ -27,7 +26,7 @@ namespace ofxGraycode {
 	class Payload {
 	public:
 		Payload();
-		void init(uint width, uint height);
+		void init(uint32_t width, uint32_t height);
 
 		bool isAllocated() const;
 
@@ -37,10 +36,10 @@ namespace ofxGraycode {
 		///	the end
 		virtual bool isOffline() const  {return false; }
 
-		uint getWidth() const;
-		uint getHeight() const;
-		uint getSize() const;
-		uint getFrameCount() const;
+		uint32_t getWidth() const;
+		uint32_t getHeight() const;
+		uint32_t getSize() const;
+		uint32_t getFrameCount() const;
 		virtual ofImageType getImageType() const = 0;
 
 		bool matchingPixels(const ofPixels& pixels) const;
@@ -52,9 +51,9 @@ namespace ofxGraycode {
 		virtual void render() = 0;
 
 		bool allocated;
-		uint width, height;
-		uint size;
-		uint frameCount;
+		uint32_t width, height;
+		uint32_t size;
+		uint32_t frameCount;
 	};
 
 	class PayloadOffline : public Payload {
@@ -80,11 +79,11 @@ namespace ofxGraycode {
 	protected:
 		void render();
 
-		uint getMaxIndex();
+		uint32_t getMaxIndex();
 
-		uint frameCountX, frameCountY;
+		uint32_t frameCountX, frameCountY;
 
-		ofPixels_<uint> data;
-		vector<uint> dataInverse;
+		ofPixels_<uint32_t> data;
+		vector<uint32_t> dataInverse;
 	};
 }

@@ -65,7 +65,7 @@ namespace ofxGraycode {
 		if (frame==0)
 			data.allocate(pixels.getWidth(), pixels.getHeight(), payload->getWidth(), payload->getHeight());
 
-		if (frame >= payload->getFrameCount() - 1) {
+		if (frame > payload->getFrameCount() - 1) {
 #pragma omp critical(ofLog)
 			ofLogWarning("ofxGraycode") << "Can't add more frames, we've already captured a full set. please clear()";
 			return;
@@ -76,8 +76,8 @@ namespace ofxGraycode {
 			ofPixels* downsample = new ofPixels();
 			downsample->allocate(pixels.getWidth(), pixels.getHeight(), OF_PIXELS_MONO);
 			downsample->set(0, 0);
-			const uchar* in = pixels.getPixels();
-			uchar* out = downsample->getPixels();
+			const uint8_t* in = pixels.getPixels();
+			uint8_t* out = downsample->getPixels();
 			for (int i=0; i<pixels.size(); i++, out += (i % pixels.getNumChannels() == 0)) {
 				*out += *in++ / pixels.getNumChannels();
 			}
@@ -109,7 +109,7 @@ namespace ofxGraycode {
 		return this->data.getHasData();
 	}
 
-	uint Decoder::size() const {
+	uint32_t Decoder::size() const {
 		return this->data.size();
 	}
 
@@ -117,7 +117,7 @@ namespace ofxGraycode {
 		return this->captures;
 	}
 
-	const ofPixels_<uint>& Decoder::getData() const {
+	const ofPixels_<uint32_t>& Decoder::getData() const {
 		return this->data.getData();
 	}
 
@@ -125,13 +125,13 @@ namespace ofxGraycode {
 		return this->data.getMean();
 	}
 
-	void Decoder::setThreshold(uchar distanceThreshold) {
+	void Decoder::setThreshold(uint8_t distanceThreshold) {
 		this->data.setDistanceThreshold(distanceThreshold);
 		if (this->data.getHasData())
 			this->updatePreview();
 	}
 
-	uchar Decoder::getThreshold() const {
+	uint8_t Decoder::getThreshold() const {
 		return this->data.getDistanceThreshold();
 	}
 
@@ -239,12 +239,12 @@ namespace ofxGraycode {
 		cameraInProjector.allocate(data.getPayloadWidth(), data.getPayloadHeight(), OF_IMAGE_COLOR);
 		memset(cameraInProjector.getPixels(), 0, cameraInProjector.getPixelsRef().size());
 
-		uchar* camPix = projectorInCamera.getPixels();
-		uchar* projPixels = cameraInProjector.getPixels();
-		uchar* projPix;
-		uint* distance = data.getDistance().getPixels();
-		uint threshold = data.getDistanceThreshold();
-		const uint* idx = data.getData().getPixels();
+		uint8_t* camPix = projectorInCamera.getPixels();
+		uint8_t* projPixels = cameraInProjector.getPixels();
+		uint8_t* projPix;
+		uint32_t* distance = data.getDistance().getPixels();
+		uint32_t threshold = (uint32_t)data.getDistanceThreshold();
+		const uint32_t* idx = data.getData().getPixels();
 		for (int i=0; i<data.size(); i++, idx++) {
 			if (*idx < payload->getSize() && *distance++ > threshold) {
 				*camPix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());

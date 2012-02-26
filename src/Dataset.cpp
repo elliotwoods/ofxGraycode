@@ -36,34 +36,36 @@ namespace ofxGraycode {
 	}
 
 	void DataSet::calcMean(const vector<ofPixels>& captures) {
-		ofPixels_<uint> tempMean;
+		cout << "calculating mean" << endl;
+		ofPixels_<uint32_t> tempMean;
 		tempMean.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
 		tempMean.set(0, 0);
 
-		const uchar* pixelIn;
-		uint* pixelOut;
-		for (uint frame=0; frame<captures.size(); frame++) {
+		const uint8_t* pixelIn;
+		uint32_t* pixelOut;
+		for (uint32_t frame=0; frame<captures.size(); frame++) {
 			pixelIn = captures[frame].getPixels();
 			pixelOut = tempMean.getPixels();
 			for (int i=0; i<tempMean.size(); i++)
 				*pixelOut++ += *pixelIn++;
 		}
 
-		uint* meanIn = tempMean.getPixels();
-		uchar* meanOut = this->mean.getPixels();
-		for (uint i = 0; i < tempMean.size(); i++)
+		uint32_t* meanIn = tempMean.getPixels();
+		uint8_t* meanOut = this->mean.getPixels();
+		for (uint32_t i = 0; i < tempMean.size(); i++)
 			*meanOut++ = *meanIn++ / captures.size();
+		cout << "end calculate mean" << endl;
 	}
 	
 	////
 	// Accessors
 	////
 	//
-	const ofPixels_<uint>& DataSet::getData() const {
+	const ofPixels_<uint32_t>& DataSet::getData() const {
 		return this->data;
 	}
 
-	ofPixels_<uint>& DataSet::getData() {
+	ofPixels_<uint32_t>& DataSet::getData() {
 		return this->data;
 	}
 
@@ -71,7 +73,7 @@ namespace ofxGraycode {
 		return this->mean;
 	}
 
-	ofPixels_<uint>& DataSet::getDistance() {
+	ofPixels_<uint32_t>& DataSet::getDistance() {
 		return this->distance;
 	}
 
@@ -79,32 +81,32 @@ namespace ofxGraycode {
 		return this->active;
 	}
 
-	uchar DataSet::getDistanceThreshold() const {
+	uint8_t DataSet::getDistanceThreshold() const {
 		return this->distanceThreshold;
 	}
 
-	void DataSet::setDistanceThreshold(uchar distanceThreshold) {
+	void DataSet::setDistanceThreshold(uint8_t distanceThreshold) {
 		this->distanceThreshold = distanceThreshold;
 		applyDistanceThreshold();
 	}
 
-	uint DataSet::getWidth() const {
+	uint32_t DataSet::getWidth() const {
 		return data.getWidth();
 	}
 
-	uint DataSet::getHeight() const {
+	uint32_t DataSet::getHeight() const {
 		return data.getHeight();
 	}
 
-	uint DataSet::getPayloadWidth() const {
+	uint32_t DataSet::getPayloadWidth() const {
 		return this->payloadWidth;
 	}
 
-	uint DataSet::getPayloadHeight() const {
+	uint32_t DataSet::getPayloadHeight() const {
 		return this->payloadHeight;
 	}
 
-	uint DataSet::size() const {
+	uint32_t DataSet::size() const {
 		return data.size();
 	}
 
@@ -117,8 +119,8 @@ namespace ofxGraycode {
 	}
 
 	void DataSet::applyDistanceThreshold() {
-		uchar* active = this->active.getPixels();
-		uint* distance = this->distance.getPixels();
+		uint8_t* active = this->active.getPixels();
+		uint32_t* distance = this->distance.getPixels();
 		for (int i=0; i<this->size(); i++)
 			*active++ = *distance++ > distanceThreshold;
 	}
@@ -128,20 +130,15 @@ namespace ofxGraycode {
 	// File access
 	////
 	//
-	void DataSet::save() {
-		this->save(ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath());
-	}
 
-	void DataSet::save(const string filename) {
+	void DataSet::save(string filename) {
 		if (!hasData) {
 			ofLogError() << "ofxGraycode::DataSet::save : cannot save, this set doesn't have data yet";
 			return;
 		}
 
-		if (filename=="") {
-			ofLogWarning() << "ofxGraycode::DataSet::save failed as no file selected";
-			return;
-		}
+		if (filename=="")
+			filename = ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath();
 
 		this->filename = filename;
 
@@ -158,26 +155,20 @@ namespace ofxGraycode {
 		save << width << "\t" <<  height << endl;
 		save << payloadWidth << "\t" <<  payloadHeight << endl;
 		save << this->distanceThreshold << endl;
-		save.write((char*)data.getPixels(), this->size() * sizeof(uint));
-		save.write((char*)mean.getPixels(), this->size() * sizeof(uchar));
-		save.write((char*)distance.getPixels(), this->size() * sizeof(uint));
-		save.write((char*)active.getPixels(), this->size() * sizeof(uchar));
+		save.write((char*)data.getPixels(), this->size() * sizeof(uint32_t));
+		save.write((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
+		save.write((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
+		save.write((char*)active.getPixels(), this->size() * sizeof(uint8_t));
 		save.close();
 	}
 
-	void DataSet::load() {
-		this->load(ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath());
-	}
-
-	void DataSet::load(const string filename) {
-		if (filename=="") {
-			ofLogWarning() << "ofxGraycode::DataSet::load failed as no file selected";
-			return;
-		}
+	void DataSet::load(string filename) {
+		if (filename=="")
+			filename = ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath();
 
 		this->filename = filename;
 
-		uint size;
+		uint32_t size;
 		unsigned short width, height;
 
 		ifstream load(ofToDataPath(filename).c_str(), ios::binary);
@@ -200,10 +191,10 @@ namespace ofxGraycode {
 		}
 		this->allocate(width, height, payloadWidth, payloadHeight);
 
-		load.read((char*)data.getPixels(), this->size() * sizeof(uint));
-		load.read((char*)mean.getPixels(), this->size() * sizeof(uchar));
-		load.read((char*)distance.getPixels(), this->size() * sizeof(uint));
-		load.read((char*)active.getPixels(), this->size() * sizeof(uchar));
+		load.read((char*)data.getPixels(), this->size() * sizeof(uint32_t));
+		load.read((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
+		load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
+		load.read((char*)active.getPixels(), this->size() * sizeof(uint8_t));
 		load.close();
 
 		this->hasData = true;
@@ -211,5 +202,9 @@ namespace ofxGraycode {
 
 	const string& DataSet::getFilename() const {
 		return this->filename;
+	}
+
+	vector<Correspondence> DataSet::getCorrespondencesVector() const {
+		return vector<Correspondence>();
 	}
 }

@@ -42,12 +42,12 @@ namespace ofxGraycode {
 		void operator<<(ofBaseHasPixels& image);
 		bool hasData();
 
-		uint size() const; ///< camera image size
+		uint32_t size() const; ///< camera image size
 		const vector<ofPixels>& getCaptures() const;
-		const ofPixels_<uint>& getData() const;
+		const ofPixels_<uint32_t>& getData() const;
 		const ofPixels& getMean() const;
-		void setThreshold(uchar distanceThreshold);
-		uchar getThreshold() const;
+		void setThreshold(uint8_t distanceThreshold);
+		uint8_t getThreshold() const;
 		const DataSet& getDataSet() const;
 
 		////

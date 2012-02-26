@@ -15,7 +15,7 @@ namespace ofxGraycode {
 		this->allocated = false;
 	}
 
-	void Payload::init(uint width, uint height) {
+	void Payload::init(uint32_t width, uint32_t height) {
 		this->width = width;
 		this->height = height;
 		this->size = width*height;
@@ -27,19 +27,19 @@ namespace ofxGraycode {
 		return this->allocated;
 	}
 
-	uint Payload::getWidth() const {
+	uint32_t Payload::getWidth() const {
 		return this->width;
 	}
 
-	uint Payload::getHeight() const {
+	uint32_t Payload::getHeight() const {
 		return this->height;
 	}
 	
-	uint Payload::getSize() const {
+	uint32_t Payload::getSize() const {
 		return this->size;
 	}
 
-	uint Payload::getFrameCount() const {
+	uint32_t Payload::getFrameCount() const {
 		return this->frameCount;
 	}
 
@@ -65,10 +65,10 @@ namespace ofxGraycode {
 			return;
 		}
 
-		uchar* pixel = pixels.getPixels();
-		const uint* data = this->data.getPixels();
+		uint8_t* pixel = pixels.getPixels();
+		const uint32_t* data = this->data.getPixels();
 		for (int i=0; i<size; i++)
-			*pixel++ = (*data++ & (uint)1 << frame) == (uint)1 << frame ? (uchar)255 : (uchar)0;
+			*pixel++ = (*data++ & (uint32_t)1 << frame) == (uint32_t)1 << frame ? (uint8_t)255 : (uint8_t)0;
 	}
 
 	void PayloadGraycode::calc(const vector<ofPixels>& captures, DataSet& data) const {
@@ -85,13 +85,13 @@ namespace ofxGraycode {
 		data.calcMean(captures);
 
 		//decode
-		const uchar* thresholdIn;
-		const uchar* pixelIn;
-		uchar distanceThreshold = data.getDistanceThreshold();
-		uint* dataOut;
-		uint* distanceOut;
+		const uint8_t* thresholdIn;
+		const uint8_t* pixelIn;
+		uint8_t distanceThreshold = data.getDistanceThreshold();
+		uint32_t* dataOut;
+		uint32_t* distanceOut;
 		int distance;
-		for (uint frame=0; frame<frameCount; frame++) {
+		for (uint32_t frame=0; frame<frameCount; frame++) {
 			pixelIn = captures[frame].getPixels();
 			thresholdIn = data.getMean().getPixels();
 			dataOut = data.getData().getPixels();
@@ -99,7 +99,7 @@ namespace ofxGraycode {
 			for (int i=0; i<data.size(); i++, dataOut++, pixelIn++, thresholdIn++) {
 				distance = (int)*pixelIn - (int)*thresholdIn;
 				if (distance > 0)
-					*dataOut |= (uint)1 << frame;
+					*dataOut |= (uint32_t)1 << frame;
 				*distanceOut++ += abs(distance);
 			}
 		}
@@ -128,11 +128,11 @@ namespace ofxGraycode {
 		data.allocate(width, height, OF_IMAGE_GRAYSCALE);
 		dataInverse.resize(getMaxIndex());
 		
-		uint* pix = data.getPixels();
-		uint idx = 0;
+		uint32_t* pix = data.getPixels();
+		uint32_t idx = 0;
 
-		for (uint y=0; y<height; y++) {
-			for (uint x=0; x<width; x++, pix++, idx++) {
+		for (uint32_t y=0; y<height; y++) {
+			for (uint32_t x=0; x<width; x++, pix++, idx++) {
 				*pix = x ^ (x >> 1) +
 					((y ^ (y >> 1)) << (int) frameCountX);
 				dataInverse[*pix] = idx;
@@ -140,7 +140,7 @@ namespace ofxGraycode {
 		}
 	}
 
-	uint PayloadGraycode::getMaxIndex() {
+	uint32_t PayloadGraycode::getMaxIndex() {
 		return 1 << (frameCountX + frameCountY);
 	}
 }
