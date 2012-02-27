@@ -28,7 +28,7 @@ namespace ofxGraycode {
 		distance.clear();
 		mean.clear();
 		active.clear();
-		distanceThreshold = 20;
+		distanceThreshold = 10;
 		hasData = false;
 		filename = "";
 		payloadWidth = 0;
@@ -204,9 +204,10 @@ namespace ofxGraycode {
 
 	vector<Correspondence> DataSet::getCorrespondencesVector() const {
 		vector<Correspondence> correspondences;
-		if (!hasData)
+		if (!hasData) {
 			ofLogError("ofxGraycode::DataSet") << "Cannot get correspondences vector as we have no data yet";
-
+			return correspondences;
+		}
 		const uint8_t* active = this->active.getPixels();
 		const uint32_t* data = this->data.getPixels();
 		for (uint32_t i=0; i<size(); i++, active++, data++) {
@@ -214,5 +215,34 @@ namespace ofxGraycode {
 				correspondences.push_back(Correspondence(i, *data));
 		}
 		return correspondences;
+	}
+
+	void DataSet::saveCorrespondences(string filename) const {
+		if (!hasData) {
+			ofLogError("ofxGraycode::DataSet") << "Cannot save correspondences vector as we have no data yet";
+			return;
+		}
+
+		if (filename=="") {
+			filename = this->getFilename();
+			if (filename=="")
+				filename = ofSystemSaveDialog("sl.correspondences", "Save correspondences").getPath();
+			else
+				filename += ".correspondences";
+		}
+
+		vector<Correspondence> correspondences = this->getCorrespondencesVector();
+		ofstream fileOut;
+		try {
+			fileOut.open(ofToDataPath(filename, true), ios::binary);
+			uint32_t size = correspondences.size();
+			fileOut.write((char*)&size, sizeof(uint32_t));
+			vector<Correspondence>::iterator it;
+			for (it = correspondences.begin(); it != correspondences.end(); it++)
+				fileOut.write((char*)&(*it), sizeof(Correspondence));
+			fileOut.close();
+		} catch (...) {
+			ofLogError("ofxGraycode") << "Save correspondences file write failed";
+		}
 	}
 }

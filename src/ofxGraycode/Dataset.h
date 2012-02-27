@@ -32,7 +32,7 @@ namespace ofxGraycode {
 		const string& getFilename() const;
 
 		vector<Correspondence> getCorrespondencesVector() const;
-
+		void saveCorrespondences(string filename="") const;
 	protected:
 		ofPixels_<uint32_t> data; ///<encoded pixel index in camera space
 		ofPixels mean; ///< used for offline DataSets
