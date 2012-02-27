@@ -57,8 +57,12 @@ namespace ofxGraycode {
 	void Decoder::reset() {
 		this->frame = 0;
 		this->data.clear();
-		this->captures.clear();
 		this->needPreviewUpdate = false;
+		this->clearCaptures();
+	}
+
+	void Decoder::clearCaptures() {
+		this->captures.clear();
 	}
 
 	void Decoder::operator<<(const ofPixels& pixels) {
@@ -139,6 +143,17 @@ namespace ofxGraycode {
 		return this->data;
 	}
 
+	
+	////
+	//ofBaseUpdates
+	////
+	//
+	void Decoder::update() {
+		this->updatePreviewTextures();
+	}
+	//
+	////
+
 	////
 	//ofBaseDraws
 	////
@@ -168,13 +183,13 @@ namespace ofxGraycode {
 	////
 	//previews
 	////
-	//
-	const ofImage& Decoder::getCameraInProjector() {
+	//	
+	ofImage& Decoder::getCameraInProjector() {
 		this->updatePreviewTextures();
 		return this->cameraInProjector;
 	}
-
-	const ofImage& Decoder::getProjectorInCamera() {
+	
+	ofImage& Decoder::getProjectorInCamera() {
 		this->updatePreviewTextures();
 		return this->projectorInCamera;
 	}
@@ -185,19 +200,9 @@ namespace ofxGraycode {
 	//file actions
 	////
 	//
-	void Decoder::loadDataSet() {
-		data.load();
-		updatePreview();
-	}
-
 	void Decoder::loadDataSet(const string filename) {
 		data.load(filename);
 		updatePreview();
-	}
-
-	void Decoder::saveDataSet() {
-		data.save();
-		savePreviews();
 	}
 
 	void Decoder::saveDataSet(const string filename) {

@@ -36,7 +36,6 @@ namespace ofxGraycode {
 	}
 
 	void DataSet::calcMean(const vector<ofPixels>& captures) {
-		cout << "calculating mean" << endl;
 		ofPixels_<uint32_t> tempMean;
 		tempMean.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
 		tempMean.set(0, 0);
@@ -54,7 +53,6 @@ namespace ofxGraycode {
 		uint8_t* meanOut = this->mean.getPixels();
 		for (uint32_t i = 0; i < tempMean.size(); i++)
 			*meanOut++ = *meanIn++ / captures.size();
-		cout << "end calculate mean" << endl;
 	}
 	
 	////
@@ -205,6 +203,16 @@ namespace ofxGraycode {
 	}
 
 	vector<Correspondence> DataSet::getCorrespondencesVector() const {
-		return vector<Correspondence>();
+		vector<Correspondence> correspondences;
+		if (!hasData)
+			ofLogError("ofxGraycode::DataSet") << "Cannot get correspondences vector as we have no data yet";
+
+		const uint8_t* active = this->active.getPixels();
+		const uint32_t* data = this->data.getPixels();
+		for (uint32_t i=0; i<size(); i++, active++, data++) {
+			if (*active)
+				correspondences.push_back(Correspondence(i, *data));
+		}
+		return correspondences;
 	}
 }

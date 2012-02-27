@@ -81,9 +81,12 @@ namespace ofxGraycode {
 		int captureWidth = captures[0].getWidth();
 		int captureHeight = captures[0].getHeight();
 
+		float startTime = ofGetElapsedTimef();
 		//prepare output
+		cout << "calc mean" << endl;
 		data.calcMean(captures);
 
+		cout << "distance and decode" << endl;
 		//decode
 		const uint8_t* thresholdIn;
 		const uint8_t* pixelIn;
@@ -104,20 +107,23 @@ namespace ofxGraycode {
 			}
 		}
 
+		cout << "normalise distance" << endl;
 		//normalise distance
 		distanceOut = data.getDistance().getPixels();
 		for (int i=0; i<data.size(); i++)
 			*distanceOut++ /= frameCount;
 		data.applyDistanceThreshold();
 
+		cout << "invert data" << endl;
 		//invert data
 		dataOut = data.getData().getPixels();
 		
-		for (int i=0; i<data.size(); i++, dataOut++) {
+		for (int i=0; i<data.size(); i++, dataOut++)
 			*dataOut = dataInverse[*dataOut];
-		}
 
 		data.setHasData(true);
+		float endTime = ofGetElapsedTimef();
+		cout << "done in " << (endTime - startTime) << " seconds." << endl;
 	}
 
 	void PayloadGraycode::render() {
