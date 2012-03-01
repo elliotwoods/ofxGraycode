@@ -12,6 +12,7 @@ namespace ofxGraycode {
 
 	void DataSet::allocate(int captureWidth, int captureHeight, int payloadWidth, int payloadHeight) {
 		data.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
+		dataInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		distance.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		mean.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		active.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
@@ -25,6 +26,7 @@ namespace ofxGraycode {
 
 	void DataSet::clear() {
 		data.clear();
+		dataInverse.clear();
 		distance.clear();
 		mean.clear();
 		active.clear();
@@ -55,6 +57,14 @@ namespace ofxGraycode {
 			*meanOut++ = *meanIn++ / captures.size();
 	}
 	
+	void DataSet::calc() {
+		uint8_t* active = this->active.getPixels();
+		uint32_t* distance = this->distance.getPixels();
+		for (int i=0; i<this->size(); i++)
+			*active++ = *distance++ > distanceThreshold;
+		calcInverse();
+	}
+
 	////
 	// Accessors
 	////
@@ -65,6 +75,14 @@ namespace ofxGraycode {
 
 	ofPixels_<uint32_t>& DataSet::getData() {
 		return this->data;
+	}
+
+	const ofPixels_<uint32_t>& DataSet::getDataInverse() const {
+		return this->dataInverse;
+	}
+
+	ofPixels_<uint32_t>& DataSet::getDataInverse() {
+		return this->dataInverse;
 	}
 
 	const ofPixels& DataSet::getMean() const {
@@ -85,7 +103,7 @@ namespace ofxGraycode {
 
 	void DataSet::setDistanceThreshold(uint8_t distanceThreshold) {
 		this->distanceThreshold = distanceThreshold;
-		applyDistanceThreshold();
+		calc();
 	}
 
 	uint32_t DataSet::getWidth() const {
@@ -104,6 +122,10 @@ namespace ofxGraycode {
 		return this->payloadHeight;
 	}
 
+	uint32_t DataSet::getPayloadSize() const {
+		return this->payloadWidth * this->payloadHeight;
+	}
+
 	uint32_t DataSet::size() const {
 		return data.size();
 	}
@@ -115,14 +137,6 @@ namespace ofxGraycode {
 	void DataSet::setHasData(bool hasData) {
 		this->hasData = hasData;
 	}
-
-	void DataSet::applyDistanceThreshold() {
-		uint8_t* active = this->active.getPixels();
-		uint32_t* distance = this->distance.getPixels();
-		for (int i=0; i<this->size(); i++)
-			*active++ = *distance++ > distanceThreshold;
-	}
-
 	
 	////
 	// File access
@@ -196,6 +210,7 @@ namespace ofxGraycode {
 		load.close();
 
 		this->hasData = true;
+		this->calc();
 	}
 
 	const string& DataSet::getFilename() const {
@@ -243,6 +258,18 @@ namespace ofxGraycode {
 			fileOut.close();
 		} catch (...) {
 			ofLogError("ofxGraycode") << "Save correspondences file write failed";
+		}
+	}
+
+	void DataSet::calcInverse() {
+		this->dataInverse.set(0, 0);
+		uint32_t *dataInverse = this->dataInverse.getPixels();
+		uint32_t *data = this->data.getPixels();
+		uint8_t *active = this->active.getPixels();
+		uint32_t payloadSize = this->getPayloadSize();
+		for (uint32_t i=0; i<this->data.size(); i++, data++, active++) {
+			if (*data < payloadSize && *active)
+				dataInverse[*data] = i;
 		}
 	}
 }

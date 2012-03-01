@@ -107,19 +107,22 @@ namespace ofxGraycode {
 			}
 		}
 
-		cout << "normalise distance" << endl;
 		//normalise distance
+		cout << "normalise distance" << endl;
 		distanceOut = data.getDistance().getPixels();
 		for (int i=0; i<data.size(); i++)
 			*distanceOut++ /= frameCount;
-		data.applyDistanceThreshold();
 
+		//decode data
 		cout << "invert data" << endl;
-		//invert data
 		dataOut = data.getData().getPixels();
 		
 		for (int i=0; i<data.size(); i++, dataOut++)
 			*dataOut = dataInverse[*dataOut];
+
+		//apply threshold, invert into projector space
+		cout << "DataSet::calc" << endl;
+		data.calc();
 
 		data.setHasData(true);
 		float endTime = ofGetElapsedTimef();

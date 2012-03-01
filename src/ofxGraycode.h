@@ -19,7 +19,8 @@ namespace ofxGraycode {
 		BaseCodec();
 		void init(const Payload& payload);
 		virtual void reset() = 0;
-		int getFrame();
+		int getFrame() const;
+		int getFrameCount() const;
 	protected:
 		const Payload* payload;
 		int	frame;
@@ -61,8 +62,8 @@ namespace ofxGraycode {
 		//ofBaseDraws
 		void draw(float x,float y);
 		void draw(float x,float y,float w, float h);
-		float getHeight();
 		float getWidth();
+		float getHeight();
 		//
 		////
 

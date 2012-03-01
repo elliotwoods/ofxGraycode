@@ -21,10 +21,13 @@ namespace ofxGraycode {
 		reset();
 	}
 
-	int BaseCodec::getFrame() {
+	int BaseCodec::getFrame() const {
 		return this->frame;
 	}
 
+	int BaseCodec::getFrameCount() const {
+		return this->payload->getFrameCount();
+	}
 //----------------------------------------
 // Encoder
 	void Encoder::reset() {
@@ -169,13 +172,13 @@ namespace ofxGraycode {
 		if (projectorInCamera.isAllocated())
 			projectorInCamera.draw(x, y, w, h);
 	}
-	
-	float Decoder::getHeight() {
-		return projectorInCamera.getHeight();
-	}
 
 	float Decoder::getWidth() {
 		return projectorInCamera.getWidth();
+	}
+	
+	float Decoder::getHeight() {
+		return projectorInCamera.getHeight();
 	}
 	//
 	////
@@ -245,25 +248,27 @@ namespace ofxGraycode {
 		memset(cameraInProjector.getPixels(), 0, cameraInProjector.getPixelsRef().size());
 
 		uint8_t* camPix = projectorInCamera.getPixels();
-		uint8_t* projPixels = cameraInProjector.getPixels();
-		uint8_t* projPix;
-		uint32_t* distance = data.getDistance().getPixels();
+		uint8_t* active = (uint8_t*)data.getActive().getPixels();
 		uint32_t threshold = (uint32_t)data.getDistanceThreshold();
+
+		memset(camPix, 0, projectorInCamera.getPixelsRef().size());
 		const uint32_t* idx = data.getData().getPixels();
-		for (int i=0; i<data.size(); i++, idx++) {
-			if (*idx < payload->getSize() && *distance++ > threshold) {
+		for (uint32_t i=0; i<data.size(); i++, idx++) {
+			if (*idx < payload->getSize() && (*active++)) {
 				*camPix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
 				*camPix++ = 255.0f * float(*idx / payload->getWidth()) / float(payload->getHeight());
 				*camPix++ = 0.0f;
-
-				projPix = projPixels + 3 * *idx;
-				projPix[0] = 255.0f * float(i % data.getWidth()) / float(data.getWidth());
-				projPix[1] = 255.0f * float(i / data.getWidth()) / float(data.getHeight());
-
-			} else {
-				memset(camPix, 0, 3);
+			} else
 				camPix += 3;
-			}
+		}
+
+		uint8_t* projPixels = cameraInProjector.getPixels();
+		uint32_t* dataInverse = this->data.getDataInverse().getPixels();
+		float cameraWidth = this->getWidth();
+		float cameraHeight = this->getHeight();
+		for (uint32_t i=0; i<this->payload->getSize(); i++, projPixels+=3, dataInverse++) {
+			projPixels[0] = 255.0f * float(*dataInverse % (uint32_t)cameraWidth) / cameraWidth;
+			projPixels[1] = 255.0f * float(*dataInverse / (uint32_t)cameraWidth) / cameraHeight;
 		}
 
 		//to be thread safe, we perform the opengl updates on next draw
