@@ -85,12 +85,14 @@
     <ClCompile Include="..\src\ofxGraycode.cpp" />
     <ClCompile Include="..\src\ofxGraycode\Dataset.cpp" />
     <ClCompile Include="..\src\ofxGraycode\Payload.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\ProjectorPixel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ofxGraycode.h" />
     <ClInclude Include="..\src\ofxGraycode\Correspondence.h" />
     <ClInclude Include="..\src\ofxGraycode\Dataset.h" />
     <ClInclude Include="..\src\ofxGraycode\Payload.h" />
+    <ClInclude Include="..\src\ofxGraycode\ProjectorPixel.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs2010\openframeworksLib.vcxproj">

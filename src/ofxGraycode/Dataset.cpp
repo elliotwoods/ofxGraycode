@@ -1,5 +1,11 @@
 #include "DataSet.h"
 
+#define OFXGRAYCODE_DATASET_HAS_DATA 1 << 0
+#define OFXGRAYCODE_DATASET_HAS_DATAINVERSE 1 << 1
+#define OFXGRAYCODE_DATASET_HAS_MEAN 1 << 2
+#define OFXGRAYCODE_DATASET_HAS_DISTANCE 1 << 3
+#define OFXGRAYCODE_DATASET_HAS_ACTIVE 1 << 4
+
 namespace ofxGraycode {
 
 	////
@@ -89,11 +95,15 @@ namespace ofxGraycode {
 		return this->mean;
 	}
 
+	const ofPixels_<uint32_t>& DataSet::getDistance() const {
+		return this->distance;
+	}
+
 	ofPixels_<uint32_t>& DataSet::getDistance() {
 		return this->distance;
 	}
 
-	const ofPixels& DataSet::getActive() {
+	const ofPixels& DataSet::getActive() const {
 		return this->active;
 	}
 
@@ -167,7 +177,17 @@ namespace ofxGraycode {
 		save << width << "\t" <<  height << endl;
 		save << payloadWidth << "\t" <<  payloadHeight << endl;
 		save << this->distanceThreshold << endl;
+
+		uint32_t contained = 0;
+		contained |= OFXGRAYCODE_DATASET_HAS_DATA;
+		contained |= OFXGRAYCODE_DATASET_HAS_DATAINVERSE;
+		contained |= OFXGRAYCODE_DATASET_HAS_MEAN;
+		contained |= OFXGRAYCODE_DATASET_HAS_DISTANCE;
+		contained |= OFXGRAYCODE_DATASET_HAS_ACTIVE;
+		save.write((char*)&contained, sizeof(contained));
+
 		save.write((char*)data.getPixels(), this->size() * sizeof(uint32_t));
+		save.write((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
 		save.write((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
 		save.write((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
 		save.write((char*)active.getPixels(), this->size() * sizeof(uint8_t));
@@ -203,10 +223,19 @@ namespace ofxGraycode {
 		}
 		this->allocate(width, height, payloadWidth, payloadHeight);
 
-		load.read((char*)data.getPixels(), this->size() * sizeof(uint32_t));
-		load.read((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
-		load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
-		load.read((char*)active.getPixels(), this->size() * sizeof(uint8_t));
+		uint32_t contained;
+		load.read((char*)&contained, sizeof(contained));
+
+		if (contained & OFXGRAYCODE_DATASET_HAS_DATA)
+			load.read((char*)data.getPixels(), this->size() * sizeof(uint32_t));
+		if (contained & OFXGRAYCODE_DATASET_HAS_DATAINVERSE)
+			load.read((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
+		if (contained & OFXGRAYCODE_DATASET_HAS_MEAN)
+			load.read((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
+		if (contained & OFXGRAYCODE_DATASET_HAS_DISTANCE)
+			load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
+		if (contained & OFXGRAYCODE_DATASET_HAS_ACTIVE)
+			load.read((char*)active.getPixels(), this->size() * sizeof(uint8_t));
 		load.close();
 
 		this->hasData = true;
@@ -215,6 +244,42 @@ namespace ofxGraycode {
 
 	const string& DataSet::getFilename() const {
 		return this->filename;
+	}
+
+	vector<ProjectorPixel> DataSet::getProjectorPixels() const {
+		const uint32_t *data = this->data.getPixels();
+		const uint8_t *active = this->active.getPixels();
+		const uint32_t *distance = this->distance.getPixels();
+
+		vector<ProjectorPixel> projectorPixels(this->getPayloadSize());
+		ofVec2f cameraXY, projectorXY;
+		uint32_t activeCount = 0;
+
+		for (int i=0; i<this->size(); i++, data++, active++, distance++) {
+			if (*active) {
+				cameraXY = ofVec2f(i % this->getWidth(), i / this->getWidth()) / 
+					ofVec2f(this->getWidth(), this->getHeight()) * 2.0f - ofVec2f(1.0f, 1.0f);
+				if (projectorPixels[*data].isFound())
+					projectorPixels[*data].addCameraFind(cameraXY, *distance);
+				else {
+					projectorXY = ofVec2f(*data % this->getPayloadWidth(), *data / this->getPayloadWidth()) / 
+					ofVec2f(this->getPayloadWidth(), this->getPayloadHeight()) * 2.0f;
+					projectorXY.x -= 1.0f;
+					projectorXY.y = 1.0f - projectorXY.y;
+					projectorPixels[*data] = ProjectorPixel(projectorXY, cameraXY, *distance);
+					activeCount++;
+				}
+			}
+		}
+
+		//filter blank pixels
+		vector<ProjectorPixel> filteredPixels;
+		filteredPixels.reserve(activeCount);
+		for (int i=0; i<this->size(); i++)
+			if (projectorPixels[i].isFound())
+				filteredPixels.push_back(projectorPixels[i]);
+
+		return filteredPixels;
 	}
 
 	vector<Correspondence> DataSet::getCorrespondencesVector() const {

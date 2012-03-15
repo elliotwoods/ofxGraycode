@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Correspondence.h"
+#include "ofxGraycode/Correspondence.h"
+#include "ofxGraycode/ProjectorPixel.h"
 
 namespace ofxGraycode {
 	class DataSet {
@@ -17,8 +18,9 @@ namespace ofxGraycode {
 		const ofPixels_<uint32_t>& getDataInverse() const;
 		ofPixels_<uint32_t>& getDataInverse();
 		const ofPixels& getMean() const;
+		const ofPixels_<uint32_t>& getDistance() const;
 		ofPixels_<uint32_t>& getDistance();
-		const ofPixels& getActive();
+		const ofPixels& getActive() const;
 		uint8_t getDistanceThreshold() const;
 
 		void setDistanceThreshold(uint8_t distanceThreshold);
@@ -35,8 +37,14 @@ namespace ofxGraycode {
 		void load(string filename="");
 		const string& getFilename() const;
 
+		vector<ProjectorPixel> getProjectorPixels() const;
+
+		////
+		//to be depreciated:
 		vector<Correspondence> getCorrespondencesVector() const;
 		void saveCorrespondences(string filename="") const;
+		////
+
 	protected:
 		void calcInverse(); //calculate data in projection space
 		ofPixels_<uint32_t> data; ///<projector pixel index in camera space
