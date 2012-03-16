@@ -1,3 +1,5 @@
+libs/
+
 *.depend
 *.layout
 *.mode*v3
@@ -27,5 +29,6 @@ ipch/
 *.pch
 Debug/
 Release/
+
 
 *~.xml

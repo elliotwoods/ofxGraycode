@@ -7,7 +7,66 @@
 #define OFXGRAYCODE_DATASET_HAS_ACTIVE 1 << 4
 
 namespace ofxGraycode {
+#pragma mark DataSet::iterator
+	//----------
+	ofVec2f DataSet::const_iterator::reference::getCameraXY() const {
+		ofVec2f xy;
+		xy.x = this->camera % this->dataSet.getWidth();
+		xy.y = this->camera / this->dataSet.getWidth();
+		return xy;
+	}
 
+	//----------
+	ofVec2f DataSet::const_iterator::reference::getCameraXYNorm() const {
+		ofVec2f xy = this->getCameraXY();
+		xy /= ofVec2f( this->dataSet.getWidth(), this->dataSet.getHeight() );
+		xy *= 2.0f; //0..2
+		xy -= 1.0f;
+		xy.y = - xy.y;
+		return xy;
+	}
+
+	//----------
+	void DataSet::const_iterator::operator++() {
+		this->camera++;
+		this->projector++;
+		this->active++;
+		this->mean++;
+		this->distance++;
+	}
+
+	//----------
+	void DataSet::const_iterator::operator--() {
+		this->camera--;
+		this->projector--;
+		this->active--;
+		this->mean--;
+		this->distance--;
+	}
+
+	//----------
+	bool DataSet::const_iterator::operator==(const DataSet::const_iterator & other) const {
+		//compare pointers
+		return this->projector == other.projector;
+	}
+
+	//----------
+	bool DataSet::const_iterator::operator!=(const DataSet::const_iterator & other) const {
+		//compare pointers
+		return this->projector != other.projector;
+	}
+
+	//----------
+	DataSet::const_iterator::reference DataSet::const_iterator::operator->() const {
+		return DataSet::const_iterator::reference(*this);
+	}
+
+	//----------
+	DataSet::const_iterator::reference DataSet::const_iterator::operator*() const {
+		return DataSet::const_iterator::reference(*this);
+	}
+
+#pragma mark DataSet
 	////
 	// Initialisation
 	////
@@ -282,6 +341,25 @@ namespace ofxGraycode {
 		return filteredPixels;
 	}
 
+	//----------
+	map<uint32_t, DataSet::const_iterator> DataSet::getMapping() const {
+		map<uint32_t, DataSet::const_iterator> mapping; //projector
+		map<uint32_t, uint32_t> distance; //projector, distance
+		for (DataSet::const_iterator it = this->begin(); it != this->end(); it++) {
+			if ( !(*it).active )
+				continue;
+			if ( mapping.count((*it).projector) == 0) {
+				mapping.insert( pair<uint32_t, DataSet::const_iterator> ( (*it).projector, it ) );
+				distance.insert( pair<uint32_t, uint32_t> ( (*it).projector, (*it).distance ) );
+			} else {
+				if ((*it).distance > distance.at( (*it).projector ) )
+					mapping.at( (*it).projector ) = it;
+			}
+		}
+		return mapping;
+	}
+
+
 	vector<Correspondence> DataSet::getCorrespondencesVector() const {
 		vector<Correspondence> correspondences;
 		if (!hasData) {
@@ -295,6 +373,28 @@ namespace ofxGraycode {
 				correspondences.push_back(Correspondence(i, *data));
 		}
 		return correspondences;
+	}
+
+	DataSet::const_iterator DataSet::begin() const {
+		DataSet::const_iterator it;
+		it.camera = 0;
+		it.projector = this->data.getPixels();
+		it.active = this->active.getPixels();
+		it.distance = this->distance.getPixels();
+		it.mean = this->mean.getPixels();
+		it.dataSet = this;
+		return it;
+	}
+
+	DataSet::const_iterator DataSet::end() const {
+		DataSet::const_iterator it;
+		it.camera = this->size();
+		it.projector = this->data.getPixels() + this->size();
+		it.active = this->active.getPixels() + this->size();
+		it.distance = this->distance.getPixels() + this->size();
+		it.mean = this->mean.getPixels() + this->size();
+		it.dataSet = this;
+		return it;
 	}
 
 	void DataSet::saveCorrespondences(string filename) const {

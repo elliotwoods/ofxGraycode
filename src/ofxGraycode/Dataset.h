@@ -7,6 +7,47 @@
 namespace ofxGraycode {
 	class DataSet {
 	public:
+
+		struct const_iterator {
+			struct reference {
+				reference(const const_iterator & iterator) :
+				camera(iterator.camera),
+				projector(*iterator.projector),
+				active(*iterator.active),
+				mean(*iterator.mean),
+				distance(*iterator.distance),
+				dataSet(*iterator.dataSet) { }
+
+				ofVec2f getCameraXY() const;
+				ofVec2f getCameraXYNorm() const;
+
+				const uint32_t & camera;
+				const uint32_t & projector;
+				const uint32_t & active;
+				const uint8_t & mean;
+				const uint32_t & distance;
+				const DataSet & dataSet;
+			};
+
+			friend class reference;
+			friend class DataSet;
+
+			void operator++();
+			void operator--();
+			bool operator==(const DataSet::const_iterator & other) const;
+			bool operator!=(const DataSet::const_iterator & other) const;
+			reference operator->() const;
+			reference operator*() const;
+		protected:
+			uint32_t camera;
+			const uint32_t * projector;
+			const uint8_t * active;
+			const uint8_t * mean;
+			const uint32_t * distance;
+			const DataSet* dataSet;
+
+		};
+
 		DataSet();
 		void allocate(int captureWidth, int captureHeight, int payloadWidth, int payloadHeight);
 		void clear();
@@ -38,6 +79,10 @@ namespace ofxGraycode {
 		const string& getFilename() const;
 
 		vector<ProjectorPixel> getProjectorPixels() const;
+		map<uint32_t, DataSet::const_iterator> getMapping() const; ///<projector pixel as index. highest distance
+		
+		DataSet::const_iterator begin() const;
+		DataSet::const_iterator end() const;
 
 		////
 		//to be depreciated:

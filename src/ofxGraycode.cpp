@@ -223,6 +223,9 @@ namespace ofxGraycode {
 
 		if (cameraInProjector.isAllocated())
 			cameraInProjector.saveImage(filename + "-cameraInProjector.png");
+
+		if (data.getMean().isAllocated())
+			ofSaveImage(ofPixels( data.getMean() ), filename + "-mean.png");
 	}
 	//
 	////
