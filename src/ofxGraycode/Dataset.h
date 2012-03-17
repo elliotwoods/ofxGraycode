@@ -4,6 +4,7 @@
 #include "ofxGraycode/Correspondence.h"
 #include "ofxGraycode/ProjectorPixel.h"
 
+#pragma warning ( disable : 4413)
 namespace ofxGraycode {
 	class DataSet {
 	public:
