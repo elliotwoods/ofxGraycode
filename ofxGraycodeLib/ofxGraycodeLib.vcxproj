@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8257A221-2EE7-44EA-BD9E-558C3D7426C5}</ProjectGuid>
+    <ProjectGuid>{FE06EE51-020E-4A7B-95EA-E051951B6E18}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ofxGraycodeLib</RootNamespace>
   </PropertyGroup>
