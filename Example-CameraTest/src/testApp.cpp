@@ -6,11 +6,13 @@ void testApp::setup(){
 	payload.init(512, 512);
 	encoder.init(payload);
 	decoder.init(payload);
+	video.initGrabber(640, 480, false);
+	this->encodeFrame = true;
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-
+	video.update();
 }
 
 //--------------------------------------------------------------
@@ -18,13 +20,25 @@ void testApp::draw(){
 	message.draw(0, 0);
 	decoder.draw(512, 0);
 
-	ofDrawBitmapString("Press any key to step through encoder frames one by one", 20, 20);
+	ofDrawBitmapString("Press any key to step through encoder and decoder frames one by one", 20, 20);
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	if (encoder >> message)
-		decoder << message;
+	
+	if (key == 'v') {
+		video.videoSettings();
+		return;
+	}
+
+	if (encodeFrame) {
+		if (encoder >> message)
+			encodeFrame = false;
+	} else {
+		decoder << video;
+		encodeFrame = true;
+	}
+
 }
 
 //--------------------------------------------------------------
