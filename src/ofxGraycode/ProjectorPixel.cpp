@@ -10,7 +10,7 @@ namespace ofxGraycode {
 		this->blank = false;
 		this->projector = projectorXY;
 		this->addCameraFind(cameraXY, distance);
-		this->cameraTotal = 0.0f;
+		this->cameraTotal = ofVec2f(0.0f, 0.0f);
 		this->weightTotal = 0.0f;
 	}
 
