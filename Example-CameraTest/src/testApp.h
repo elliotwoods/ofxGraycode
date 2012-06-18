@@ -3,6 +3,9 @@
 #include "ofMain.h"
 #include "ofxGraycode.h"
 
+//wait for a certain amount of time to allow the camera to capture the encoded frame
+#define WAIT_TIME 300
+
 using namespace ofxGraycode;
 
 class testApp : public ofBaseApp{
@@ -11,6 +14,9 @@ public:
 	void setup();
 	void update();
 	void draw();
+	
+	void advance();
+	void reset();
 
 	void keyPressed  (int key);
 	void keyReleased(int key);
@@ -29,4 +35,5 @@ public:
 	ofVideoGrabber video;
 
 	bool encodeFrame;
+	bool autoAdvance;
 };
