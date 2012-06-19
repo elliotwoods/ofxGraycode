@@ -345,7 +345,7 @@ namespace ofxGraycode {
 	map<uint32_t, DataSet::const_iterator> DataSet::getMapping() const {
 		map<uint32_t, DataSet::const_iterator> mapping; //projector
 		map<uint32_t, uint32_t> distance; //projector, distance
-		for (DataSet::const_iterator it = this->begin(); it != this->end(); it++) {
+		for (DataSet::const_iterator it = this->begin(); it != this->end(); ++it) {
 			if ( !(*it).active )
 				continue;
 			if ( mapping.count((*it).projector) == 0) {
@@ -414,7 +414,7 @@ namespace ofxGraycode {
 		vector<Correspondence> correspondences = this->getCorrespondencesVector();
 		ofstream fileOut;
 		try {
-			fileOut.open(ofToDataPath(filename, true), ios::binary);
+			fileOut.open(ofToDataPath(filename, true).c_str(), ios::binary);
 			uint32_t size = correspondences.size();
 			fileOut.write((char*)&size, sizeof(uint32_t));
 			vector<Correspondence>::iterator it;
