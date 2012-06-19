@@ -205,7 +205,8 @@ namespace ofxGraycode {
 	//
 	void Decoder::loadDataSet(const string filename) {
 		data.load(filename);
-		updatePreview();
+		if (data.getHasData())
+			updatePreview();
 	}
 
 	void Decoder::saveDataSet(const string filename) {
