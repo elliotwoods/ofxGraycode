@@ -21,10 +21,13 @@ namespace ofxGraycode {
 
 				ofVec2f getCameraXY() const;
 				ofVec2f getCameraXYNorm() const;
+				
+				ofVec2f getProjectorXY() const;
+				ofVec2f getProjectorXYNorm() const;
 
 				const uint32_t & camera;
 				const uint32_t & projector;
-				const uint32_t & active;
+				const uint8_t & active;
 				const uint8_t & mean;
 				const uint32_t & distance;
 				const DataSet & dataSet;

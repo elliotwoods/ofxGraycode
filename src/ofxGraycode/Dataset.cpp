@@ -15,11 +15,29 @@ namespace ofxGraycode {
 		xy.y = this->camera / this->dataSet.getWidth();
 		return xy;
 	}
-
+	
 	//----------
 	ofVec2f DataSet::const_iterator::reference::getCameraXYNorm() const {
 		ofVec2f xy = this->getCameraXY();
 		xy /= ofVec2f( this->dataSet.getWidth(), this->dataSet.getHeight() );
+		xy *= 2.0f; //0..2
+		xy -= 1.0f;
+		xy.y = - xy.y;
+		return xy;
+	}
+	
+	//----------
+	ofVec2f DataSet::const_iterator::reference::getProjectorXY() const {
+		ofVec2f xy;
+		xy.x = this->projector % this->dataSet.getPayloadWidth();
+		xy.y = this->projector / this->dataSet.getPayloadHeight();
+		return xy;
+	}
+	
+	//----------
+	ofVec2f DataSet::const_iterator::reference::getProjectorXYNorm() const {
+		ofVec2f xy = this->getProjectorXY();
+		xy /= ofVec2f( this->dataSet.getPayloadWidth(), this->dataSet.getPayloadHeight() );
 		xy *= 2.0f; //0..2
 		xy -= 1.0f;
 		xy.y = - xy.y;
