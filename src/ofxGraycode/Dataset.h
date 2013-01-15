@@ -63,6 +63,7 @@ namespace ofxGraycode {
 		const ofPixels_<uint32_t>& getDataInverse() const;
 		ofPixels_<uint32_t>& getDataInverse();
 		const ofPixels& getMean() const;
+        const ofPixels& getMeanInverse() const;
 		const ofPixels_<uint32_t>& getDistance() const;
 		ofPixels_<uint32_t>& getDistance();
 		const ofPixels& getActive() const;
@@ -98,7 +99,8 @@ namespace ofxGraycode {
 		void calcInverse(); //calculate data in projection space
 		ofPixels_<uint32_t> data; ///<projector pixel index in camera space
 		ofPixels_<uint32_t> dataInverse; ///<camera pixel index in projector space
-		ofPixels mean; ///< used for offline DataSets
+		ofPixels mean; ///< mean brightness per camera pixel
+		ofPixels meanInverse; ///< mean brightness per projector pixel as seen in camera
 		ofPixels_<uint32_t> distance; ///<distance from threshold
 		ofPixels active; ///< We treat this as if it stores bools, but no reason to make a bool type really
 

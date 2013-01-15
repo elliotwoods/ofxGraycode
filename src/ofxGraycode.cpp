@@ -227,6 +227,9 @@ namespace ofxGraycode {
 
 		if (data.getMean().isAllocated())
 			ofImage(data.getMean()).saveImage(filename + "-mean.png");
+        
+        if (data.getMeanInverse().isAllocated())
+			ofImage(data.getMeanInverse()).saveImage(filename + "-meanInverse.png");
 	}
 	//
 	////

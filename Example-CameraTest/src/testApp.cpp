@@ -6,6 +6,7 @@ void testApp::setup(){
 	payload.init(512, 512);
 	encoder.init(payload);
 	decoder.init(payload);
+	video.setDeviceID(5);
 	video.initGrabber(2592, 1944, true);
 	this->encodeFrame = true;
 	this->autoAdvance = false;

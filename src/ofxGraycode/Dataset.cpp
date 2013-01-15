@@ -5,6 +5,7 @@
 #define OFXGRAYCODE_DATASET_HAS_MEAN 1 << 2
 #define OFXGRAYCODE_DATASET_HAS_DISTANCE 1 << 3
 #define OFXGRAYCODE_DATASET_HAS_ACTIVE 1 << 4
+#define OFXGRAYCODE_DATASET_HAS_MEAN_INVERSE 1 << 2
 
 namespace ofxGraycode {
 #pragma mark DataSet::iterator
@@ -98,6 +99,7 @@ namespace ofxGraycode {
 		dataInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		distance.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		mean.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
+        meanInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		active.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		data.set(0,0);
 		distance.set(0,0);
@@ -171,6 +173,10 @@ namespace ofxGraycode {
 	const ofPixels& DataSet::getMean() const {
 		return this->mean;
 	}
+    
+    const ofPixels& DataSet::getMeanInverse() const {
+        return this->meanInverse;
+    }
 
 	const ofPixels_<uint32_t>& DataSet::getDistance() const {
 		return this->distance;
@@ -259,6 +265,7 @@ namespace ofxGraycode {
 		contained |= OFXGRAYCODE_DATASET_HAS_DATA;
 		contained |= OFXGRAYCODE_DATASET_HAS_DATAINVERSE;
 		contained |= OFXGRAYCODE_DATASET_HAS_MEAN;
+		contained |= OFXGRAYCODE_DATASET_HAS_MEAN_INVERSE;
 		contained |= OFXGRAYCODE_DATASET_HAS_DISTANCE;
 		contained |= OFXGRAYCODE_DATASET_HAS_ACTIVE;
 		save.write((char*)&contained, sizeof(contained));
@@ -266,6 +273,7 @@ namespace ofxGraycode {
 		save.write((char*)data.getPixels(), this->size() * sizeof(uint32_t));
 		save.write((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
 		save.write((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
+		save.write((char*)meanInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
 		save.write((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
 		save.write((char*)active.getPixels(), this->size() * sizeof(uint8_t));
 		save.close();
@@ -309,6 +317,8 @@ namespace ofxGraycode {
 			load.read((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_MEAN)
 			load.read((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
+        if (contained & OFXGRAYCODE_DATASET_HAS_MEAN_INVERSE)
+			load.read((char*)meanInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_DISTANCE)
 			load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_ACTIVE)
@@ -447,12 +457,15 @@ namespace ofxGraycode {
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
 		uint32_t *dataInverse = this->dataInverse.getPixels();
+        uint8_t *meanInverse = this->meanInverse.getPixels();
 		uint32_t *data = this->data.getPixels();
 		uint8_t *active = this->active.getPixels();
 		uint32_t payloadSize = this->getPayloadSize();
 		for (uint32_t i=0; i<this->data.size(); i++, data++, active++) {
-			if (*data < payloadSize && *active)
+			if (*data < payloadSize && *active) {
 				dataInverse[*data] = i;
+                meanInverse[*data] = mean[i];
+            }
 		}
 	}
 }
