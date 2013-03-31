@@ -1,0 +1,37 @@
+<install>
+	<name>ofxGraycode</name>
+	<version>0.01</version>
+	<author>Elliot Woods</author>
+	<url>http://github.com/elliotwoods/ofxGraycode</url>
+	<requires></requires>
+	
+	<add>
+		
+		<!-- 	=====================================================================	-->
+		<!--	========================== add per project using this addon =========	-->
+		<!-- 	=====================================================================	-->
+
+		<src>
+			<folder name="addons/ofxGraycode/src">
+				<file>../../../addons/ofxGraycode/src/ofxGraycode.h</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode.cpp</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/Correspondence.h</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/Dataset.cpp</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/Dataset.h</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/Payload.cpp</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/Payload.h</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/ProjectorPixel.cpp</file>
+				<file>../../../addons/ofxGraycode/src/ofxGraycode/ProjectorPixel.h</file>
+			</folder>
+		</src>
+
+		<include>
+			<path>../../../addons/ofxGraycode/src</path>
+		</include>
+
+		<link>
+		</link>
+	
+	</add>
+	
+</install>
