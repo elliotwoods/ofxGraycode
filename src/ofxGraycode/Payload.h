@@ -75,7 +75,10 @@ namespace ofxGraycode {
 		ofImageType getImageType() const;
 		void fillPixels(const unsigned int frame, ofPixels& pixels) const;
 		void calc(const vector<ofPixels> &captures, DataSet &data) const;
-		
+		int getFrameCountX() const { return this->frameCountX; }
+		int getFrameCountY() const { return this->frameCountY; }
+		int toGraycode(int binary) const;
+
 	protected:
 		void render();
 

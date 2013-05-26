@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGrabCam.h"
 #include "ofxGraycode.h"
 
 using namespace ofxGraycode;
