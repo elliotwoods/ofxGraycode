@@ -6,6 +6,10 @@ uniform sampler2DRect graycodeToBinary;
 float viewScale = 1024.0;
 
 int toBinary(int graycode) {
+
+	//let's consider splitting MSB/LSB across R,G,B,A.
+	//this should be accurate with RGB8 texture
+
 	return (int) (texture2DRect(graycodeToBinary, vec2(graycode, 0.5)).r * 255.0f * 255.0f);
 }
 

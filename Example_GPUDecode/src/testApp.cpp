@@ -15,6 +15,9 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::process() {
+
+	clock_t begin = clock();
+
 	//string path = ofSystemLoadDialog("Select folder of graycode captures", true).getPath();
 	string path = "c:\\dev\\openFrameworks\\Research.ReprojectionScanning\\data\\scans\\head";
 	ofDirectory directory;
@@ -32,6 +35,10 @@ void testApp::process() {
 		images.back().loadImage(file);
 	}
 
+	auto end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to load images";
+	begin = clock();
+
 	ofImage & referenceImage(images[0]);
 	ofFbo::Settings settings;
 	settings.width = referenceImage.getWidth();
@@ -44,8 +51,17 @@ void testApp::process() {
 	graycode.allocate(settings);
 	uv.allocate(settings);
 
+	end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to allocate surfaces";
+	begin = clock();
+
 	addBits.load("passThrough.vert", "addBits.frag");
 	decodeUV.load("passThrough.vert", "decodeUV.frag");
+
+	auto endLoadShaders = clock();
+	end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to load shader files";
+	begin = clock();
 
 	//--
 	//setup graycode to binary lookup table
@@ -62,6 +78,9 @@ void testApp::process() {
 	//
 	//--
 
+	end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to load graycode into memory";
+	begin = clock();
 
 	//--
 	//calc mean
@@ -84,6 +103,10 @@ void testApp::process() {
 	ofPopStyle();
 	//
 	//--
+
+	end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to calc mean";
+	begin = clock();
 
 
 	//--
@@ -112,6 +135,9 @@ void testApp::process() {
 	//
 	//--
 
+	end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to accumulate bits";
+	begin = clock();
 
 	//--
 	//decode to uv
@@ -124,6 +150,10 @@ void testApp::process() {
 	uv.end();
 	//
 	//--
+
+	end = clock();
+	ofLogNotice() << "It took " << (float) (end - begin) * 1000.0f / (float) (CLOCKS_PER_SEC) << "ms to decode to uv";
+	begin = clock();
 }
 
 //--------------------------------------------------------------
