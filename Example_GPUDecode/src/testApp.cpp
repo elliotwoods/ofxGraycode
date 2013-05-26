@@ -55,8 +55,10 @@ void testApp::process() {
 	for (int i=0; i<graycodeToBinaryPixels.getWidth(); i++) {
 		graycodeToBinaryPixels[this->payload.toGraycode(i)] = i;
 	}
-	graycodeToBinary.allocate(graycodeToBinaryPixels);
+	graycodeToBinary.allocate(graycodeToBinaryPixels.getWidth(), 1, GL_LUMINANCE16);
 	graycodeToBinary.loadData(graycodeToBinaryPixels);
+	auto data = graycodeToBinary.getTextureData();
+	cout << data.glType;
 	//
 	//--
 

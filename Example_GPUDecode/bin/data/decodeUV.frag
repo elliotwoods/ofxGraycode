@@ -3,10 +3,10 @@
 uniform sampler2DRect graycode;
 uniform sampler2DRect graycodeToBinary;
 
-float viewScale = 768.0;
+float viewScale = 1024.0;
 
 int toBinary(int graycode) {
-	return (int) (texture2DRect(graycodeToBinary, vec2(graycode, 0.5)).r * 255.0f);
+	return (int) (texture2DRect(graycodeToBinary, vec2(graycode, 0.5)).r * 255.0f * 255.0f);
 }
 
 void main() {
