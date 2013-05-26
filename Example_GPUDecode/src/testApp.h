@@ -30,6 +30,7 @@ class testApp : public ofBaseApp{
 		ofFbo uv;
 
 		ofShader addBits;
+		ofShader decodeUV;
 		vector<ofImage> images;
 
 		ofxCvGui::Builder gui;

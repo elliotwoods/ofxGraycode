@@ -1,19 +1,19 @@
 #extension GL_ARB_texture_rectangle : enable
 
-uniform sampler2DRect image;
-uniform sampler2DRect mean;
+uniform sampler2DRect graycode;
+uniform sampler2DRect graycodeToBinary;
 
-uniform int axis;
-uniform int bit;
+float viewScale = 768.0;
 
-void main()
-{
+int toBinary(int graycode) {
+	return (int) (texture2DRect(graycodeToBinary, vec2(graycode, 0.5)).r * 255.0f);
+}
+
+void main() {
 	vec2 st = gl_TexCoord[0].st;
-	int high = texture2DRect(image, st).r > texture2DRect(mean, st).r;
-	int value = high << bit;
+	vec4 sample = texture2DRect(graycode, st);
+	int x = toBinary( (int) sample.r);
+	int y = toBinary( (int) sample.g);
 
-	if (axis == 0)
-		gl_FragColor = vec4(value, 0, 0, 1.0 );
-	else 
-		gl_FragColor = vec4(0, value, 0, 1.0 );
+	gl_FragColor = vec4(x, y, 0, 1.0 ) / vec4(viewScale, viewScale, 1.0, 1.0);
 }

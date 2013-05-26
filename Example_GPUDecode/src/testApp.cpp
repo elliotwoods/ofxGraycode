@@ -10,6 +10,7 @@ void testApp::setup(){
 	gui.add(mean, "mean");
 	gui.add(graycode, "graycode");
 	gui.add(uv, "uv");
+	gui.add(graycodeToBinary, "graycodeToBinary");
 }
 
 //--------------------------------------------------------------
@@ -44,6 +45,7 @@ void testApp::process() {
 	uv.allocate(settings);
 
 	addBits.load("passThrough.vert", "addBits.frag");
+	decodeUV.load("passThrough.vert", "decodeUV.frag");
 
 	//--
 	//setup graycode to binary lookup table
@@ -112,6 +114,12 @@ void testApp::process() {
 	//--
 	//decode to uv
 	//
+	uv.begin();
+	decodeUV.begin();
+	decodeUV.setUniformTexture("graycodeToBinary", graycodeToBinary, 1);
+	graycode.draw(0,0);
+	decodeUV.end();
+	uv.end();
 	//
 	//--
 }
