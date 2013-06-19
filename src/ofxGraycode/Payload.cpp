@@ -83,8 +83,8 @@ namespace ofxGraycode {
 
 		float startTime = ofGetElapsedTimef();
 		//prepare output
-		cout << "calc mean" << endl;
-		data.calcMean(captures);
+		cout << "calc median" << endl;
+		data.calcMedian(captures);
 
 		cout << "distance and decode" << endl;
 		//decode
@@ -96,7 +96,7 @@ namespace ofxGraycode {
 		int distance;
 		for (uint32_t frame=0; frame<frameCount; frame++) {
 			pixelIn = captures[frame].getPixels();
-			thresholdIn = data.getMean().getPixels();
+			thresholdIn = data.getMedian().getPixels();
 			dataOut = data.getData().getPixels();
 			distanceOut = data.getDistance().getPixels();
 			for (int i=0; i<data.size(); i++, dataOut++, pixelIn++, thresholdIn++) {

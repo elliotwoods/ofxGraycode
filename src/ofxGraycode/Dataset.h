@@ -15,7 +15,7 @@ namespace ofxGraycode {
 				camera(iterator.camera),
 				projector(*iterator.projector),
 				active(*iterator.active),
-				mean(*iterator.mean),
+				median(*iterator.median),
 				distance(*iterator.distance),
 				dataSet(*iterator.dataSet) { }
 
@@ -28,7 +28,7 @@ namespace ofxGraycode {
 				const uint32_t & camera;
 				const uint32_t & projector;
 				const uint8_t & active;
-				const uint8_t & mean;
+				const uint8_t & median;
 				const uint32_t & distance;
 				const DataSet & dataSet;
 			};
@@ -46,7 +46,7 @@ namespace ofxGraycode {
 			uint32_t camera;
 			const uint32_t * projector;
 			const uint8_t * active;
-			const uint8_t * mean;
+			const uint8_t * median;
 			const uint32_t * distance;
 			const DataSet* dataSet;
 
@@ -55,20 +55,29 @@ namespace ofxGraycode {
 		DataSet();
 		void allocate(int captureWidth, int captureHeight, int payloadWidth, int payloadHeight);
 		void clear();
-		void calcMean(const vector<ofPixels>& captures);
+		void calcMedian(const vector<ofPixels>& captures);
 		void calc(); ///<calc and apply threshold, calc inverse
 		
 		const ofPixels_<uint32_t>& getData() const;
 		ofPixels_<uint32_t>& getData();
 		const ofPixels_<uint32_t>& getDataInverse() const;
 		ofPixels_<uint32_t>& getDataInverse();
-		const ofPixels& getMean() const;
-        const ofPixels& getMeanInverse() const;
+		const ofPixels& getMedian() const;
+        const ofPixels& getMedianInverse() const;
 		const ofPixels_<uint32_t>& getDistance() const;
 		ofPixels_<uint32_t>& getDistance();
 		const ofPixels& getActive() const;
 		uint8_t getDistanceThreshold() const;
 
+		const ofPixels& getMean() const {
+			ofLogWarning("ofxGraycode") << "getMean() is depreciated, please use getMedian()";
+			return this->getMedian();
+		}
+        const ofPixels& getMeanInverse() const {
+			ofLogWarning("ofxGraycode") << "getMeanInverse() is depreciated, please use getMedian()";
+			return this->getMedianInverse();
+		}
+		
 		void setDistanceThreshold(uint8_t distanceThreshold);
 		uint32_t getWidth() const;
 		uint32_t getHeight() const;
@@ -99,8 +108,8 @@ namespace ofxGraycode {
 		void calcInverse(); //calculate data in projection space
 		ofPixels_<uint32_t> data; ///<projector pixel index in camera space
 		ofPixels_<uint32_t> dataInverse; ///<camera pixel index in projector space
-		ofPixels mean; ///< mean brightness per camera pixel
-		ofPixels meanInverse; ///< mean brightness per projector pixel as seen in camera
+		ofPixels median; ///< median brightness per camera pixel
+		ofPixels medianInverse; ///< median brightness per projector pixel as seen in camera
 		ofPixels_<uint32_t> distance; ///<distance from threshold
 		ofPixels active; ///< We treat this as if it stores bools, but no reason to make a bool type really
 

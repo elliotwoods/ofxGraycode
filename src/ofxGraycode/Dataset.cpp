@@ -2,10 +2,10 @@
 
 #define OFXGRAYCODE_DATASET_HAS_DATA 1 << 0
 #define OFXGRAYCODE_DATASET_HAS_DATAINVERSE 1 << 1
-#define OFXGRAYCODE_DATASET_HAS_MEAN 1 << 2
+#define OFXGRAYCODE_DATASET_HAS_MEDIAN 1 << 2
 #define OFXGRAYCODE_DATASET_HAS_DISTANCE 1 << 3
 #define OFXGRAYCODE_DATASET_HAS_ACTIVE 1 << 4
-#define OFXGRAYCODE_DATASET_HAS_MEAN_INVERSE 1 << 2
+#define OFXGRAYCODE_DATASET_HAS_MEDIAN_INVERSE 1 << 5
 
 namespace ofxGraycode {
 #pragma mark DataSet::iterator
@@ -50,7 +50,7 @@ namespace ofxGraycode {
 		this->camera++;
 		this->projector++;
 		this->active++;
-		this->mean++;
+		this->median++;
 		this->distance++;
 	}
 
@@ -59,7 +59,7 @@ namespace ofxGraycode {
 		this->camera--;
 		this->projector--;
 		this->active--;
-		this->mean--;
+		this->median--;
 		this->distance--;
 	}
 
@@ -98,12 +98,12 @@ namespace ofxGraycode {
 		data.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		dataInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		distance.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
-		mean.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
-        meanInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
+		median.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
+        medianInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		active.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		data.set(0,0);
 		distance.set(0,0);
-		mean.set(0,0);
+		median.set(0,0);
 		active.set(0,0);
 		this->payloadWidth = payloadWidth;
 		this->payloadHeight = payloadHeight;
@@ -113,7 +113,7 @@ namespace ofxGraycode {
 		data.clear();
 		dataInverse.clear();
 		distance.clear();
-		mean.clear();
+		median.clear();
 		active.clear();
 		distanceThreshold = 10;
 		hasData = false;
@@ -122,24 +122,46 @@ namespace ofxGraycode {
 		payloadHeight = 0;
 	}
 
-	void DataSet::calcMean(const vector<ofPixels>& captures) {
-		ofPixels_<uint32_t> tempMean;
-		tempMean.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
-		tempMean.set(0, 0);
+	void DataSet::calcMedian(const vector<ofPixels>& captures) {
+		ofPixels tempMax;
+		ofPixels tempMin;
+		
+		tempMin.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
+		tempMax.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
+		
+		tempMin.set(0, 255);
+		tempMax.set(0, 0);
 
 		const uint8_t* pixelIn;
-		uint32_t* pixelOut;
+		uint8_t* pixelMax;
+		uint8_t* pixelMin;
+		
+		uint32_t size = captures[0].getWidth() * captures[0].getHeight();
+		
 		for (uint32_t frame=0; frame<captures.size(); frame++) {
 			pixelIn = captures[frame].getPixels();
-			pixelOut = tempMean.getPixels();
-			for (int i=0; i<tempMean.size(); i++)
-				*pixelOut++ += *pixelIn++;
+			pixelMin = tempMin.getPixels();
+			pixelMax = tempMax.getPixels();
+			for (int i=0; i<size; i++) {
+				if (*pixelIn > *pixelMax) {
+					*pixelMax = *pixelIn;
+				}
+				if (*pixelIn < *pixelMin) {
+					*pixelMin = *pixelIn;
+				}
+				pixelIn++;
+				pixelMin++;
+				pixelMax++;
+			}
 		}
 
-		uint32_t* meanIn = tempMean.getPixels();
-		uint8_t* meanOut = this->mean.getPixels();
-		for (uint32_t i = 0; i < tempMean.size(); i++)
-			*meanOut++ = *meanIn++ / captures.size();
+		pixelMin = tempMin.getPixels();
+		pixelMax = tempMax.getPixels();
+		
+		uint8_t* medianOut = this->median.getPixels();
+		for (uint32_t i = 0; i < size; i++) {
+			*medianOut++ = (uint8_t) (( (uint16_t)(*pixelMax++) + (uint16_t)(*pixelMin++) ) / 2);
+		}
 	}
 	
 	void DataSet::calc() {
@@ -170,12 +192,12 @@ namespace ofxGraycode {
 		return this->dataInverse;
 	}
 
-	const ofPixels& DataSet::getMean() const {
-		return this->mean;
+	const ofPixels& DataSet::getMedian() const {
+		return this->median;
 	}
     
-    const ofPixels& DataSet::getMeanInverse() const {
-        return this->meanInverse;
+    const ofPixels& DataSet::getMedianInverse() const {
+        return this->medianInverse;
     }
 
 	const ofPixels_<uint32_t>& DataSet::getDistance() const {
@@ -264,16 +286,16 @@ namespace ofxGraycode {
 		uint32_t contained = 0;
 		contained |= OFXGRAYCODE_DATASET_HAS_DATA;
 		contained |= OFXGRAYCODE_DATASET_HAS_DATAINVERSE;
-		contained |= OFXGRAYCODE_DATASET_HAS_MEAN;
-		contained |= OFXGRAYCODE_DATASET_HAS_MEAN_INVERSE;
+		contained |= OFXGRAYCODE_DATASET_HAS_MEDIAN;
+		contained |= OFXGRAYCODE_DATASET_HAS_MEDIAN_INVERSE;
 		contained |= OFXGRAYCODE_DATASET_HAS_DISTANCE;
 		contained |= OFXGRAYCODE_DATASET_HAS_ACTIVE;
 		save.write((char*)&contained, sizeof(contained));
 
 		save.write((char*)data.getPixels(), this->size() * sizeof(uint32_t));
 		save.write((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
-		save.write((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
-		save.write((char*)meanInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
+		save.write((char*)median.getPixels(), this->size() * sizeof(uint8_t));
+		save.write((char*)medianInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
 		save.write((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
 		save.write((char*)active.getPixels(), this->size() * sizeof(uint8_t));
 		save.close();
@@ -315,10 +337,10 @@ namespace ofxGraycode {
 			load.read((char*)data.getPixels(), this->size() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_DATAINVERSE)
 			load.read((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
-		if (contained & OFXGRAYCODE_DATASET_HAS_MEAN)
-			load.read((char*)mean.getPixels(), this->size() * sizeof(uint8_t));
-        if (contained & OFXGRAYCODE_DATASET_HAS_MEAN_INVERSE)
-			load.read((char*)meanInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
+		if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN)
+			load.read((char*)median.getPixels(), this->size() * sizeof(uint8_t));
+        if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN_INVERSE)
+			load.read((char*)medianInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_DISTANCE)
 			load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_ACTIVE)
@@ -409,7 +431,7 @@ namespace ofxGraycode {
 		it.projector = this->data.getPixels();
 		it.active = this->active.getPixels();
 		it.distance = this->distance.getPixels();
-		it.mean = this->mean.getPixels();
+		it.median = this->median.getPixels();
 		it.dataSet = this;
 		return it;
 	}
@@ -420,7 +442,7 @@ namespace ofxGraycode {
 		it.projector = this->data.getPixels() + this->size();
 		it.active = this->active.getPixels() + this->size();
 		it.distance = this->distance.getPixels() + this->size();
-		it.mean = this->mean.getPixels() + this->size();
+		it.median = this->median.getPixels() + this->size();
 		it.dataSet = this;
 		return it;
 	}
@@ -457,14 +479,14 @@ namespace ofxGraycode {
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
 		uint32_t *dataInverse = this->dataInverse.getPixels();
-        uint8_t *meanInverse = this->meanInverse.getPixels();
+        uint8_t *medianInverse = this->medianInverse.getPixels();
 		uint32_t *data = this->data.getPixels();
 		uint8_t *active = this->active.getPixels();
 		uint32_t payloadSize = this->getPayloadSize();
 		for (uint32_t i=0; i<this->data.size(); i++, data++, active++) {
 			if (*data < payloadSize && *active) {
 				dataInverse[*data] = i;
-                meanInverse[*data] = mean[i];
+                medianInverse[*data] = median[i];
             }
 		}
 	}

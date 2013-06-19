@@ -2,15 +2,28 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	//avoid output video tearing
-	ofSetVerticalSync(true);
+	payload.init(1024, 768);
+	decoder.init(payload);
 	
-	//initialise everything
-	payload.init(1280, 1024);
-	encoder.init(payload);
-
-	//load first frame
-	encoder >> output;
+	string path = ofSystemLoadDialog("Select folder of images", true, ofToDataPath("")).getPath();
+	ofLogNotice() << "Adding images from " << path;
+	
+	ofDirectory folder;
+	folder.listDir(path);
+	folder.sort();
+	
+	auto files = folder.getFiles();
+	
+	for (const auto it : files) {
+		ofImage image(it);
+		image.update();
+		if (image.isAllocated()) {
+			ofLogNotice() << "Adding file " << it.getFileName();
+			decoder << image;
+		}
+	}
+	
+	this->state = StateViewCamera;
 }
 
 //--------------------------------------------------------------
@@ -20,20 +33,44 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	output.draw(0,0);
+	switch (state) {
+		case StateViewCamera:
+			decoder.draw(0, 0);
+			break;
+		case StateViewProjector:
+			decoder.getCameraInProjector().draw(0, 0);
+			break;
+		default:
+			break;
+	}
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
-	if (key == 'r')
-		encoder.reset();
-	if (key == 'f')
-		ofToggleFullscreen();
-	else {
-		//feed out a new frame
-		//returns false if no new frames
- 		if (!(encoder >> output))
-			ofLogNotice() << "End of frames";
+	switch (key) {
+		case ' ':
+			state++;
+			if (state == StateEnd) {
+				state = StateViewCamera;
+			}
+			break;
+			
+		case OF_KEY_UP:
+			decoder.setThreshold(decoder.getThreshold() + 5);
+			break;
+		case OF_KEY_DOWN:
+			decoder.setThreshold(decoder.getThreshold() - 5);
+			break;
+			
+		case 's':
+			decoder.saveDataSet();
+			break;
+		case 'l':
+			decoder.loadDataSet();
+			break;
+			
+		default:
+			break;
 	}
 }
 

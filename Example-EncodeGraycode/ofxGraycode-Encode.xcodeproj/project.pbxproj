@@ -8,11 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		8BB05C94146C0DA400E65B31 /* ofxGrabCam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BB05C93146C0DA400E65B31 /* ofxGrabCam.cpp */; };
-		8BF7624C14E7EB2000A35C2A /* Dataset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BF7624514E7EB2000A35C2A /* Dataset.cpp */; };
-		8BF7624D14E7EB2000A35C2A /* ofxGraycode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BF7624714E7EB2000A35C2A /* ofxGraycode.cpp */; };
-		8BF7624E14E7EB2000A35C2A /* Payload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BF7624914E7EB2000A35C2A /* Payload.cpp */; };
+		8BC2F95217707BD400014396 /* Dataset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2F94B17707BD400014396 /* Dataset.cpp */; };
+		8BC2F95317707BD400014396 /* Payload.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2F94D17707BD400014396 /* Payload.cpp */; };
+		8BC2F95417707BD400014396 /* ProjectorPixel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2F94F17707BD400014396 /* ProjectorPixel.cpp */; };
+		8BC2F95517707BD400014396 /* ofxGraycode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8BC2F95117707BD400014396 /* ofxGraycode.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		E4328149138ABC9F0047C5CB /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworks.a */; };
+		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -63,13 +64,15 @@
 /* Begin PBXFileReference section */
 		8BB05C93146C0DA400E65B31 /* ofxGrabCam.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxGrabCam.cpp; path = ../../../../addons/ofxGrabCam/src/ofxGrabCam.cpp; sourceTree = "<group>"; };
 		8BB05C95146C113600E65B31 /* ofxGrabCam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxGrabCam.h; path = ../../../../addons/ofxGrabCam/src/ofxGrabCam.h; sourceTree = "<group>"; };
-		8BF7624514E7EB2000A35C2A /* Dataset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Dataset.cpp; path = ../src/Dataset.cpp; sourceTree = "<group>"; };
-		8BF7624614E7EB2000A35C2A /* Dataset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dataset.h; path = ../src/Dataset.h; sourceTree = "<group>"; };
-		8BF7624714E7EB2000A35C2A /* ofxGraycode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofxGraycode.cpp; path = ../src/ofxGraycode.cpp; sourceTree = "<group>"; };
-		8BF7624814E7EB2000A35C2A /* ofxGraycode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxGraycode.h; path = ../src/ofxGraycode.h; sourceTree = "<group>"; };
-		8BF7624914E7EB2000A35C2A /* Payload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Payload.cpp; path = ../src/Payload.cpp; sourceTree = "<group>"; };
-		8BF7624A14E7EB2000A35C2A /* Payload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Payload.h; path = ../src/Payload.h; sourceTree = "<group>"; };
-		8BF7624B14E7EB2000A35C2A /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Types.h; path = ../src/Types.h; sourceTree = "<group>"; };
+		8BC2F94817707BD400014396 /* ofxGraycode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGraycode.h; sourceTree = "<group>"; };
+		8BC2F94A17707BD400014396 /* Correspondence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Correspondence.h; sourceTree = "<group>"; };
+		8BC2F94B17707BD400014396 /* Dataset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Dataset.cpp; sourceTree = "<group>"; };
+		8BC2F94C17707BD400014396 /* Dataset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dataset.h; sourceTree = "<group>"; };
+		8BC2F94D17707BD400014396 /* Payload.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Payload.cpp; sourceTree = "<group>"; };
+		8BC2F94E17707BD400014396 /* Payload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Payload.h; sourceTree = "<group>"; };
+		8BC2F94F17707BD400014396 /* ProjectorPixel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectorPixel.cpp; sourceTree = "<group>"; };
+		8BC2F95017707BD400014396 /* ProjectorPixel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectorPixel.h; sourceTree = "<group>"; };
+		8BC2F95117707BD400014396 /* ofxGraycode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGraycode.cpp; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -99,7 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */,
-				E4328149138ABC9F0047C5CB /* openFrameworks.a in Frameworks */,
+				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
 				E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */,
 				E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */,
@@ -128,16 +131,35 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		8BC2F94717707BD400014396 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				8BC2F94817707BD400014396 /* ofxGraycode.h */,
+				8BC2F94917707BD400014396 /* ofxGraycode */,
+				8BC2F95117707BD400014396 /* ofxGraycode.cpp */,
+			);
+			name = src;
+			path = ../src;
+			sourceTree = "<group>";
+		};
+		8BC2F94917707BD400014396 /* ofxGraycode */ = {
+			isa = PBXGroup;
+			children = (
+				8BC2F94A17707BD400014396 /* Correspondence.h */,
+				8BC2F94B17707BD400014396 /* Dataset.cpp */,
+				8BC2F94C17707BD400014396 /* Dataset.h */,
+				8BC2F94D17707BD400014396 /* Payload.cpp */,
+				8BC2F94E17707BD400014396 /* Payload.h */,
+				8BC2F94F17707BD400014396 /* ProjectorPixel.cpp */,
+				8BC2F95017707BD400014396 /* ProjectorPixel.h */,
+			);
+			path = ofxGraycode;
+			sourceTree = "<group>";
+		};
 		8BF7624414E7EB0200A35C2A /* ofxGraycode */ = {
 			isa = PBXGroup;
 			children = (
-				8BF7624514E7EB2000A35C2A /* Dataset.cpp */,
-				8BF7624614E7EB2000A35C2A /* Dataset.h */,
-				8BF7624714E7EB2000A35C2A /* ofxGraycode.cpp */,
-				8BF7624814E7EB2000A35C2A /* ofxGraycode.h */,
-				8BF7624914E7EB2000A35C2A /* Payload.cpp */,
-				8BF7624A14E7EB2000A35C2A /* Payload.h */,
-				8BF7624B14E7EB2000A35C2A /* Types.h */,
+				8BC2F94717707BD400014396 /* src */,
 			);
 			name = ofxGraycode;
 			sourceTree = "<group>";
@@ -181,7 +203,7 @@
 		E4328144138ABC890047C5CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4328148138ABC890047C5CB /* openFrameworks.a */,
+				E4328148138ABC890047C5CB /* openFrameworksDebug.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -281,10 +303,9 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E4328148138ABC890047C5CB /* openFrameworks.a */ = {
+		E4328148138ABC890047C5CB /* openFrameworksDebug.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = openFrameworks.a;
 			path = openFrameworksDebug.a;
 			remoteRef = E4328147138ABC890047C5CB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -315,9 +336,10 @@
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* testApp.cpp in Sources */,
 				8BB05C94146C0DA400E65B31 /* ofxGrabCam.cpp in Sources */,
-				8BF7624C14E7EB2000A35C2A /* Dataset.cpp in Sources */,
-				8BF7624D14E7EB2000A35C2A /* ofxGraycode.cpp in Sources */,
-				8BF7624E14E7EB2000A35C2A /* Payload.cpp in Sources */,
+				8BC2F95217707BD400014396 /* Dataset.cpp in Sources */,
+				8BC2F95317707BD400014396 /* Payload.cpp in Sources */,
+				8BC2F95417707BD400014396 /* ProjectorPixel.cpp in Sources */,
+				8BC2F95517707BD400014396 /* ofxGraycode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,8 +428,11 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				HEADER_SEARCH_PATHS = "$(OF_CORE_HEADERS)";
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					../../../addons/ofxGraycode/src,
+				);
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -492,6 +517,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../../addons/ofxOpenCv/libs/opencv/lib/win_cb\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "ofxGraycode-EncodeDebug";
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -511,8 +537,11 @@
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				HEADER_SEARCH_PATHS = "$(OF_CORE_HEADERS)";
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					../../../addons/ofxGraycode/src,
+				);
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -597,6 +626,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../../addons/ofxOpenCv/libs/opencv/lib/win_cb\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "ofxGraycode-Encode";
+				SDKROOT = macosx10.7;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

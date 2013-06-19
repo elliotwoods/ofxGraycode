@@ -47,10 +47,15 @@ namespace ofxGraycode {
 		uint32_t size() const; ///< camera image size
 		const vector<ofPixels>& getCaptures() const;
 		const ofPixels_<uint32_t>& getData() const;
-		const ofPixels& getMean() const;
+		const ofPixels& getMedian() const;
 		void setThreshold(uint8_t distanceThreshold);
 		uint8_t getThreshold() const;
 		const DataSet& getDataSet() const;
+		
+		const ofPixels& getMean() const {
+			ofLogWarning("ofxGraycode") << "getMean is depreciated, please use getMedian";
+			return this->getMedian();
+		}
 
 		////
 		//ofBaseUpdates

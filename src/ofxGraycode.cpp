@@ -28,6 +28,7 @@ namespace ofxGraycode {
 	int BaseCodec::getFrameCount() const {
 		return this->payload->getFrameCount();
 	}
+
 //----------------------------------------
 // Encoder
 	void Encoder::reset() {
@@ -128,8 +129,8 @@ namespace ofxGraycode {
 		return this->data.getData();
 	}
 
-	const ofPixels& Decoder::getMean() const {
-		return this->data.getMean();
+	const ofPixels& Decoder::getMedian() const {
+		return this->data.getMedian();
 	}
 
 	void Decoder::setThreshold(uint8_t distanceThreshold) {
@@ -238,7 +239,7 @@ namespace ofxGraycode {
 		ofLogNotice() << "ofxGraycode::Decoder::calc()";
 		if (payload->isOffline()) {
 			const PayloadOffline& payload(*(const PayloadOffline*)this->payload);
-			data.calcMean(this->captures);
+			data.calcMedian(this->captures);
 			payload.calc(this->captures, this->data);
 		} else {
 			const PayloadOnline& payload(*(const PayloadOnline*)this->payload);

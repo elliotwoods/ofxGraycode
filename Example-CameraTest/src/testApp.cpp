@@ -6,8 +6,9 @@ void testApp::setup(){
 	payload.init(512, 512);
 	encoder.init(payload);
 	decoder.init(payload);
-	video.setDeviceID(5);
-	video.initGrabber(2592, 1944, true);
+	video.listDevices();
+	video.setDeviceID(1);
+	video.initGrabber(1280, 720, true);
 	this->encodeFrame = true;
 	this->autoAdvance = false;
 }
@@ -53,7 +54,11 @@ void testApp::keyPressed(int key){
 		reset();
 		return;
 	}
-
+	
+	if (key == 's') {
+		decoder.saveDataSet();
+	}
+	
 	if (key == 'a') {
 		autoAdvance = true;
 		cout << "Auto advance" << endl;
