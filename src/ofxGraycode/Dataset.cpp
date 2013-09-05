@@ -31,7 +31,7 @@ namespace ofxGraycode {
 	ofVec2f DataSet::const_iterator::reference::getProjectorXY() const {
 		ofVec2f xy;
 		xy.x = this->projector % this->dataSet.getPayloadWidth();
-		xy.y = this->projector / this->dataSet.getPayloadHeight();
+		xy.y = this->projector / this->dataSet.getPayloadWidth();
 		return xy;
 	}
 	
