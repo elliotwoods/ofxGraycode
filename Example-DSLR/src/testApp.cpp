@@ -59,12 +59,14 @@ void testApp::draw() {
 void testApp::keyPressed(int key) {
 	if(key == ' ') {
         if (!this->isScanning) {
+			//start scanning
             payload.init(ofGetWidth(), ofGetHeight());
             encoder.init(payload);
             decoder.init(payload);
             this->doSend = true;
             this->isScanning = true;
         } else {
+			//stop scanning
             this->isScanning = false;
         }
 	}

@@ -227,10 +227,10 @@ namespace ofxGraycode {
 			cameraInProjector.saveImage(filename + "-cameraInProjector.png");
 
 		if (data.getMedian().isAllocated())
-			ofImage(data.getMedian()).saveImage(filename + "-mean.png");
+			ofImage(data.getMedian()).saveImage(filename + "-median.png");
         
         if (data.getMedianInverse().isAllocated())
-			ofImage(data.getMedianInverse()).saveImage(filename + "-meanInverse.png");
+			ofImage(data.getMedianInverse()).saveImage(filename + "-medianInverse.png");
 	}
 	//
 	////

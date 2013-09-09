@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	payload.init(1024, 768);
+	payload.init(1920, 1080);
 	decoder.init(payload);
 	
 	string path = ofSystemLoadDialog("Select folder of images", true, ofToDataPath("")).getPath();
@@ -35,7 +35,7 @@ void testApp::update(){
 void testApp::draw(){
 	switch (state) {
 		case StateViewCamera:
-			decoder.draw(0, 0);
+			decoder.draw(0, 0, ofGetWidth(), ofGetHeight());
 			break;
 		case StateViewProjector:
 			decoder.getCameraInProjector().draw(0, 0);
