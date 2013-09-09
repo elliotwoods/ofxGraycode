@@ -129,6 +129,10 @@ namespace ofxGraycode {
 		cout << "done in " << (endTime - startTime) << " seconds." << endl;
 	}
 
+	int PayloadGraycode::toGraycode(int binary) const {
+		return binary ^ (binary >> 1);
+	}
+
 	void PayloadGraycode::render() {
 		this->frameCountX = ceil(log((float)width) / log((float)2)); 
 		this->frameCountY = ceil(log((float)height) / log((float)2)); 
@@ -142,8 +146,8 @@ namespace ofxGraycode {
 
 		for (uint32_t y=0; y<height; y++) {
 			for (uint32_t x=0; x<width; x++, pix++, idx++) {
-				*pix = x ^ (x >> 1) +
-					((y ^ (y >> 1)) << (int) frameCountX);
+				*pix = toGraycode(x) +
+					(toGraycode(y) << (int) frameCountX);
 				dataInverse[*pix] = idx;
 			}
 		}

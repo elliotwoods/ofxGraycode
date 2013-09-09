@@ -12,9 +12,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
-    <RootNamespace>emptyExample</RootNamespace>
+    <RootNamespace>Example_GPUDecode</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>Example-EncodeGraycode</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -29,17 +28,18 @@
     <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\ofxGraycodeLib\ofxGraycodeDebug.props" />
     <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="..\ofxGraycodeLib\ofxGraycodeDebug.props" />
+    <Import Project="..\..\ofxCvGui2\ofxCvGuiLib\ofxCvGui-Debug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\ofxGraycodeLib\ofxGraycodeDebug.props" />
     <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="..\ofxGraycodeLib\ofxGraycodeDebug.props" />
+    <Import Project="..\..\ofxCvGui2\ofxCvGuiLib\ofxCvGui-Debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -57,82 +57,120 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;POCO_STATIC;CAIRO_WIN32_STATIC_BUILD;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(TargetDir)$(TargetName)_debugInfo.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <DataExecutionPrevention>
-      </DataExecutionPrevention>
+      <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;POCO_STATIC;CAIRO_WIN32_STATIC_BUILD;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat />
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <DataExecutionPrevention>
-      </DataExecutionPrevention>
+      <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Message>adding DLLs and creating data folder</Message>
-      <Command>xcopy /e /i /y "$(ProjectDir)\..\..\..\export\vs2010\*.dll" "$(ProjectDir)\bin"
-if not exist "$(ProjectDir)\bin\data" mkdir  "$(ProjectDir)\bin\data"
-
-</Command>
-    </PostBuildEvent>
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\testApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ofxUI\src\ofxUI.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUI2DGraph.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUI2DPad.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIBaseDraws.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIBiLabelSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIButton.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUICanvas.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUICircleSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUICustomImageButton.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIDropDownList.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIEventArgs.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIFPS.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIFPSSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIImage.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIImageButton.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIImageSampler.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIImageSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIImageToggle.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUILabel.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUILabelButton.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUILabelToggle.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIMinimalSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIMovingGraph.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIMultiImageButton.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIMultiImageSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIMultiImageToggle.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUINumberDialer.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIOFWrapper.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIRadio.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIRangeSlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIRectangle.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIRotarySlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIScrollableCanvas.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUISlider.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUISpacer.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUISpectrum.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUISuperCanvas.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUITextArea.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUITextInput.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIToggle.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIToggleMatrix.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIUtils.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIValuePlotter.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIWaveform.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIWidget.h" />
+    <ClInclude Include="..\..\ofxUI\src\ofxUIWidgetWithLabel.h" />
     <ClInclude Include="src\testApp.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
       <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\ofxCvGui2\ofxCvGuiLib\ofxCvGuiLib.vcxproj">
+      <Project>{6f0ddb4f-4014-4433-919b-9d956c034bad}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\ofxGraycodeLib\ofxGraycodeLib.vcxproj">
       <Project>{fe06ee51-020e-4a7b-95ea-e051951b6e18}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\data\addBits.frag" />
+    <None Include="bin\data\passThrough.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
