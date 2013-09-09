@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\Dataset.cpp">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\Payload.cpp">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\ProjectorPixel.cpp">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxGraycode\src\ofxGraycode.cpp">
+			<Filter>addons\ofxGraycode\src</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834f65-f3a9-211e-73b8-dc8563776aec}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGraycode">
+			<UniqueIdentifier>{e0befb76-bf92-bf89-f2e4-09a0abbeec29}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGraycode\src">
+			<UniqueIdentifier>{296dbedd-e7d5-6df1-1e21-598297a02010}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxGraycode\src\ofxGraycode">
+			<UniqueIdentifier>{acc721ad-19bd-2b8a-9bae-254f2deee610}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\Correspondence.h">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\Dataset.h">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\Payload.h">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGraycode\src\ofxGraycode\ProjectorPixel.h">
+			<Filter>addons\ofxGraycode\src\ofxGraycode</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxGraycode\src\ofxGraycode.h">
+			<Filter>addons\ofxGraycode\src</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
+	</ItemGroup>
+</Project>
