@@ -38,7 +38,8 @@ namespace ofxGraycode {
 
 	class Decoder : public BaseCodec, public ofBaseDraws {
 	public:
-		void reset();
+		void clear();
+		void reset() { this->clear(); }
 		void clearCaptures(); ///< keep data but drop captures
 		void operator<<(const ofPixels& pixels);
 		void operator<<(ofBaseHasPixels& image);
