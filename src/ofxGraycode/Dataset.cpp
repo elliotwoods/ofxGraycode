@@ -264,8 +264,12 @@ namespace ofxGraycode {
 			return;
 		}
 
-		if (filename=="")
+		if (filename=="") {
 			filename = ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath();
+			if(ofToLower(ofFilePath::getFileExt(filename)) != "sl") {
+				filename += ".sl";
+			}
+		}
 
 		this->filename = filename;
 
@@ -478,6 +482,7 @@ namespace ofxGraycode {
 
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
+		this->medianInverse.set(0, 0);
 		uint32_t *dataInverse = this->dataInverse.getPixels();
         uint8_t *medianInverse = this->medianInverse.getPixels();
 		uint32_t *data = this->data.getPixels();

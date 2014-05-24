@@ -135,8 +135,10 @@ namespace ofxGraycode {
 
 	void Decoder::setThreshold(uint8_t distanceThreshold) {
 		this->data.setDistanceThreshold(distanceThreshold);
-		if (this->data.getHasData())
+		if (this->data.getHasData()) {
+			this->data.calc();
 			this->updatePreview();
+		}
 	}
 
 	uint8_t Decoder::getThreshold() const {
@@ -212,7 +214,9 @@ namespace ofxGraycode {
 
 	void Decoder::saveDataSet(const string filename) {
 		data.save(filename);
-		savePreviews();
+		if (filename != "" && data.getFilename() != "") {
+			this->savePreviews();
+		}
 	}
 
 	void Decoder::savePreviews() {
