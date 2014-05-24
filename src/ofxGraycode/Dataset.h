@@ -33,7 +33,7 @@ namespace ofxGraycode {
 				const DataSet & dataSet;
 			};
 
-			friend class reference;
+			friend struct reference;
 			friend class DataSet;
 
 			void operator++();
@@ -49,7 +49,6 @@ namespace ofxGraycode {
 			const uint8_t * median;
 			const uint32_t * distance;
 			const DataSet* dataSet;
-
 		};
 
 		DataSet();

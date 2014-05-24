@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{51e6cbf9-c2a9-4508-a644-45e4867b898b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ofxGraycode">
+      <UniqueIdentifier>{5057417c-b708-4521-bc97-fbde14ac861c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\ofxGraycode.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Payload.cpp">
+      <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\ProjectorPixel.cpp">
+      <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Dataset.cpp">
+      <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\ofxGraycode.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Payload.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\ProjectorPixel.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Correspondence.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Dataset.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
