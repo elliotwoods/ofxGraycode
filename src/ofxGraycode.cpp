@@ -58,7 +58,7 @@ namespace ofxGraycode {
 	
 //----------------------------------------
 // Decoder
-	void Decoder::reset() {
+	void Decoder::clear() {
 		this->frame = 0;
 		this->data.clear();
 		this->needPreviewUpdate = false;
