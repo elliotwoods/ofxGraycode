@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofSetWindowShape(1024, 512);
+	
 	payload.init(512, 512);
 	encoder.init(payload);
 	decoder.init(payload);
