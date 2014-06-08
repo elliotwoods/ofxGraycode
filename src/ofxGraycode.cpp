@@ -63,6 +63,8 @@ namespace ofxGraycode {
 		this->data.clear();
 		this->needPreviewUpdate = false;
 		this->clearCaptures();
+		this->cameraInProjector.clear();
+		this->projectorInCamera.clear();
 	}
 
 	void Decoder::clearCaptures() {
@@ -113,7 +115,7 @@ namespace ofxGraycode {
 		this->operator<<(image.getPixelsRef());
 	}
 
-	bool Decoder::hasData() {
+	bool Decoder::hasData() const {
 		return this->data.getHasData();
 	}
 

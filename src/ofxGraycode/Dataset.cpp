@@ -168,7 +168,7 @@ namespace ofxGraycode {
 		uint8_t* active = this->active.getPixels();
 		uint32_t* distance = this->distance.getPixels();
 		for (int i=0; i<this->size(); i++)
-			*active++ = *distance++ > distanceThreshold;
+			*active++ = *distance++ > distanceThreshold ? 255 : 0;
 		calcInverse();
 	}
 
@@ -483,6 +483,9 @@ namespace ofxGraycode {
 		uint32_t *data = this->data.getPixels();
 		uint8_t *active = this->active.getPixels();
 		uint32_t payloadSize = this->getPayloadSize();
+
+		memset(medianInverse, 0, payloadSize);
+
 		for (uint32_t i=0; i<this->data.size(); i++, data++, active++) {
 			if (*data < payloadSize && *active) {
 				dataInverse[*data] = i;
