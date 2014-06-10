@@ -113,7 +113,7 @@ namespace ofxGraycode {
 		this->operator<<(image.getPixelsRef());
 	}
 
-	bool Decoder::hasData() {
+	bool Decoder::hasData() const {
 		return this->data.getHasData();
 	}
 

@@ -77,10 +77,7 @@ namespace ofxGraycode {
 			ofLogError() << "ofxGraycode::PayloadGraycode::calc : cannot calc as number of captured frames does not match target framecount";
 			return;
 		}
-
-		int captureWidth = captures[0].getWidth();
-		int captureHeight = captures[0].getHeight();
-
+		
 		float startTime = ofGetElapsedTimef();
 		//prepare output
 		cout << "calc median" << endl;
@@ -90,7 +87,6 @@ namespace ofxGraycode {
 		//decode
 		const uint8_t* thresholdIn;
 		const uint8_t* pixelIn;
-		uint8_t distanceThreshold = data.getDistanceThreshold();
 		uint32_t* dataOut;
 		uint32_t* distanceOut;
 		int distance;

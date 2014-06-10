@@ -43,7 +43,7 @@ namespace ofxGraycode {
 		void clearCaptures(); ///< keep data but drop captures
 		void operator<<(const ofPixels& pixels);
 		void operator<<(ofBaseHasPixels& image);
-		bool hasData();
+		bool hasData() const;
 
 		uint32_t size() const; ///< camera image size
 		const vector<ofPixels>& getCaptures() const;
