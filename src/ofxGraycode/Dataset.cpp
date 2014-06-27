@@ -168,7 +168,7 @@ namespace ofxGraycode {
 		uint8_t* active = this->active.getPixels();
 		uint32_t* distance = this->distance.getPixels();
 		for (int i=0; i<this->size(); i++)
-			*active++ = *distance++ > distanceThreshold;
+			*active++ = *distance++ > distanceThreshold ? 255 : 0;
 		calcInverse();
 	}
 
@@ -264,12 +264,8 @@ namespace ofxGraycode {
 			return;
 		}
 
-		if (filename=="") {
+		if (filename=="")
 			filename = ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath();
-			if(ofToLower(ofFilePath::getFileExt(filename)) != "sl") {
-				filename += ".sl";
-			}
-		}
 
 		this->filename = filename;
 
@@ -306,14 +302,9 @@ namespace ofxGraycode {
 	}
 
 	void DataSet::load(string filename) {
-		if (filename=="") {
+		if (filename=="")
 			filename = ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath();
-		}
-		if (filename=="") {
-			ofLogWarning("ofxGraycode::DataSet") << "No file selected";
-			return;
-		}
-		
+
 		this->filename = filename;
 
 		uint32_t size;
@@ -487,12 +478,14 @@ namespace ofxGraycode {
 
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
-		this->medianInverse.set(0, 0);
 		uint32_t *dataInverse = this->dataInverse.getPixels();
         uint8_t *medianInverse = this->medianInverse.getPixels();
 		uint32_t *data = this->data.getPixels();
 		uint8_t *active = this->active.getPixels();
 		uint32_t payloadSize = this->getPayloadSize();
+
+		memset(medianInverse, 0, payloadSize);
+
 		for (uint32_t i=0; i<this->data.size(); i++, data++, active++) {
 			if (*data < payloadSize && *active) {
 				dataInverse[*data] = i;

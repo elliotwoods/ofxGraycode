@@ -1,4 +1,3 @@
-//
 //  ofxGraycode.cpp
 //  ofxGraycode
 //
