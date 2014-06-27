@@ -306,9 +306,14 @@ namespace ofxGraycode {
 	}
 
 	void DataSet::load(string filename) {
-		if (filename=="")
+		if (filename=="") {
 			filename = ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath();
-
+		}
+		if (filename=="") {
+			ofLogWarning("ofxGraycode::DataSet") << "No file selected";
+			return;
+		}
+		
 		this->filename = filename;
 
 		uint32_t size;
