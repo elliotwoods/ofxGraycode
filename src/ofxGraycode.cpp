@@ -207,8 +207,9 @@ namespace ofxGraycode {
 	//
 	void Decoder::loadDataSet(const string filename) {
 		data.load(filename);
-		if (data.getHasData())
+		if (data.getHasData()) {
 			updatePreview();
+		}
 	}
 
 	void Decoder::saveDataSet(const string filename) {
@@ -252,6 +253,10 @@ namespace ofxGraycode {
 	}
 
 	void Decoder::updatePreview() {
+		if (!this->payload) {
+			return;
+		}
+
 		projectorInCamera.allocate(data.getWidth(), data.getHeight(), OF_IMAGE_COLOR);
 		memset(projectorInCamera.getPixels(), 0, projectorInCamera.getPixelsRef().size());
 
