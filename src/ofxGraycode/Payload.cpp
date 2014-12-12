@@ -13,6 +13,10 @@ namespace ofxGraycode {
 // Payload
 	Payload::Payload() {
 		this->allocated = false;
+		this->width = 0;
+		this->height = 0;
+		this->size = 0;
+		this->frameCount = 0;
 	}
 
 	void Payload::init(uint32_t width, uint32_t height) {
