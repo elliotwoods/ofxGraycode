@@ -78,6 +78,11 @@ namespace ofxGraycode {
 			return;
 		}
 
+		if (!pixels.isAllocated()) {
+			ofLogError("ofxGraycode") << "Cannot add this capture as the pixels object is empty";
+			return;
+		}
+
 		const ofPixels* greyPixels;
 		if (pixels.getNumChannels() > 1) {
 			ofPixels* downsample = new ofPixels();
