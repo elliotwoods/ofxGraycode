@@ -15,7 +15,7 @@ namespace ofxGraycode {
 		this->payload = 0;
 	}
 
-	void BaseCodec::init(const Payload& payload) {
+	void BaseCodec::init(Payload & payload) {
 		this->payload = &payload;
 		reset();
 	}
@@ -210,9 +210,21 @@ namespace ofxGraycode {
 	//file actions
 	////
 	//
-	void Decoder::loadDataSet(const string filename) {
+	void Decoder::loadDataSet(const string filename, bool throwIfPayloadDoesntMatch) {
+		//load the dataSet
 		data.load(filename);
-		if (data.getHasData()) {
+
+		//if we have data, and a payload
+		if (data.getHasData() && this->payload) {
+			//check that the payload matches what we just loaded
+			if (this->payload->getWidth() != data.getPayloadWidth() || this->payload->getHeight() != data.getPayloadHeight()) {
+				if (throwIfPayloadDoesntMatch) {
+					throw("ofxGraycode::Decoder::loadDataSet : Payload dimensions do not match the dataSet which was just loaded.");
+				}
+
+				//if not, let's re-imitialise the payload (this is a little bit contentious)
+				this->payload->init(data.getPayloadWidth(), data.getPayloadHeight());
+			}
 			updatePreview();
 		}
 	}
@@ -259,6 +271,10 @@ namespace ofxGraycode {
 
 	void Decoder::updatePreview() {
 		if (!this->payload) {
+			return;
+		}
+
+		if (!this->data.getHasData()) {
 			return;
 		}
 

@@ -17,12 +17,12 @@ namespace ofxGraycode {
 	class BaseCodec {
 	public:
 		BaseCodec();
-		void init(const Payload& payload);
+		void init(Payload & payload);
 		virtual void reset() = 0;
 		int getFrame() const;
 		int getFrameCount() const;
 	protected:
-		const Payload* payload;
+		Payload * payload;
 		int	frame;
 	};
 
@@ -82,7 +82,7 @@ namespace ofxGraycode {
 
 		////
 		//file actions
-		void loadDataSet(const string filename="");
+		void loadDataSet(const string filename="", bool throwIfPayloadDoesntMatch = false);
 		void saveDataSet(const string filename="");
 		void savePreviews();
 		// 
@@ -91,6 +91,7 @@ namespace ofxGraycode {
 		void calc(); ///< this is called automatically when all frames are received
 		void updatePreview();
 		void updatePreviewTextures();
+
 		///Captures is only used if this payload specifies
 		///	that it is offline using isOffline()
 		///Offline denotes it performs image analysis at the
