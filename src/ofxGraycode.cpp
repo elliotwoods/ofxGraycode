@@ -257,7 +257,6 @@ namespace ofxGraycode {
 	////
 
 	void Decoder::calc() {
-		ofLogNotice() << "ofxGraycode::Decoder::calc()";
 		if (payload->isOffline()) {
 			const PayloadOffline& payload(*(const PayloadOffline*)this->payload);
 			data.calcMedian(this->captures);

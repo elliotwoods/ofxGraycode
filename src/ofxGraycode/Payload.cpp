@@ -82,12 +82,9 @@ namespace ofxGraycode {
 			return;
 		}
 		
-		float startTime = ofGetElapsedTimef();
 		//prepare output
-		cout << "calc median" << endl;
 		data.calcMedian(captures);
 
-		cout << "distance and decode" << endl;
 		//decode
 		const uint8_t* thresholdIn;
 		const uint8_t* pixelIn;
@@ -108,25 +105,20 @@ namespace ofxGraycode {
 		}
 
 		//normalise distance
-		cout << "normalise distance" << endl;
 		distanceOut = data.getDistance().getPixels();
 		for (int i=0; i<data.size(); i++)
 			*distanceOut++ /= frameCount;
 
 		//decode data
-		cout << "invert data" << endl;
 		dataOut = data.getData().getPixels();
 		
 		for (int i=0; i<data.size(); i++, dataOut++)
 			*dataOut = dataInverse[*dataOut];
 
 		//apply threshold, invert into projector space
-		cout << "DataSet::calc" << endl;
 		data.calc();
 
 		data.setHasData(true);
-		float endTime = ofGetElapsedTimef();
-		cout << "done in " << (endTime - startTime) << " seconds." << endl;
 	}
 
 	int PayloadGraycode::toGraycode(int binary) const {
