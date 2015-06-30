@@ -465,7 +465,7 @@ namespace ofxGraycode {
 		ofstream fileOut;
 		try {
 			fileOut.open(ofToDataPath(filename, true).c_str(), ios::binary);
-			uint32_t size = correspondences.size();
+			auto size = (uint32_t) correspondences.size();
 			fileOut.write((char*)&size, sizeof(uint32_t));
 			vector<Correspondence>::iterator it;
 			for (it = correspondences.begin(); it != correspondences.end(); it++)

@@ -48,7 +48,7 @@ namespace ofxGraycode {
 	}
 
 	bool Encoder::operator>>(ofImage& image) {
-		if (operator>>(image.getPixelsRef())) {
+		if (operator>>(image.getPixels())) {
 			image.update();
 			return true;
 		} else
@@ -114,7 +114,7 @@ namespace ofxGraycode {
 	}
 
 	void Decoder::operator<<(ofBaseHasPixels& image) {
-		this->operator<<(image.getPixelsRef());
+		this->operator<<(image.getPixels());
 	}
 
 	bool Decoder::hasData() const {
@@ -168,23 +168,23 @@ namespace ofxGraycode {
 	//ofBaseDraws
 	////
 	//
-	void Decoder::draw(float x,float y) {
-		this->updatePreviewTextures();
-		if (projectorInCamera.isAllocated())
+	void Decoder::draw(float x,float y) const {
+		if (projectorInCamera.isAllocated()) {
 			projectorInCamera.draw(x, y);
+		}
 	}
 
-	void Decoder::draw(float x,float y,float w, float h) {
-		this->updatePreviewTextures();
-		if (projectorInCamera.isAllocated())
+	void Decoder::draw(float x, float y, float w, float h) const {
+		if (projectorInCamera.isAllocated()) {
 			projectorInCamera.draw(x, y, w, h);
+		}
 	}
 
-	float Decoder::getWidth() {
+	float Decoder::getWidth() const {
 		return projectorInCamera.getWidth();
 	}
 	
-	float Decoder::getHeight() {
+	float Decoder::getHeight() const {
 		return projectorInCamera.getHeight();
 	}
 	//
@@ -278,16 +278,16 @@ namespace ofxGraycode {
 		}
 
 		projectorInCamera.allocate(data.getWidth(), data.getHeight(), OF_IMAGE_COLOR);
-		memset(projectorInCamera.getPixels(), 0, projectorInCamera.getPixelsRef().size());
+		memset(projectorInCamera.getPixels().getPixels(), 0, projectorInCamera.getPixels().size());
 
 		cameraInProjector.allocate(data.getPayloadWidth(), data.getPayloadHeight(), OF_IMAGE_COLOR);
-		memset(cameraInProjector.getPixels(), 0, cameraInProjector.getPixelsRef().size());
+		memset(cameraInProjector.getPixels().getPixels(), 0, cameraInProjector.getPixels().size());
 
 		uint8_t* camPix = projectorInCamera.getPixels();
 		uint8_t* active = (uint8_t*)data.getActive().getPixels();
 		uint32_t threshold = (uint32_t)data.getDistanceThreshold();
 
-		memset(camPix, 0, projectorInCamera.getPixelsRef().size());
+		memset(camPix, 0, projectorInCamera.getPixels().size());
 		const uint32_t* idx = data.getData().getPixels();
 		for (uint32_t i=0; i<data.size(); i++, idx++) {
 			if (*idx < payload->getSize() && (*active++)) {

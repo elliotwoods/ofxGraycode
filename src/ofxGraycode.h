@@ -66,10 +66,10 @@ namespace ofxGraycode {
 
 		////
 		//ofBaseDraws
-		void draw(float x,float y);
-		void draw(float x,float y,float w, float h);
-		float getWidth();
-		float getHeight();
+		void draw(float x,float y) const;
+		void draw(float x,float y,float w, float h) const;
+		float getWidth() const;
+		float getHeight() const;
 		//
 		////
 
