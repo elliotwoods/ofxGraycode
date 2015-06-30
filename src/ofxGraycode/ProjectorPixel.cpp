@@ -1,4 +1,5 @@
-#include "ofxGraycode/ProjectorPixel.h"
+#include "ProjectorPixel.h"
+
 namespace ofxGraycode {
 	//--------------------------------------------------------------
 	ProjectorPixel::ProjectorPixel() {

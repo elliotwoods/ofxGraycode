@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxGraycode/Correspondence.h"
-#include "ofxGraycode/ProjectorPixel.h"
+#include "Correspondence.h"
+#include "ProjectorPixel.h"
 
 #pragma warning ( disable : 4413)
 namespace ofxGraycode {
