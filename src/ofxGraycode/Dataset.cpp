@@ -86,14 +86,12 @@ namespace ofxGraycode {
 	}
 
 #pragma mark DataSet
-	////
-	// Initialisation
-	////
-	//
+	//----------
 	DataSet::DataSet() {
 		clear();
 	}
 
+	//----------
 	void DataSet::allocate(int captureWidth, int captureHeight, int payloadWidth, int payloadHeight) {
 		data.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		dataInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
@@ -109,6 +107,7 @@ namespace ofxGraycode {
 		this->payloadHeight = payloadHeight;
 	}
 
+	//----------
 	void DataSet::clear() {
 		data.clear();
 		dataInverse.clear();
@@ -122,6 +121,7 @@ namespace ofxGraycode {
 		payloadHeight = 0;
 	}
 
+	//----------
 	void DataSet::calcMedian(const vector<ofPixels>& captures) {
 		ofPixels tempMax;
 		ofPixels tempMin;
@@ -176,55 +176,68 @@ namespace ofxGraycode {
 	// Accessors
 	////
 	//
+	//----------
 	const ofPixels_<uint32_t>& DataSet::getData() const {
 		return this->data;
 	}
 
+	//----------
 	ofPixels_<uint32_t>& DataSet::getData() {
 		return this->data;
 	}
 
+	//----------
 	const ofPixels_<uint32_t>& DataSet::getDataInverse() const {
 		return this->dataInverse;
 	}
 
+	//----------
 	ofPixels_<uint32_t>& DataSet::getDataInverse() {
 		return this->dataInverse;
 	}
 
+	//----------
 	const ofPixels& DataSet::getMedian() const {
 		return this->median;
 	}
     
-    const ofPixels& DataSet::getMedianInverse() const {
+	//----------
+	const ofPixels& DataSet::getMedianInverse() const {
         return this->medianInverse;
     }
 
+	//----------
 	const ofPixels_<uint32_t>& DataSet::getDistance() const {
 		return this->distance;
 	}
 
+	//----------
 	ofPixels_<uint32_t>& DataSet::getDistance() {
 		return this->distance;
 	}
 
+	//----------
 	const ofPixels& DataSet::getActive() const {
 		return this->active;
 	}
 
+	//----------
 	uint8_t DataSet::getDistanceThreshold() const {
 		return this->distanceThreshold;
 	}
 
+	//----------
 	void DataSet::setDistanceThreshold(uint8_t distanceThreshold) {
 		this->distanceThreshold = distanceThreshold;
 		calc();
 	}
 
+	//----------
 	uint32_t DataSet::getWidth() const {
 		return data.getWidth();
 	}
 
+	//----------
 	uint32_t DataSet::getHeight() const {
 		return data.getHeight();
 	}
@@ -233,22 +246,27 @@ namespace ofxGraycode {
 		return this->payloadWidth;
 	}
 
+	//----------
 	uint32_t DataSet::getPayloadHeight() const {
 		return this->payloadHeight;
 	}
 
+	//----------
 	uint32_t DataSet::getPayloadSize() const {
 		return this->payloadWidth * this->payloadHeight;
 	}
 
+	//----------
 	uint32_t DataSet::size() const {
 		return data.size();
 	}
 
+	//----------
 	bool DataSet::getHasData() const {
 		return this->hasData;
 	}
 
+	//----------
 	void DataSet::setHasData(bool hasData) {
 		this->hasData = hasData;
 	}
@@ -258,6 +276,7 @@ namespace ofxGraycode {
 	////
 	//
 
+	//----------
 	void DataSet::save(string filename) {
 		if (!hasData) {
 			ofLogError() << "ofxGraycode::DataSet::save : cannot save, this set doesn't have data yet";
@@ -301,6 +320,7 @@ namespace ofxGraycode {
 		save.close();
 	}
 
+	//----------
 	void DataSet::load(string filename) {
 		if (filename=="")
 			filename = ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath();
@@ -351,10 +371,12 @@ namespace ofxGraycode {
 		this->calc();
 	}
 
+	//----------
 	const string& DataSet::getFilename() const {
 		return this->filename;
 	}
 
+	//----------
 	vector<ProjectorPixel> DataSet::getProjectorPixels() const {
 		const uint32_t *data = this->data.getPixels();
 		const uint8_t *active = this->active.getPixels();
@@ -409,22 +431,7 @@ namespace ofxGraycode {
 		return mapping;
 	}
 
-
-	vector<Correspondence> DataSet::getCorrespondencesVector() const {
-		vector<Correspondence> correspondences;
-		if (!hasData) {
-			ofLogError("ofxGraycode::DataSet") << "Cannot get correspondences vector as we have no data yet";
-			return correspondences;
-		}
-		const uint8_t* active = this->active.getPixels();
-		const uint32_t* data = this->data.getPixels();
-		for (uint32_t i=0; i<size(); i++, active++, data++) {
-			if (*active)
-				correspondences.push_back(Correspondence(i, *data));
-		}
-		return correspondences;
-	}
-
+	//----------
 	DataSet::const_iterator DataSet::begin() const {
 		DataSet::const_iterator it;
 		it.camera = 0;
@@ -436,6 +443,7 @@ namespace ofxGraycode {
 		return it;
 	}
 
+	//----------
 	DataSet::const_iterator DataSet::end() const {
 		DataSet::const_iterator it;
 		it.camera = this->size();
@@ -447,35 +455,7 @@ namespace ofxGraycode {
 		return it;
 	}
 
-	void DataSet::saveCorrespondences(string filename) const {
-		if (!hasData) {
-			ofLogError("ofxGraycode::DataSet") << "Cannot save correspondences vector as we have no data yet";
-			return;
-		}
-
-		if (filename=="") {
-			filename = this->getFilename();
-			if (filename=="")
-				filename = ofSystemSaveDialog("sl.correspondences", "Save correspondences").getPath();
-			else
-				filename += ".correspondences";
-		}
-
-		vector<Correspondence> correspondences = this->getCorrespondencesVector();
-		ofstream fileOut;
-		try {
-			fileOut.open(ofToDataPath(filename, true).c_str(), ios::binary);
-			auto size = (uint32_t) correspondences.size();
-			fileOut.write((char*)&size, sizeof(uint32_t));
-			vector<Correspondence>::iterator it;
-			for (it = correspondences.begin(); it != correspondences.end(); it++)
-				fileOut.write((char*)&(*it), sizeof(Correspondence));
-			fileOut.close();
-		} catch (...) {
-			ofLogError("ofxGraycode") << "Save correspondences file write failed";
-		}
-	}
-
+	//----------
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
 		uint32_t *dataInverse = this->dataInverse.getPixels();

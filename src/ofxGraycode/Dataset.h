@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Correspondence.h"
 #include "ProjectorPixel.h"
 
 #pragma warning ( disable : 4413)
@@ -67,15 +66,6 @@ namespace ofxGraycode {
 		ofPixels_<uint32_t>& getDistance();
 		const ofPixels& getActive() const;
 		uint8_t getDistanceThreshold() const;
-
-		const ofPixels& getMean() const {
-			ofLogWarning("ofxGraycode") << "getMean() is depreciated, please use getMedian()";
-			return this->getMedian();
-		}
-        const ofPixels& getMeanInverse() const {
-			ofLogWarning("ofxGraycode") << "getMeanInverse() is depreciated, please use getMedian()";
-			return this->getMedianInverse();
-		}
 		
 		void setDistanceThreshold(uint8_t distanceThreshold);
 		uint32_t getWidth() const;
@@ -97,11 +87,27 @@ namespace ofxGraycode {
 		DataSet::const_iterator begin() const;
 		DataSet::const_iterator end() const;
 
-		////
-		//to be depreciated:
-		vector<Correspondence> getCorrespondencesVector() const;
-		void saveCorrespondences(string filename="") const;
-		////
+		///Remap an image in camera space to an image in projector space
+		template<typename PixelType>
+		ofPixels_<PixelType> remapCameraToProjector(const ofPixels_<PixelType> & pixelsInCameraSpace) const {
+			ofPixels_<PixelType> pixelsInProjectorSpace;
+			pixelsInProjectorSpace.allocate(this->getPayloadWidth()
+				, this->getPayloadHeight()
+				, pixelsInCameraSpace.getImageType());
+			pixelsInProjectorSpace.set(0);
+			const auto pixelCount = this->getPayloadSize();
+			const auto numChannels = pixelsInCameraSpace.getNumChannels();
+			
+			for (const auto pixel : *this) {
+				if (pixel.active) {
+					memcpy(pixelsInProjectorSpace.getData() + numChannels * pixel.projector
+						, pixelsInCameraSpace.getData() + numChannels * pixel.camera
+						, numChannels * sizeof(PixelType));
+				}
+			}
+
+			return pixelsInProjectorSpace;
+		}
 
 	protected:
 		void calcInverse(); //calculate data in projection space
