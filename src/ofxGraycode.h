@@ -51,8 +51,10 @@ namespace ofxGraycode {
 		const ofPixels& getMedian() const;
 		void setThreshold(uint8_t distanceThreshold);
 		uint8_t getThreshold() const;
+
 		const DataSet& getDataSet() const;
-		
+		void setDataSet(const DataSet&);
+
 		const ofPixels& getMean() const {
 			ofLogWarning("ofxGraycode") << "getMean is depreciated, please use getMedian";
 			return this->getMedian();

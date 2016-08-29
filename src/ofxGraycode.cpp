@@ -153,6 +153,10 @@ namespace ofxGraycode {
 		return this->data;
 	}
 
+	void Decoder::setDataSet(const DataSet& data) {
+		this->data = data;
+		this->updatePreview();
+	}
 	
 	////
 	//ofBaseUpdates

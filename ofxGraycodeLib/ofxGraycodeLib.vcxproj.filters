@@ -32,9 +32,6 @@
     <ClInclude Include="..\src\ofxGraycode\ProjectorPixel.h">
       <Filter>src\ofxGraycode</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ofxGraycode\Correspondence.h">
-      <Filter>src\ofxGraycode</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ofxGraycode\Dataset.h">
       <Filter>src\ofxGraycode</Filter>
     </ClInclude>
