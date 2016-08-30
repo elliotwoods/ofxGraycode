@@ -21,6 +21,8 @@ namespace ofxGraycode {
 		virtual void reset() = 0;
 		int getFrame() const;
 		int getFrameCount() const;
+
+		const Payload & getPayload() const;
 	protected:
 		Payload * payload;
 		int	frame;

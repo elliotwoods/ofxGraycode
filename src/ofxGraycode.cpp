@@ -28,7 +28,11 @@ namespace ofxGraycode {
 		return this->payload->getFrameCount();
 	}
 
-//----------------------------------------
+	const Payload & BaseCodec::getPayload() const {
+		return * this->payload;
+	}
+
+	//----------------------------------------
 // Encoder
 	void Encoder::reset() {
 		frame = 0;
