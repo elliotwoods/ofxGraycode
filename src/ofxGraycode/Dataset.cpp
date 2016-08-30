@@ -229,7 +229,9 @@ namespace ofxGraycode {
 	//----------
 	void DataSet::setDistanceThreshold(uint8_t distanceThreshold) {
 		this->distanceThreshold = distanceThreshold;
-		calc();
+		if (this->getHasData()) {
+			calc();
+		}
 	}
 
 	//----------
