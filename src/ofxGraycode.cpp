@@ -15,8 +15,8 @@ namespace ofxGraycode {
 		this->payload = 0;
 	}
 
-	void BaseCodec::init(Payload & payload) {
-		this->payload = &payload;
+	void BaseCodec::init(shared_ptr<Payload> payload) {
+		this->payload = payload;
 		reset();
 	}
 
@@ -28,8 +28,8 @@ namespace ofxGraycode {
 		return this->payload->getFrameCount();
 	}
 
-	const Payload & BaseCodec::getPayload() const {
-		return * this->payload;
+	shared_ptr<Payload> BaseCodec::getPayload() const {
+		return this->payload;
 	}
 
 	//----------------------------------------
@@ -222,18 +222,26 @@ namespace ofxGraycode {
 		//load the dataSet
 		data.load(filename);
 
-		//if we have data, and a payload
-		if (data.getHasData() && this->payload) {
-			//check that the payload matches what we just loaded
-			if (this->payload->getWidth() != data.getPayloadWidth() || this->payload->getHeight() != data.getPayloadHeight()) {
-				if (throwIfPayloadDoesntMatch) {
-					throw("ofxGraycode::Decoder::loadDataSet : Payload dimensions do not match the dataSet which was just loaded.");
-				}
+		if (data.getHasData()) {
 
-				//if not, let's re-imitialise the payload (this is a little bit contentious)
-				this->payload->init(data.getPayloadWidth(), data.getPayloadHeight());
+			if (this->payload) {
+				//check for payload mismatch
+				if (this->payload->getWidth() != data.getPayloadWidth() || this->payload->getHeight() != data.getPayloadHeight()) {
+					if (throwIfPayloadDoesntMatch) {
+						throw("ofxGraycode::Decoder::loadDataSet : Payload dimensions do not match the dataSet which was just loaded.");
+					}
+
+					//if not, let's invalidate the payload
+					this->payload = nullptr;
+				}
 			}
-			updatePreview();
+
+			if (!this->payload) {
+				//HACK-> this is hardcoded payload type
+				auto payload = make_shared<PayloadGraycode>();
+				payload->init(data.getPayloadWidth(), data.getPayloadHeight());
+				this->payload = payload;
+			}
 		}
 	}
 
@@ -266,12 +274,12 @@ namespace ofxGraycode {
 
 	void Decoder::calc() {
 		if (payload->isOffline()) {
-			const PayloadOffline& payload(*(const PayloadOffline*)this->payload);
+			auto payload = static_pointer_cast<PayloadOffline>(this->payload);
 			data.calcMedian(this->captures);
-			payload.calc(this->captures, this->data);
+			payload->calc(this->captures, this->data);
 		} else {
-			const PayloadOnline& payload(*(const PayloadOnline*)this->payload);
-			payload.calc(this->data);
+			auto payload = static_pointer_cast<PayloadOnline>(this->payload);
+			payload->calc(this->data);
 		}
 		updatePreview();
 	}

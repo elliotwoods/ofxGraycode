@@ -17,14 +17,14 @@ namespace ofxGraycode {
 	class BaseCodec {
 	public:
 		BaseCodec();
-		void init(Payload & payload);
+		void init(shared_ptr<Payload> payload);
 		virtual void reset() = 0;
 		int getFrame() const;
 		int getFrameCount() const;
 
-		const Payload & getPayload() const;
+		shared_ptr<Payload> getPayload() const;
 	protected:
-		Payload * payload;
+		shared_ptr<Payload> payload;
 		int	frame;
 	};
 
