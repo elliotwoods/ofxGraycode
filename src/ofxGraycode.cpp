@@ -243,6 +243,9 @@ namespace ofxGraycode {
 				this->payload = payload;
 			}
 		}
+
+		this->updatePreview();
+		this->updatePreviewTextures();
 	}
 
 	void Decoder::saveDataSet(const string filename) {
