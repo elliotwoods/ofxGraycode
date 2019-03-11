@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ofxCanonLib", "..\..\ofxCan
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ofxMachineVisionLib", "..\..\ofxMachineVision\ofxMachineVisionLib\ofxMachineVisionLib.vcxproj", "{CD4455E0-0454-4C3C-BB42-9D15D16A34DD}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ofxCvGuiLib", "..\..\ofxCvGui\ofxCvGuiLib\ofxCvGuiLib.vcxproj", "{6F0DDB4F-4014-4433-919B-9D956C034BAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -60,6 +62,14 @@ Global
 		{CD4455E0-0454-4C3C-BB42-9D15D16A34DD}.Release|Win32.Build.0 = Release|Win32
 		{CD4455E0-0454-4C3C-BB42-9D15D16A34DD}.Release|x64.ActiveCfg = Release|x64
 		{CD4455E0-0454-4C3C-BB42-9D15D16A34DD}.Release|x64.Build.0 = Release|x64
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Debug|Win32.Build.0 = Debug|Win32
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Debug|x64.ActiveCfg = Debug|x64
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Debug|x64.Build.0 = Debug|x64
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Release|Win32.ActiveCfg = Release|Win32
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Release|Win32.Build.0 = Release|Win32
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Release|x64.ActiveCfg = Release|x64
+		{6F0DDB4F-4014-4433-919B-9D956C034BAD}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
