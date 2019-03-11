@@ -1,5 +1,6 @@
 #include "DataSet.h"
 
+// Bit patterns for when saving
 #define OFXGRAYCODE_DATASET_HAS_DATA 1 << 0
 #define OFXGRAYCODE_DATASET_HAS_DATAINVERSE 1 << 1
 #define OFXGRAYCODE_DATASET_HAS_MEDIAN 1 << 2
@@ -16,17 +17,17 @@ namespace ofxGraycode {
 		xy.y = this->camera / this->dataSet.getWidth();
 		return xy;
 	}
-	
+
 	//----------
 	ofVec2f DataSet::const_iterator::reference::getCameraXYNorm() const {
 		ofVec2f xy = this->getCameraXY();
-		xy /= ofVec2f( this->dataSet.getWidth(), this->dataSet.getHeight() );
+		xy /= ofVec2f(this->dataSet.getWidth(), this->dataSet.getHeight());
 		xy *= 2.0f; //0..2
 		xy -= 1.0f;
-		xy.y = - xy.y;
+		xy.y = -xy.y;
 		return xy;
 	}
-	
+
 	//----------
 	ofVec2f DataSet::const_iterator::reference::getProjectorXY() const {
 		ofVec2f xy;
@@ -34,14 +35,14 @@ namespace ofxGraycode {
 		xy.y = this->projector / this->dataSet.getPayloadWidth();
 		return xy;
 	}
-	
+
 	//----------
 	ofVec2f DataSet::const_iterator::reference::getProjectorXYNorm() const {
 		ofVec2f xy = this->getProjectorXY();
-		xy /= ofVec2f( this->dataSet.getPayloadWidth(), this->dataSet.getPayloadHeight() );
+		xy /= ofVec2f(this->dataSet.getPayloadWidth(), this->dataSet.getPayloadHeight());
 		xy *= 2.0f; //0..2
 		xy -= 1.0f;
-		xy.y = - xy.y;
+		xy.y = -xy.y;
 		return xy;
 	}
 
@@ -97,12 +98,12 @@ namespace ofxGraycode {
 		dataInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		distance.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
 		median.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
-        medianInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
+		medianInverse.allocate(payloadWidth, payloadHeight, OF_PIXELS_MONO);
 		active.allocate(captureWidth, captureHeight, OF_PIXELS_MONO);
-		data.set(0,0);
-		distance.set(0,0);
-		median.set(0,0);
-		active.set(0,0);
+		data.set(0, 0);
+		distance.set(0, 0);
+		median.set(0, 0);
+		active.set(0, 0);
 		this->payloadWidth = payloadWidth;
 		this->payloadHeight = payloadHeight;
 	}
@@ -125,24 +126,24 @@ namespace ofxGraycode {
 	void DataSet::calcMedian(const vector<ofPixels>& captures) {
 		ofPixels tempMax;
 		ofPixels tempMin;
-		
+
 		tempMin.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
 		tempMax.allocate(captures[0].getWidth(), captures[0].getHeight(), OF_PIXELS_MONO);
-		
+
 		tempMin.set(0, 255);
 		tempMax.set(0, 0);
 
 		const uint8_t* pixelIn;
 		uint8_t* pixelMax;
 		uint8_t* pixelMin;
-		
+
 		uint32_t size = captures[0].getWidth() * captures[0].getHeight();
-		
-		for (uint32_t frame=0; frame<captures.size(); frame++) {
+
+		for (uint32_t frame = 0; frame < captures.size(); frame++) {
 			pixelIn = captures[frame].getPixels();
 			pixelMin = tempMin.getPixels();
 			pixelMax = tempMax.getPixels();
-			for (int i=0; i<size; i++) {
+			for (int i = 0; i < size; i++) {
 				if (*pixelIn > *pixelMax) {
 					*pixelMax = *pixelIn;
 				}
@@ -157,18 +158,19 @@ namespace ofxGraycode {
 
 		pixelMin = tempMin.getPixels();
 		pixelMax = tempMax.getPixels();
-		
+
 		uint8_t* medianOut = this->median.getPixels();
 		for (uint32_t i = 0; i < size; i++) {
-			*medianOut++ = (uint8_t) (( (uint16_t)(*pixelMax++) + (uint16_t)(*pixelMin++) ) / 2);
+			*medianOut++ = (uint8_t)(((uint16_t)(*pixelMax++) + (uint16_t)(*pixelMin++)) / 2);
 		}
 	}
-	
+
 	void DataSet::calc() {
 		uint8_t* active = this->active.getPixels();
 		uint32_t* distance = this->distance.getPixels();
-		for (int i=0; i<this->size(); i++)
+		for (int i = 0; i < this->size(); i++) {
 			*active++ = *distance++ > distanceThreshold ? 255 : 0;
+		}
 		calcInverse();
 	}
 
@@ -200,11 +202,11 @@ namespace ofxGraycode {
 	const ofPixels& DataSet::getMedian() const {
 		return this->median;
 	}
-    
+
 	//----------
 	const ofPixels& DataSet::getMedianInverse() const {
-        return this->medianInverse;
-    }
+		return this->medianInverse;
+	}
 
 	//----------
 	const ofPixels_<uint32_t>& DataSet::getDistance() const {
@@ -272,7 +274,7 @@ namespace ofxGraycode {
 	void DataSet::setHasData(bool hasData) {
 		this->hasData = hasData;
 	}
-	
+
 	////
 	// File access
 	////
@@ -285,14 +287,14 @@ namespace ofxGraycode {
 			return;
 		}
 
-		if (filename=="")
+		if (filename == "")
 			filename = ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath();
 
 		this->filename = filename;
 
 		int width = this->data.getWidth();
 		int height = this->data.getHeight();
-		
+
 		ofstream save(ofToDataPath(filename).c_str(), ios::binary);
 		if (!save.is_open()) {
 			ofLogError() << "ofxGraycode::DataSet::save failed to open file " << filename;
@@ -300,8 +302,8 @@ namespace ofxGraycode {
 		}
 
 		save << this->size() << endl;
-		save << width << "\t" <<  height << endl;
-		save << payloadWidth << "\t" <<  payloadHeight << endl;
+		save << width << "\t" << height << endl;
+		save << payloadWidth << "\t" << payloadHeight << endl;
 		save << this->distanceThreshold << endl;
 
 		uint32_t contained = 0;
@@ -324,7 +326,7 @@ namespace ofxGraycode {
 
 	//----------
 	void DataSet::load(string filename) {
-		if (filename=="")
+		if (filename == "")
 			filename = ofSystemLoadDialog("Load ofxGrayCode::DataSet").getPath();
 
 		this->filename = filename;
@@ -361,7 +363,7 @@ namespace ofxGraycode {
 			load.read((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN)
 			load.read((char*)median.getPixels(), this->size() * sizeof(uint8_t));
-        if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN_INVERSE)
+		if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN_INVERSE)
 			load.read((char*)medianInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_DISTANCE)
 			load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
@@ -379,38 +381,40 @@ namespace ofxGraycode {
 	}
 
 	//----------
-	vector<ProjectorPixel> DataSet::getProjectorPixels() const {
+	vector<Utils::ProjectorPixel> DataSet::getProjectorPixels() const {
 		const uint32_t *data = this->data.getPixels();
 		const uint8_t *active = this->active.getPixels();
 		const uint32_t *distance = this->distance.getPixels();
 
-		vector<ProjectorPixel> projectorPixels(this->getPayloadSize());
+		vector<Utils::ProjectorPixel> projectorPixels(this->getPayloadSize());
 		ofVec2f cameraXY, projectorXY;
 		uint32_t activeCount = 0;
 
-		for (int i=0; i<this->size(); i++, data++, active++, distance++) {
+		for (int i = 0; i < this->size(); i++, data++, active++, distance++) {
 			if (*active) {
-				cameraXY = ofVec2f(i % this->getWidth(), i / this->getWidth()) / 
+				cameraXY = ofVec2f(i % this->getWidth(), i / this->getWidth()) /
 					ofVec2f(this->getWidth(), this->getHeight()) * 2.0f - ofVec2f(1.0f, 1.0f);
 				if (projectorPixels[*data].isFound())
 					projectorPixels[*data].addCameraFind(cameraXY, *distance);
 				else {
-					projectorXY = ofVec2f(*data % this->getPayloadWidth(), *data / this->getPayloadWidth()) / 
-					ofVec2f(this->getPayloadWidth(), this->getPayloadHeight()) * 2.0f;
+					projectorXY = ofVec2f(*data % this->getPayloadWidth(), *data / this->getPayloadWidth()) /
+						ofVec2f(this->getPayloadWidth(), this->getPayloadHeight()) * 2.0f;
 					projectorXY.x -= 1.0f;
 					projectorXY.y = 1.0f - projectorXY.y;
-					projectorPixels[*data] = ProjectorPixel(projectorXY, cameraXY, *distance);
+					projectorPixels[*data] = Utils::ProjectorPixel(projectorXY, cameraXY, *distance);
 					activeCount++;
 				}
 			}
 		}
 
 		//filter blank pixels
-		vector<ProjectorPixel> filteredPixels;
+		vector<Utils::ProjectorPixel> filteredPixels;
 		filteredPixels.reserve(activeCount);
-		for (int i=0; i<this->size(); i++)
-			if (projectorPixels[i].isFound())
+		for (int i = 0; i < this->size(); i++) {
+			if (projectorPixels[i].isFound()) {
 				filteredPixels.push_back(projectorPixels[i]);
+			}
+		}
 
 		return filteredPixels;
 	}
@@ -420,14 +424,15 @@ namespace ofxGraycode {
 		map<uint32_t, DataSet::const_iterator> mapping; //projector
 		map<uint32_t, uint32_t> distance; //projector, distance
 		for (DataSet::const_iterator it = this->begin(); it != this->end(); ++it) {
-			if ( !(*it).active )
+			if (!(*it).active)
 				continue;
-			if ( mapping.count((*it).projector) == 0) {
-				mapping.insert( pair<uint32_t, DataSet::const_iterator> ( (*it).projector, it ) );
-				distance.insert( pair<uint32_t, uint32_t> ( (*it).projector, (*it).distance ) );
-			} else {
-				if ((*it).distance > distance.at( (*it).projector ) )
-					mapping.at( (*it).projector ) = it;
+			if (mapping.count((*it).projector) == 0) {
+				mapping.insert(pair<uint32_t, DataSet::const_iterator>((*it).projector, it));
+				distance.insert(pair<uint32_t, uint32_t>((*it).projector, (*it).distance));
+			}
+			else {
+				if ((*it).distance > distance.at((*it).projector))
+					mapping.at((*it).projector) = it;
 			}
 		}
 		return mapping;
@@ -461,18 +466,18 @@ namespace ofxGraycode {
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
 		uint32_t *dataInverse = this->dataInverse.getPixels();
-        uint8_t *medianInverse = this->medianInverse.getPixels();
+		uint8_t *medianInverse = this->medianInverse.getPixels();
 		uint32_t *data = this->data.getPixels();
 		uint8_t *active = this->active.getPixels();
 		uint32_t payloadSize = this->getPayloadSize();
 
 		memset(medianInverse, 0, payloadSize);
 
-		for (uint32_t i=0; i<this->data.size(); i++, data++, active++) {
+		for (uint32_t i = 0; i < this->data.size(); i++, data++, active++) {
 			if (*data < payloadSize && *active) {
 				dataInverse[*data] = i;
-                medianInverse[*data] = median[i];
-            }
+				medianInverse[*data] = median[i];
+			}
 		}
 	}
 }

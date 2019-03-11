@@ -7,33 +7,78 @@
     <Filter Include="src\ofxGraycode">
       <UniqueIdentifier>{5057417c-b708-4521-bc97-fbde14ac861c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\ofxGraycode\Utils">
+      <UniqueIdentifier>{4a87e16f-96e6-4a9c-9a7a-281fe377885e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ofxGraycode\Payload">
+      <UniqueIdentifier>{33b8dd8b-781c-4b29-ac7d-fdaa530ade84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ofxGraycode.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ofxGraycode\Payload.cpp">
-      <Filter>src\ofxGraycode</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ofxGraycode\ProjectorPixel.cpp">
-      <Filter>src\ofxGraycode</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ofxGraycode\Dataset.cpp">
       <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Utils\ProjectorPixel.cpp">
+      <Filter>src\ofxGraycode\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Decoder.cpp">
+      <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Encoder.cpp">
+      <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\BaseCodec.cpp">
+      <Filter>src\ofxGraycode</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Payload\Base.cpp">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Payload\Graycode.cpp">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Payload\Factory.cpp">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Payload\BalancedGraycode.cpp">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ofxGraycode\Utils\Math.cpp">
+      <Filter>src\ofxGraycode\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ofxGraycode.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ofxGraycode\Payload.h">
-      <Filter>src\ofxGraycode</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\ofxGraycode\ProjectorPixel.h">
-      <Filter>src\ofxGraycode</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\ofxGraycode\Dataset.h">
       <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Utils\ProjectorPixel.h">
+      <Filter>src\ofxGraycode\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\BaseCodec.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Encoder.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Decoder.h">
+      <Filter>src\ofxGraycode</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Payload\Base.h">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Payload\Graycode.h">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Payload\Factory.h">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Payload\BalancedGraycode.h">
+      <Filter>src\ofxGraycode\Payload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ofxGraycode\Utils\Math.h">
+      <Filter>src\ofxGraycode\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,13 +1,12 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ProjectorPixel.h"
+#include "Utils/ProjectorPixel.h"
 
 #pragma warning ( disable : 4413)
 namespace ofxGraycode {
 	class DataSet {
 	public:
-
 		struct const_iterator {
 			struct reference {
 				reference(const const_iterator & iterator) :
@@ -81,7 +80,7 @@ namespace ofxGraycode {
 		void load(string filename="");
 		const string& getFilename() const;
 
-		vector<ProjectorPixel> getProjectorPixels() const;
+		vector<Utils::ProjectorPixel> getProjectorPixels() const;
 		map<uint32_t, DataSet::const_iterator> getMapping() const; ///<projector pixel as index. highest distance
 		
 		DataSet::const_iterator begin() const;

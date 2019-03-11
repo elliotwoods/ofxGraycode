@@ -132,16 +132,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\ofxGraycode.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\BaseCodec.cpp" />
     <ClCompile Include="..\src\ofxGraycode\Dataset.cpp" />
-    <ClCompile Include="..\src\ofxGraycode\Payload.cpp" />
-    <ClCompile Include="..\src\ofxGraycode\ProjectorPixel.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Decoder.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Encoder.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Payload\BalancedGraycode.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Payload\Base.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Payload\Factory.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Payload\Graycode.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Utils\Math.cpp" />
+    <ClCompile Include="..\src\ofxGraycode\Utils\ProjectorPixel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\ofxGraycode.h" />
+    <ClInclude Include="..\src\ofxGraycode\BaseCodec.h" />
     <ClInclude Include="..\src\ofxGraycode\Dataset.h" />
-    <ClInclude Include="..\src\ofxGraycode\Payload.h" />
-    <ClInclude Include="..\src\ofxGraycode\ProjectorPixel.h" />
+    <ClInclude Include="..\src\ofxGraycode\Decoder.h" />
+    <ClInclude Include="..\src\ofxGraycode\Encoder.h" />
+    <ClInclude Include="..\src\ofxGraycode\Payload\BalancedGraycode.h" />
+    <ClInclude Include="..\src\ofxGraycode\Payload\Base.h" />
+    <ClInclude Include="..\src\ofxGraycode\Payload\Factory.h" />
+    <ClInclude Include="..\src\ofxGraycode\Payload\Graycode.h" />
+    <ClInclude Include="..\src\ofxGraycode\Utils\Math.h" />
+    <ClInclude Include="..\src\ofxGraycode\Utils\ProjectorPixel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

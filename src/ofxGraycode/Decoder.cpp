@@ -1,66 +1,9 @@
-//  ofxGraycode.cpp
-//  ofxGraycode
-//
-//  Created by Elliot Woods on 10/11/2011.
-//	http://www.kimchiandchips.com
-//
-#include "ofxGraycode.h"
+#include "Decoder.h"
+
+#include "Payload/Factory.h"
 
 namespace ofxGraycode {
-	
-//----------------------------------------
-// BaseCodec
-	BaseCodec::BaseCodec() {
-		this->frame = 0;
-		this->payload = 0;
-	}
-
-	void BaseCodec::init(shared_ptr<Payload> payload) {
-		this->payload = payload;
-		reset();
-	}
-
-	int BaseCodec::getFrame() const {
-		return this->frame;
-	}
-
-	int BaseCodec::getFrameCount() const {
-		return this->payload->getFrameCount();
-	}
-
-	shared_ptr<Payload> BaseCodec::getPayload() const {
-		return this->payload;
-	}
-
-	//----------------------------------------
-// Encoder
-	void Encoder::reset() {
-		frame = 0;
-	}
-
-	bool Encoder::operator>>(ofPixels& pixels) {
-
-		if (frame >= payload->getFrameCount())
-			return false;
-
-		if (!payload->matchingPixels(pixels))
-			payload->allocatePixels(pixels);
-
-		payload->fillPixels(frame++, pixels);
-
-		return true;
-	}
-
-	bool Encoder::operator>>(ofImage& image) {
-		if (operator>>(image.getPixels())) {
-			image.update();
-			return true;
-		} else
-			return false;
-	}
-	
-//----------------------------------------
-// Decoder
+	//----------
 	void Decoder::clear() {
 		this->frame = 0;
 		this->data.clear();
@@ -68,12 +11,14 @@ namespace ofxGraycode {
 		this->clearCaptures();
 	}
 
+	//----------
 	void Decoder::clearCaptures() {
 		this->captures.clear();
 	}
 
+	//----------
 	void Decoder::operator<<(const ofPixels& pixels) {
-		if (frame==0)
+		if (frame == 0)
 			data.allocate(pixels.getWidth(), pixels.getHeight(), payload->getWidth(), payload->getHeight());
 
 		if (frame > payload->getFrameCount() - 1) {
@@ -94,11 +39,12 @@ namespace ofxGraycode {
 			downsample->set(0, 0);
 			const uint8_t* in = pixels.getPixels();
 			uint8_t* out = downsample->getPixels();
-			for (int i=0; i<pixels.size(); i++, out += (i % pixels.getNumChannels() == 0)) {
+			for (int i = 0; i < pixels.size(); i++, out += (i % pixels.getNumChannels() == 0)) {
 				*out += *in++ / pixels.getNumChannels();
 			}
 			greyPixels = downsample;
-		} else
+		}
+		else
 			greyPixels = &pixels;
 
 		if (this->payload->isOffline())
@@ -117,30 +63,37 @@ namespace ofxGraycode {
 			delete greyPixels;
 	}
 
+	//----------
 	void Decoder::operator<<(ofBaseHasPixels& image) {
 		this->operator<<(image.getPixels());
 	}
 
+	//----------
 	bool Decoder::hasData() const {
 		return this->data.getHasData();
 	}
 
+	//----------
 	uint32_t Decoder::size() const {
 		return this->data.size();
 	}
 
+	//----------
 	const vector<ofPixels>& Decoder::getCaptures() const {
 		return this->captures;
 	}
 
+	//----------
 	const ofPixels_<uint32_t>& Decoder::getData() const {
 		return this->data.getData();
 	}
 
+	//----------
 	const ofPixels& Decoder::getMedian() const {
 		return this->data.getMedian();
 	}
 
+	//----------
 	void Decoder::setThreshold(uint8_t distanceThreshold) {
 		this->data.setDistanceThreshold(distanceThreshold);
 		if (this->data.getHasData()) {
@@ -149,75 +102,64 @@ namespace ofxGraycode {
 		}
 	}
 
+	//----------
 	uint8_t Decoder::getThreshold() const {
 		return this->data.getDistanceThreshold();
 	}
 
+	//----------
 	const DataSet& Decoder::getDataSet() const {
 		return this->data;
 	}
 
+	//----------
 	void Decoder::setDataSet(const DataSet& data) {
 		this->data = data;
 		this->updatePreview();
 	}
-	
-	////
-	//ofBaseUpdates
-	////
-	//
+
+	//----------
 	void Decoder::update() {
 		this->updatePreviewTextures();
 	}
-	//
-	////
 
-	////
-	//ofBaseDraws
-	////
-	//
-	void Decoder::draw(float x,float y) const {
+	//----------
+	void Decoder::draw(float x, float y) const {
 		if (projectorInCamera.isAllocated()) {
 			projectorInCamera.draw(x, y);
 		}
 	}
 
+	//----------
 	void Decoder::draw(float x, float y, float w, float h) const {
 		if (projectorInCamera.isAllocated()) {
 			projectorInCamera.draw(x, y, w, h);
 		}
 	}
 
+	//----------
 	float Decoder::getWidth() const {
 		return projectorInCamera.getWidth();
 	}
-	
+
+	//----------
 	float Decoder::getHeight() const {
 		return projectorInCamera.getHeight();
 	}
-	//
-	////
 
-	////
-	//previews
-	////
-	//	
+	//----------
 	ofImage& Decoder::getCameraInProjector() {
 		this->updatePreviewTextures();
 		return this->cameraInProjector;
 	}
-	
+
+	//----------
 	ofImage& Decoder::getProjectorInCamera() {
 		this->updatePreviewTextures();
 		return this->projectorInCamera;
 	}
-	//
-	////
 
-	////
-	//file actions
-	////
-	//
+	//----------
 	void Decoder::loadDataSet(const string filename, bool throwIfPayloadDoesntMatch) {
 		//load the dataSet
 		data.load(filename);
@@ -238,7 +180,7 @@ namespace ofxGraycode {
 
 			if (!this->payload) {
 				//HACK-> this is hardcoded payload type
-				auto payload = make_shared<PayloadGraycode>();
+				auto payload = Payload::make();
 				payload->init(data.getPayloadWidth(), data.getPayloadHeight());
 				this->payload = payload;
 			}
@@ -248,6 +190,7 @@ namespace ofxGraycode {
 		this->updatePreviewTextures();
 	}
 
+	//----------
 	void Decoder::saveDataSet(const string filename) {
 		data.save(filename);
 		if (filename != "" && data.getFilename() != "") {
@@ -255,6 +198,7 @@ namespace ofxGraycode {
 		}
 	}
 
+	//----------
 	void Decoder::savePreviews() {
 		string filename = data.getFilename();
 		if (filename == "")
@@ -268,25 +212,26 @@ namespace ofxGraycode {
 
 		if (data.getMedian().isAllocated())
 			ofImage(data.getMedian()).saveImage(filename + "-median.png");
-        
-        if (data.getMedianInverse().isAllocated())
+
+		if (data.getMedianInverse().isAllocated())
 			ofImage(data.getMedianInverse()).saveImage(filename + "-medianInverse.png");
 	}
-	//
-	////
 
+	//----------
 	void Decoder::calc() {
 		if (payload->isOffline()) {
-			auto payload = static_pointer_cast<PayloadOffline>(this->payload);
+			auto payload = static_pointer_cast<Payload::Offline>(this->payload);
 			data.calcMedian(this->captures);
 			payload->calc(this->captures, this->data);
-		} else {
-			auto payload = static_pointer_cast<PayloadOnline>(this->payload);
+		}
+		else {
+			auto payload = static_pointer_cast<Payload::Online>(this->payload);
 			payload->calc(this->data);
 		}
 		updatePreview();
 	}
 
+	//----------
 	void Decoder::updatePreview() {
 		if (!this->payload) {
 			return;
@@ -308,12 +253,13 @@ namespace ofxGraycode {
 
 		memset(camPix, 0, projectorInCamera.getPixels().size());
 		const uint32_t* idx = data.getData().getPixels();
-		for (uint32_t i=0; i<data.size(); i++, idx++) {
+		for (uint32_t i = 0; i < data.size(); i++, idx++) {
 			if (*idx < payload->getSize() && (*active++)) {
 				*camPix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
 				*camPix++ = 255.0f * float(*idx / payload->getWidth()) / float(payload->getHeight());
 				*camPix++ = 0.0f;
-			} else
+			}
+			else
 				camPix += 3;
 		}
 
@@ -321,7 +267,7 @@ namespace ofxGraycode {
 		uint32_t* dataInverse = this->data.getDataInverse().getPixels();
 		float cameraWidth = this->getWidth();
 		float cameraHeight = this->getHeight();
-		for (uint32_t i=0; i<this->payload->getSize(); i++, projPixels+=3, dataInverse++) {
+		for (uint32_t i = 0; i < this->payload->getSize(); i++, projPixels += 3, dataInverse++) {
 			projPixels[0] = 255.0f * float(*dataInverse % (uint32_t)cameraWidth) / cameraWidth;
 			projPixels[1] = 255.0f * float(*dataInverse / (uint32_t)cameraWidth) / cameraHeight;
 		}
@@ -330,6 +276,7 @@ namespace ofxGraycode {
 		this->needPreviewUpdate = true;
 	}
 
+	//----------
 	void Decoder::updatePreviewTextures() {
 		if (!this->needPreviewUpdate)
 			return;
