@@ -115,7 +115,7 @@ namespace ofxGraycode {
 		ofPixels median; ///< median brightness per camera pixel
 		ofPixels medianInverse; ///< median brightness per projector pixel as seen in camera
 		ofPixels_<uint32_t> distance; ///<distance from threshold
-		ofPixels active; ///< We treat this as if it stores bools, but no reason to make a bool type really
+		ofPixels active; ///< We treat this as if it stores bools, but no reason to make a bool type since size is same as uint8_t
 
 		uint32_t payloadWidth, payloadHeight;
 		uint32_t distanceThreshold;

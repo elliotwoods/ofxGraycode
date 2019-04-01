@@ -8,11 +8,12 @@ namespace ofxGraycode {
 	public:
 		BaseCodec();
 		void init(shared_ptr<Payload::Base> payload);
-		virtual void reset() = 0;
+		virtual void clear() { }
 		int getFrame() const;
 		int getFrameCount() const;
 
 		shared_ptr<Payload::Base> getPayload() const;
+		void setPayload(shared_ptr<Payload::Base>);
 	protected:
 		shared_ptr<Payload::Base> payload;
 		int	frame;

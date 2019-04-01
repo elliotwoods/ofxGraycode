@@ -2,12 +2,12 @@
 
 #include "BaseCodec.h"
 #include "ofBaseTypes.h"
+#include "Payload/Base.h"
 
 namespace ofxGraycode {
 	class Decoder : public BaseCodec, public ofBaseDraws {
 	public:
-		void clear();
-		void reset() { this->clear(); }
+		void clear() override;
 		void clearCaptures(); ///< keep data but drop captures
 		void operator<<(const ofPixels& pixels);
 		void operator<<(ofBaseHasPixels& image);
@@ -52,7 +52,7 @@ namespace ofxGraycode {
 
 		////
 		//file actions
-		void loadDataSet(const string filename = "", bool throwIfPayloadDoesntMatch = false);
+		void loadDataSet(const string filename = "", Payload::Type payloadType = Payload::Type::Graycode, bool throwIfPayloadDoesntMatch = false);
 		void saveDataSet(const string filename = "");
 		void savePreviews();
 		// 

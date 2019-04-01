@@ -160,12 +160,11 @@ namespace ofxGraycode {
 	}
 
 	//----------
-	void Decoder::loadDataSet(const string filename, bool throwIfPayloadDoesntMatch) {
+	void Decoder::loadDataSet(const string filename, Payload::Type payloadType, bool throwIfPayloadDoesntMatch) {
 		//load the dataSet
 		data.load(filename);
 
 		if (data.getHasData()) {
-
 			if (this->payload) {
 				//check for payload mismatch
 				if (this->payload->getWidth() != data.getPayloadWidth() || this->payload->getHeight() != data.getPayloadHeight()) {
@@ -178,12 +177,9 @@ namespace ofxGraycode {
 				}
 			}
 
-			if (!this->payload) {
-				//HACK-> this is hardcoded payload type
-				auto payload = Payload::make();
-				payload->init(data.getPayloadWidth(), data.getPayloadHeight());
-				this->payload = payload;
-			}
+			auto payload = Payload::make(payloadType);
+			payload->init(data.getPayloadWidth(), data.getPayloadHeight());
+			this->setPayload(payload);
 		}
 
 		this->updatePreview();

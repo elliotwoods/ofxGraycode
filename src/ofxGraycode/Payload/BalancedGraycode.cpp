@@ -43,8 +43,11 @@ namespace ofxGraycode {
 			//calculate median (unused, just for photo purposes)
 			data.calcMedian(captures);
 
+			ofPixels_<uint32_t> distanceAccumulator;
+			distanceAccumulator.allocate(data.getWidth(), data.getHeight(), ofPixelFormat::OF_PIXELS_GRAY);
+			distanceAccumulator.set(0, 0);
+
 			data.getData().set(0, 0);
-			data.getDistance().set(0, 255);
 
 			if (captures.size() < this->frameCount) {
 				ofLogError("ofxGraycode::Payload::BalancedGraycode") << "Cannot perform calc until all frames are available";
@@ -56,10 +59,10 @@ namespace ofxGraycode {
 			for (uint32_t framePairIndex = 0; framePairIndex < halfFrameCount; framePairIndex++) {
 				auto pixelA = captures[framePairIndex * 2].getData();
 				auto pixelB = captures[framePairIndex * 2 + 1].getData();
-				auto recordedDistance = data.getDistance().getData();
+				auto distanceAccumulatorPixel = distanceAccumulator.getData();
 				auto dataOut = data.getData().getData();
 
-				for (uint32_t i = 0; i < data.size(); i++, pixelA++, pixelB++, recordedDistance++, dataOut++) {
+				for (uint32_t i = 0; i < data.size(); i++, pixelA++, pixelB++, distanceAccumulatorPixel++, dataOut++) {
 					auto high = *pixelA > *pixelB;
 
 					if (high) {
@@ -73,9 +76,16 @@ namespace ofxGraycode {
 						? *pixelA - *pixelB
 						: *pixelB - *pixelA;
 
-					if (distance < *recordedDistance) {
-						*recordedDistance = distance;
-					}
+					*distanceAccumulatorPixel += distance;
+				}
+			}
+
+			//calculate distance values
+			{
+				auto distanceAccumulatorPixel = distanceAccumulator.getData();
+				auto distancePixel = data.getDistance().getData();
+				for (uint32_t i = 0; i < distanceAccumulator.size(); i++) {
+					*distancePixel++ = *distanceAccumulatorPixel++ / halfFrameCount;
 				}
 			}
 

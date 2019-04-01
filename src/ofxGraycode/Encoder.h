@@ -5,7 +5,7 @@
 namespace ofxGraycode {
 	class Encoder : public BaseCodec {
 	public:
-		void reset();
+		void clear();
 
 		bool operator >> (ofPixels& pixels);
 		bool operator >> (ofImage& image);

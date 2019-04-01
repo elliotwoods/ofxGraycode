@@ -10,7 +10,7 @@ namespace ofxGraycode {
 	//----------
 	void BaseCodec::init(shared_ptr<Payload::Base> payload) {
 		this->payload = payload;
-		reset();
+		this->clear();
 	}
 
 	//----------
@@ -26,5 +26,10 @@ namespace ofxGraycode {
 	//----------
 	shared_ptr<Payload::Base> BaseCodec::getPayload() const {
 		return this->payload;
+	}
+
+	//----------
+	void BaseCodec::setPayload(shared_ptr<Payload::Base> payload) {
+		this->payload = payload;
 	}
 }

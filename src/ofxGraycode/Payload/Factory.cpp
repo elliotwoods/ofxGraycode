@@ -1,5 +1,6 @@
 #include "Factory.h"
 #include "Graycode.h"
+#include "BalancedGraycode.h"
 
 namespace ofxGraycode {
 	namespace Payload {
@@ -8,6 +9,8 @@ namespace ofxGraycode {
 			switch (type) {
 			case Type::Graycode:
 				return make_shared<Payload::Graycode>();
+			case Type::BalancedGraycode:
+				return make_shared<Payload::BalancedGraycode>();
 			}
 
 			// We arrived here, we failed to find a matching type

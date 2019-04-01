@@ -287,8 +287,9 @@ namespace ofxGraycode {
 			return;
 		}
 
-		if (filename == "")
+		if (filename == "") {
 			filename = ofSystemSaveDialog("dataset.sl", "Save ofxGrayCode::DataSet").getPath();
+		}
 
 		this->filename = filename;
 

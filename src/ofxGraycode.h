@@ -13,4 +13,6 @@
 
 #include "ofxGraycode/Payload/BalancedGraycode.h"
 #include "ofxGraycode/Payload/Graycode.h"
+#include "ofxGraycode/Payload/Factory.h"
+
 #include "ofxGraycode/Dataset.h"

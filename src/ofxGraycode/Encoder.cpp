@@ -2,7 +2,7 @@
 
 namespace ofxGraycode {
 	//----------
-	void Encoder::reset() {
+	void Encoder::clear() {
 		frame = 0;
 	}
 
