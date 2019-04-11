@@ -9,7 +9,7 @@ namespace ofxGraycode {
 			Type getType() const override;
 			ofImageType getImageType() const override;
 			void fillPixels(const unsigned int frame, ofPixels& pixels) const override;
-			void calc(const vector<ofPixels> &captures, DataSet &data) const;
+			void calc(const std::vector<ofPixels> &captures, DataSet &data) const;
 			int getFrameCountX() const { return this->frameCountX; }
 			int getFrameCountY() const { return this->frameCountY; }
 		protected:
@@ -20,7 +20,7 @@ namespace ofxGraycode {
 			uint32_t frameCountX, frameCountY;
 
 			ofPixels_<uint32_t> messageBits;
-			vector<uint32_t> messageBitsInverse;
+			std::vector<uint32_t> messageBitsInverse;
 			
 			size_t framesReceived = 0;
 		};

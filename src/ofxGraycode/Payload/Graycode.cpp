@@ -21,8 +21,8 @@ namespace ofxGraycode {
 				return;
 			}
 
-			uint8_t* pixel = pixels.getPixels();
-			const uint32_t* data = this->data.getPixels();
+			uint8_t* pixel = pixels.getData();
+			const uint32_t* data = this->data.getData();
 
 			for (int i = 0; i < size; i++) {
 				bool value = (*data++ & (uint32_t)1 << frame) == (uint32_t)1 << frame;
@@ -50,10 +50,10 @@ namespace ofxGraycode {
 			uint32_t* distanceOut;
 			int distance;
 			for (uint32_t frame = 0; frame < frameCount; frame++) {
-				pixelIn = captures[frame].getPixels();
-				thresholdIn = data.getMedian().getPixels();
-				dataOut = data.getData().getPixels();
-				distanceOut = data.getDistance().getPixels();
+				pixelIn = captures[frame].getData();
+				thresholdIn = data.getMedian().getData();
+				dataOut = data.getData().getData();
+				distanceOut = data.getDistance().getData();
 				for (int i = 0; i < data.size(); i++, dataOut++, pixelIn++, thresholdIn++) {
 					distance = (int)*pixelIn - (int)*thresholdIn;
 					if (distance > 0)
@@ -63,12 +63,12 @@ namespace ofxGraycode {
 			}
 
 			//normalise distance
-			distanceOut = data.getDistance().getPixels();
+			distanceOut = data.getDistance().getData();
 			for (int i = 0; i < data.size(); i++)
 				*distanceOut++ /= frameCount;
 
 			//decode data
-			dataOut = data.getData().getPixels();
+			dataOut = data.getData().getData();
 
 			for (int i = 0; i < data.size(); i++, dataOut++)
 				*dataOut = dataInverse[*dataOut];
@@ -88,7 +88,7 @@ namespace ofxGraycode {
 			data.allocate(width, height, OF_IMAGE_GRAYSCALE);
 			dataInverse.resize(getMaxIndex());
 
-			uint32_t* pix = data.getPixels();
+			uint32_t* pix = data.getData();
 			uint32_t idx = 0;
 
 			for (uint32_t y = 0; y < height; y++) {

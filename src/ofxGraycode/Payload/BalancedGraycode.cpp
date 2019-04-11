@@ -2,6 +2,8 @@
 #include "../Dataset.h"
 #include "../Utils/Math.h"
 
+using namespace std;
+
 namespace ofxGraycode {
 	namespace Payload {
 		//----------
@@ -21,8 +23,8 @@ namespace ofxGraycode {
 				return;
 			}
 
-			uint8_t* pixel = pixels.getPixels();
-			const uint32_t* messageBits = this->messageBits.getPixels();
+			uint8_t* pixel = pixels.getData();
+			const uint32_t* messageBits = this->messageBits.getData();
 
 			const uint32_t halfFrame = frame / 2;
 
@@ -113,7 +115,7 @@ namespace ofxGraycode {
 			this->messageBits.allocate(this->width, this->height, OF_IMAGE_GRAYSCALE);
 			this->messageBitsInverse.resize(getMaxIndex());
 
-			uint32_t* pix = this->messageBits.getPixels();
+			uint32_t* pix = this->messageBits.getData();
 			uint32_t idx = 0;
 
 			for (uint32_t y = 0; y < height; y++) {
