@@ -18,8 +18,9 @@ namespace ofxGraycode {
 
 	//----------
 	void Decoder::operator<<(const ofPixels& pixels) {
-		if (frame == 0)
+		if (frame == 0) {
 			data.allocate(pixels.getWidth(), pixels.getHeight(), payload->getWidth(), payload->getHeight());
+		}
 
 		if (frame > payload->getFrameCount() - 1) {
 #pragma omp critical(ofLog)
@@ -37,8 +38,8 @@ namespace ofxGraycode {
 			ofPixels* downsample = new ofPixels();
 			downsample->allocate(pixels.getWidth(), pixels.getHeight(), OF_PIXELS_MONO);
 			downsample->set(0, 0);
-			const uint8_t* in = pixels.getPixels();
-			uint8_t* out = downsample->getPixels();
+			const uint8_t* in = pixels.getData();
+			uint8_t* out = downsample->getData();
 			for (int i = 0; i < pixels.size(); i++, out += (i % pixels.getNumChannels() == 0)) {
 				*out += *in++ / pixels.getNumChannels();
 			}
@@ -197,20 +198,25 @@ namespace ofxGraycode {
 	//----------
 	void Decoder::savePreviews() {
 		string filename = data.getFilename();
-		if (filename == "")
+		if (filename == "") {
 			filename = ofSystemSaveDialog("DataSet", "Select output path for previews").getPath();
+		}
 
-		if (projectorInCamera.isAllocated())
-			projectorInCamera.saveImage(filename + "-projectorInCamera.png");
+		if (projectorInCamera.isAllocated()) {
+			projectorInCamera.save(filename + "-projectorInCamera.png");
+		}
 
-		if (cameraInProjector.isAllocated())
-			cameraInProjector.saveImage(filename + "-cameraInProjector.png");
+		if (cameraInProjector.isAllocated()) {
+			cameraInProjector.save(filename + "-cameraInProjector.png");
+		}
 
-		if (data.getMedian().isAllocated())
-			ofImage(data.getMedian()).saveImage(filename + "-median.png");
+		if (data.getMedian().isAllocated()) {
+			ofImage(data.getMedian()).save(filename + "-median.png");
+		}
 
-		if (data.getMedianInverse().isAllocated())
-			ofImage(data.getMedianInverse()).saveImage(filename + "-medianInverse.png");
+		if (data.getMedianInverse().isAllocated()) {
+			ofImage(data.getMedianInverse()).save(filename + "-medianInverse.png");
+		}
 	}
 
 	//----------
@@ -238,17 +244,17 @@ namespace ofxGraycode {
 		}
 
 		projectorInCamera.allocate(data.getWidth(), data.getHeight(), OF_IMAGE_COLOR);
-		memset(projectorInCamera.getPixels().getPixels(), 0, projectorInCamera.getPixels().size());
+		memset(projectorInCamera.getPixels().getData(), 0, projectorInCamera.getPixels().size());
 
 		cameraInProjector.allocate(data.getPayloadWidth(), data.getPayloadHeight(), OF_IMAGE_COLOR);
-		memset(cameraInProjector.getPixels().getPixels(), 0, cameraInProjector.getPixels().size());
+		memset(cameraInProjector.getPixels().getData(), 0, cameraInProjector.getPixels().size());
 
-		uint8_t* camPix = projectorInCamera.getPixels();
-		uint8_t* active = (uint8_t*)data.getActive().getPixels();
+		uint8_t* camPix = projectorInCamera.getPixels().getData();
+		uint8_t* active = (uint8_t*)data.getActive().getData();
 		uint32_t threshold = (uint32_t)data.getDistanceThreshold();
 
 		memset(camPix, 0, projectorInCamera.getPixels().size());
-		const uint32_t* idx = data.getData().getPixels();
+		const uint32_t* idx = data.getData().getData();
 		for (uint32_t i = 0; i < data.size(); i++, idx++) {
 			if (*idx < payload->getSize() && (*active++)) {
 				*camPix++ = 255.0f * float(*idx % payload->getWidth()) / float(payload->getWidth());
@@ -259,8 +265,8 @@ namespace ofxGraycode {
 				camPix += 3;
 		}
 
-		uint8_t* projPixels = cameraInProjector.getPixels();
-		uint32_t* dataInverse = this->data.getDataInverse().getPixels();
+		uint8_t* projPixels = cameraInProjector.getPixels().getData();
+		uint32_t* dataInverse = this->data.getDataInverse().getData();
 		float cameraWidth = this->getWidth();
 		float cameraHeight = this->getHeight();
 		for (uint32_t i = 0; i < this->payload->getSize(); i++, projPixels += 3, dataInverse++) {

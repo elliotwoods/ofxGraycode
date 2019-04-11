@@ -140,9 +140,9 @@ namespace ofxGraycode {
 		uint32_t size = captures[0].getWidth() * captures[0].getHeight();
 
 		for (uint32_t frame = 0; frame < captures.size(); frame++) {
-			pixelIn = captures[frame].getPixels();
-			pixelMin = tempMin.getPixels();
-			pixelMax = tempMax.getPixels();
+			pixelIn = captures[frame].getData();
+			pixelMin = tempMin.getData();
+			pixelMax = tempMax.getData();
 			for (int i = 0; i < size; i++) {
 				if (*pixelIn > *pixelMax) {
 					*pixelMax = *pixelIn;
@@ -156,18 +156,18 @@ namespace ofxGraycode {
 			}
 		}
 
-		pixelMin = tempMin.getPixels();
-		pixelMax = tempMax.getPixels();
+		pixelMin = tempMin.getData();
+		pixelMax = tempMax.getData();
 
-		uint8_t* medianOut = this->median.getPixels();
+		uint8_t* medianOut = this->median.getData();
 		for (uint32_t i = 0; i < size; i++) {
 			*medianOut++ = (uint8_t)(((uint16_t)(*pixelMax++) + (uint16_t)(*pixelMin++)) / 2);
 		}
 	}
 
 	void DataSet::calc() {
-		uint8_t* active = this->active.getPixels();
-		uint32_t* distance = this->distance.getPixels();
+		uint8_t* active = this->active.getData();
+		uint32_t* distance = this->distance.getData();
 		for (int i = 0; i < this->size(); i++) {
 			*active++ = *distance++ > distanceThreshold ? 255 : 0;
 		}
@@ -316,12 +316,12 @@ namespace ofxGraycode {
 		contained |= OFXGRAYCODE_DATASET_HAS_ACTIVE;
 		save.write((char*)&contained, sizeof(contained));
 
-		save.write((char*)data.getPixels(), this->size() * sizeof(uint32_t));
-		save.write((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
-		save.write((char*)median.getPixels(), this->size() * sizeof(uint8_t));
-		save.write((char*)medianInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
-		save.write((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
-		save.write((char*)active.getPixels(), this->size() * sizeof(uint8_t));
+		save.write((char*)data.getData(), this->size() * sizeof(uint32_t));
+		save.write((char*)dataInverse.getData(), this->getPayloadSize() * sizeof(uint32_t));
+		save.write((char*)median.getData(), this->size() * sizeof(uint8_t));
+		save.write((char*)medianInverse.getData(), this->getPayloadSize() * sizeof(uint8_t));
+		save.write((char*)distance.getData(), this->size() * sizeof(uint32_t));
+		save.write((char*)active.getData(), this->size() * sizeof(uint8_t));
 		save.close();
 	}
 
@@ -359,17 +359,17 @@ namespace ofxGraycode {
 		load.read((char*)&contained, sizeof(contained));
 
 		if (contained & OFXGRAYCODE_DATASET_HAS_DATA)
-			load.read((char*)data.getPixels(), this->size() * sizeof(uint32_t));
+			load.read((char*)data.getData(), this->size() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_DATAINVERSE)
-			load.read((char*)dataInverse.getPixels(), this->getPayloadSize() * sizeof(uint32_t));
+			load.read((char*)dataInverse.getData(), this->getPayloadSize() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN)
-			load.read((char*)median.getPixels(), this->size() * sizeof(uint8_t));
+			load.read((char*)median.getData(), this->size() * sizeof(uint8_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_MEDIAN_INVERSE)
-			load.read((char*)medianInverse.getPixels(), this->getPayloadSize() * sizeof(uint8_t));
+			load.read((char*)medianInverse.getData(), this->getPayloadSize() * sizeof(uint8_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_DISTANCE)
-			load.read((char*)distance.getPixels(), this->size() * sizeof(uint32_t));
+			load.read((char*)distance.getData(), this->size() * sizeof(uint32_t));
 		if (contained & OFXGRAYCODE_DATASET_HAS_ACTIVE)
-			load.read((char*)active.getPixels(), this->size() * sizeof(uint8_t));
+			load.read((char*)active.getData(), this->size() * sizeof(uint8_t));
 		load.close();
 
 		this->hasData = true;
@@ -383,9 +383,9 @@ namespace ofxGraycode {
 
 	//----------
 	vector<Utils::ProjectorPixel> DataSet::getProjectorPixels() const {
-		const uint32_t *data = this->data.getPixels();
-		const uint8_t *active = this->active.getPixels();
-		const uint32_t *distance = this->distance.getPixels();
+		const uint32_t *data = this->data.getData();
+		const uint8_t *active = this->active.getData();
+		const uint32_t *distance = this->distance.getData();
 
 		vector<Utils::ProjectorPixel> projectorPixels(this->getPayloadSize());
 		ofVec2f cameraXY, projectorXY;
@@ -443,10 +443,10 @@ namespace ofxGraycode {
 	DataSet::const_iterator DataSet::begin() const {
 		DataSet::const_iterator it;
 		it.camera = 0;
-		it.projector = this->data.getPixels();
-		it.active = this->active.getPixels();
-		it.distance = this->distance.getPixels();
-		it.median = this->median.getPixels();
+		it.projector = this->data.getData();
+		it.active = this->active.getData();
+		it.distance = this->distance.getData();
+		it.median = this->median.getData();
 		it.dataSet = this;
 		return it;
 	}
@@ -455,10 +455,10 @@ namespace ofxGraycode {
 	DataSet::const_iterator DataSet::end() const {
 		DataSet::const_iterator it;
 		it.camera = this->size();
-		it.projector = this->data.getPixels() + this->size();
-		it.active = this->active.getPixels() + this->size();
-		it.distance = this->distance.getPixels() + this->size();
-		it.median = this->median.getPixels() + this->size();
+		it.projector = this->data.getData() + this->size();
+		it.active = this->active.getData() + this->size();
+		it.distance = this->distance.getData() + this->size();
+		it.median = this->median.getData() + this->size();
 		it.dataSet = this;
 		return it;
 	}
@@ -466,10 +466,10 @@ namespace ofxGraycode {
 	//----------
 	void DataSet::calcInverse() {
 		this->dataInverse.set(0, 0);
-		uint32_t *dataInverse = this->dataInverse.getPixels();
-		uint8_t *medianInverse = this->medianInverse.getPixels();
-		uint32_t *data = this->data.getPixels();
-		uint8_t *active = this->active.getPixels();
+		uint32_t *dataInverse = this->dataInverse.getData();
+		uint8_t *medianInverse = this->medianInverse.getData();
+		uint32_t *data = this->data.getData();
+		uint8_t *active = this->active.getData();
 		uint32_t payloadSize = this->getPayloadSize();
 
 		memset(medianInverse, 0, payloadSize);

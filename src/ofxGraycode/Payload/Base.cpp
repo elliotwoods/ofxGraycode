@@ -1,5 +1,7 @@
 #include "Base.h"
 
+using namespace std;
+
 namespace ofxGraycode {
 	namespace Payload {
 		//----------

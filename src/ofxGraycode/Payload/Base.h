@@ -60,7 +60,7 @@ namespace ofxGraycode {
 		class Offline : public Base {
 		public:
 			bool isOffline() const { return true; }
-			virtual void calc(const vector<ofPixels> &captures, DataSet &data) const = 0;
+			virtual void calc(const std::vector<ofPixels> &captures, DataSet &data) const = 0;
 		};
 
 		class Online : public Base {
