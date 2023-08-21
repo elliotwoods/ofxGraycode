@@ -17,11 +17,11 @@ namespace ofxGraycode {
 				distance(*iterator.distance),
 				dataSet(*iterator.dataSet) { }
 
-				ofVec2f getCameraXY() const;
-				ofVec2f getCameraXYNorm() const;
+				glm::vec2 getCameraXY() const;
+				glm::vec2 getCameraXYNorm() const;
 				
-				ofVec2f getProjectorXY() const;
-				ofVec2f getProjectorXYNorm() const;
+				glm::vec2 getProjectorXY() const;
+				glm::vec2 getProjectorXYNorm() const;
 
 				const uint32_t & camera;
 				const uint32_t & projector;

@@ -11,7 +11,7 @@
 namespace ofxGraycode {
 #pragma mark DataSet::iterator
 	//----------
-	ofVec2f DataSet::const_iterator::reference::getCameraXY() const {
+	glm::vec2 DataSet::const_iterator::reference::getCameraXY() const {
 		ofVec2f xy;
 		xy.x = this->camera % this->dataSet.getWidth();
 		xy.y = this->camera / this->dataSet.getWidth();
@@ -19,8 +19,8 @@ namespace ofxGraycode {
 	}
 
 	//----------
-	ofVec2f DataSet::const_iterator::reference::getCameraXYNorm() const {
-		ofVec2f xy = this->getCameraXY();
+	glm::vec2 DataSet::const_iterator::reference::getCameraXYNorm() const {
+		glm::vec2 xy = this->getCameraXY();
 		xy /= ofVec2f(this->dataSet.getWidth(), this->dataSet.getHeight());
 		xy *= 2.0f; //0..2
 		xy -= 1.0f;
@@ -29,16 +29,16 @@ namespace ofxGraycode {
 	}
 
 	//----------
-	ofVec2f DataSet::const_iterator::reference::getProjectorXY() const {
-		ofVec2f xy;
+	glm::vec2 DataSet::const_iterator::reference::getProjectorXY() const {
+		glm::vec2 xy;
 		xy.x = this->projector % this->dataSet.getPayloadWidth();
 		xy.y = this->projector / this->dataSet.getPayloadWidth();
 		return xy;
 	}
 
 	//----------
-	ofVec2f DataSet::const_iterator::reference::getProjectorXYNorm() const {
-		ofVec2f xy = this->getProjectorXY();
+	glm::vec2 DataSet::const_iterator::reference::getProjectorXYNorm() const {
+		glm::vec2 xy = this->getProjectorXY();
 		xy /= ofVec2f(this->dataSet.getPayloadWidth(), this->dataSet.getPayloadHeight());
 		xy *= 2.0f; //0..2
 		xy -= 1.0f;
